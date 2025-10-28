@@ -63,8 +63,8 @@ export default function ContactPage() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="text-xl sm:text-2xl text-charcoal-700 max-w-3xl mx-auto leading-relaxed"
             >
-              We love hearing from readers, collaborators, and fellow creators. Whether you'd like to share your story, pitch an idea, or explore a partnership—{' '}
-              <span className="font-bold text-forest-700">we're here to listen.</span>
+              We love hearing from readers, collaborators, and fellow creators. Whether you&apos;d like to share your story, pitch an idea, or explore a partnership—{' '}
+              <span className="font-bold text-forest-700">we&apos;re here to listen.</span>
             </motion.p>
           </header>
         </div>
@@ -211,7 +211,7 @@ export default function ContactPage() {
                 className="p-4 bg-green-50 border-2 border-green-200 text-green-800 rounded-xl font-semibold"
                 role="alert"
               >
-                ✓ Message sent successfully! We'll get back to you soon.
+                ✓ Message sent successfully! We&apos;ll get back to you soon.
               </motion.div>
             )}
 

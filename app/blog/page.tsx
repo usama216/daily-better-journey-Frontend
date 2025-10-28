@@ -79,7 +79,7 @@ export default function BlogPage() {
           >
             <blockquote className="text-center">
               <p className="text-2xl sm:text-3xl text-charcoal-800 italic leading-relaxed">
-                "Discipline isn't punishment. It's freedom, the freedom to follow through, to trust yourself, to build a life you're proud of."
+                &ldquo;Discipline isn&apos;t punishment. It&apos;s freedom, the freedom to follow through, to trust yourself, to build a life you&apos;re proud of.&rdquo;
               </p>
             </blockquote>
           </motion.div>
