@@ -3,6 +3,9 @@
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import Image from 'next/image'
+import { FaStar } from 'react-icons/fa6'
+import { HiOutlineHeart } from 'react-icons/hi2'
+import { IoSparkles } from 'react-icons/io5'
 
 const Hero = () => {
   return (
@@ -93,30 +96,52 @@ const Hero = () => {
               </Link>
             </motion.div>
 
-            {/* Trust Indicators */}
+            {/* Trust Indicators - Enhanced Design */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.7, delay: 0.9 }}
-              className="flex flex-wrap items-center gap-6 pt-6 border-t border-charcoal-200"
+              className="flex flex-wrap items-center gap-8 pt-8 border-t border-charcoal-200"
             >
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-gradient-to-br from-golden-400 to-golden-600 rounded-xl flex items-center justify-center shadow-lg">
-                  <span className="text-2xl font-black text-white">500+</span>
-                </div>
+              <div className="flex items-center gap-4 group cursor-pointer">
+                <motion.div 
+                  whileHover={{ scale: 1.1, rotate: 5 }}
+                  className="relative w-14 h-14 bg-gradient-to-br from-golden-400 to-golden-600 rounded-2xl flex items-center justify-center shadow-xl"
+                >
+                  <span className="text-xl font-black text-white">500+</span>
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-2xl"></div>
+                </motion.div>
                 <div>
-                  <p className="font-bold text-charcoal-900">Readers</p>
+                  <p className="font-bold text-lg text-charcoal-900 group-hover:text-golden-600 transition-colors">Readers</p>
                   <p className="text-sm text-charcoal-600">Growing daily</p>
                 </div>
               </div>
               
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-gradient-to-br from-forest-400 to-forest-600 rounded-xl flex items-center justify-center shadow-lg">
-                  <span className="text-2xl font-black text-white">50+</span>
-                </div>
+              <div className="flex items-center gap-4 group cursor-pointer">
+                <motion.div 
+                  whileHover={{ scale: 1.1, rotate: -5 }}
+                  className="relative w-14 h-14 bg-gradient-to-br from-forest-400 to-forest-600 rounded-2xl flex items-center justify-center shadow-xl"
+                >
+                  <span className="text-xl font-black text-white">50+</span>
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-2xl"></div>
+                </motion.div>
                 <div>
-                  <p className="font-bold text-charcoal-900">Articles</p>
+                  <p className="font-bold text-lg text-charcoal-900 group-hover:text-forest-600 transition-colors">Articles</p>
                   <p className="text-sm text-charcoal-600">Expert insights</p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-4 group cursor-pointer">
+                <motion.div 
+                  whileHover={{ scale: 1.1, rotate: 5 }}
+                  className="relative w-14 h-14 bg-gradient-to-br from-golden-400 to-forest-500 rounded-2xl flex items-center justify-center shadow-xl"
+                >
+                  <FaStar className="w-6 h-6 text-white" />
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-2xl"></div>
+                </motion.div>
+                <div>
+                  <p className="font-bold text-lg text-charcoal-900 group-hover:text-golden-600 transition-colors">Weekly</p>
+                  <p className="text-sm text-charcoal-600">New content</p>
                 </div>
               </div>
             </motion.div>
@@ -150,7 +175,7 @@ const Hero = () => {
                 transition={{ delay: 1.5, type: "spring", stiffness: 200 }}
                 className="absolute -top-6 -right-6 bg-gradient-to-r from-golden-500 to-forest-600 text-white p-6 rounded-2xl shadow-2xl"
               >
-                <div className="text-3xl font-black">✨</div>
+                <IoSparkles className="w-8 h-8 mx-auto mb-2" />
                 <p className="text-sm font-bold mt-1">Small Steps</p>
                 <p className="text-xs opacity-90">Big Change</p>
               </motion.div>
@@ -164,7 +189,7 @@ const Hero = () => {
               >
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-gradient-to-br from-forest-400 to-forest-600 rounded-xl flex items-center justify-center">
-                    <span className="text-lg">💚</span>
+                    <HiOutlineHeart className="w-5 h-5 text-white" />
                   </div>
                   <div>
                     <p className="font-black text-charcoal-900">Daily Growth</p>

@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import Image from 'next/image'
+import { FaInstagram, FaLinkedin, FaYoutube } from 'react-icons/fa6'
 
 const Footer = () => {
   const quickLinks = [
@@ -13,9 +14,9 @@ const Footer = () => {
   ]
 
   const socialLinks = [
-    { name: 'Instagram', href: '#', icon: '📷' },
-    { name: 'LinkedIn', href: '#', icon: '💼' },
-    { name: 'YouTube', href: '#', icon: '🎥' }
+    { name: 'Instagram', href: '#', Icon: FaInstagram },
+    { name: 'LinkedIn', href: '#', Icon: FaLinkedin },
+    { name: 'YouTube', href: '#', Icon: FaYoutube }
   ]
 
   return (
@@ -50,17 +51,22 @@ const Footer = () => {
               Join us on a journey of growth, habits, and self-awareness. Small steps lead to big changes.
             </p>
             <div className="flex gap-3">
-              {socialLinks.map((social, index) => (
-                <motion.a
-                  key={index}
-                  href={social.href}
-                  whileHover={{ scale: 1.1, y: -2 }}
-                  className="w-10 h-10 bg-white/10 hover:bg-golden-500 rounded-full flex items-center justify-center text-xl transition-colors backdrop-blur-sm"
-                  aria-label={social.name}
-                >
-                  {social.icon}
-                </motion.a>
-              ))}
+              {socialLinks.map((social, index) => {
+                const IconComponent = social.Icon
+                return (
+                  <motion.a
+                    key={index}
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    whileHover={{ scale: 1.1, y: -2 }}
+                    className="w-10 h-10 bg-white/10 hover:bg-golden-500 rounded-full flex items-center justify-center text-xl transition-colors backdrop-blur-sm"
+                    aria-label={social.name}
+                  >
+                    <IconComponent className="w-5 h-5" />
+                  </motion.a>
+                )
+              })}
             </div>
           </div>
 
