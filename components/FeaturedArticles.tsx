@@ -1,28 +1,27 @@
 'use client'
 
 import { motion } from 'framer-motion'
-
-interface Article {
-  title: string
-  description: string
-}
-
-const articles: Article[] = [
-  {
-    title: 'Morning Habits That Shape Your Day',
-    description: 'Learn the power of mindful mornings and small routines that set the tone for success.',
-  },
-  {
-    title: 'Learning Emotional Control',
-    description: 'Discover how to manage reactions, calm your mind, and build emotional strength.',
-  },
-  {
-    title: 'Why Reflection Makes You Stronger',
-    description: 'How journaling and self-awareness help you create balance and direction in life.',
-  },
-]
+import Link from 'next/link'
+import { useGetPostsQuery } from '@/lib/api/blogApi'
 
 const FeaturedArticles = () => {
+  const { data: postsData } = useGetPostsQuery({})
+  const posts = (postsData?.data || postsData || [])
+    .filter((p: any) => p.status === 'published' && p.is_featured)
+    .slice(0, 3)
+
+  const getTextPreview = (html: string, maxLength = 140) => {
+    if (!html) return ''
+    const text = html.replace(/<[^>]*>/g, '')
+    const decoded = text
+      .replace(/&nbsp;/g, ' ')
+      .replace(/&amp;/g, '&')
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/&quot;/g, '"')
+    const trimmed = decoded.trim()
+    return trimmed.length > maxLength ? trimmed.substring(0, maxLength) + '...' : trimmed
+  }
   const gradients = [
     'from-golden-500 via-golden-400 to-forest-500',
     'from-forest-500 via-forest-400 to-golden-500',
@@ -66,7 +65,7 @@ const FeaturedArticles = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mb-12 md:mb-16">
-        {articles.map((article, index) => (
+        {posts.map((post: any, index: number) => (
           <motion.article
             key={index}
             initial={{ opacity: 0, y: 30 }}
@@ -80,19 +79,19 @@ const FeaturedArticles = () => {
             <div className="relative bg-white rounded-2xl overflow-hidden shadow-lg border border-charcoal-200 hover:shadow-2xl transition-all duration-300 h-full flex flex-col">
               {/* Image with Unsplash */}
               <div className="relative w-full h-56 overflow-hidden bg-gradient-to-br from-golden-200 to-forest-200 flex-shrink-0">
-                <img 
-                  src={[
-                    'https://images.unsplash.com/photo-1495385794356-15371f348c31?w=600&h=300&fit=crop',
-                    'https://images.unsplash.com/photo-1459947727010-6267d2c1232f?w=600&h=300&fit=crop',
-                    'https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=600&h=300&fit=crop'
-                  ][index]}
-                  alt={article.title}
-                  className="w-full h-full object-cover"
-                />
+                {post.featured_image ? (
+                  <img
+                    src={post.featured_image}
+                    alt={post.title}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full" />
+                )}
                 <div className="absolute inset-0 bg-gradient-to-t from-charcoal-900/60 to-transparent"></div>
                 {/* Badge */}
                 <div className="absolute top-4 left-4 px-3 py-1.5 bg-white/95 backdrop-blur-sm rounded-full text-xs font-bold text-charcoal-800 shadow-lg">
-                  Article {index + 1}
+                  Latest
                 </div>
                 {/* Category Badge */}
                 <div className="absolute bottom-4 right-4 px-3 py-1 bg-golden-500/90 backdrop-blur-sm rounded-full text-xs font-bold text-white shadow-lg">
@@ -104,21 +103,21 @@ const FeaturedArticles = () => {
               <div className="p-6 md:p-8 flex flex-col flex-1">
                 {/* Article Title */}
                 <h3 className="text-xl md:text-2xl font-bold text-charcoal-900 mb-3 group-hover:text-golden-600 transition-colors line-clamp-2">
-                  {article.title}
+                  {post.title}
                 </h3>
                 
                 {/* Description */}
                 <p className="text-charcoal-600 mb-6 leading-relaxed text-base flex-1">
-                  {article.description}
+                  {post.excerpt ? getTextPreview(post.excerpt) : getTextPreview(post.content)}
                 </p>
                 
                 {/* Read More Link */}
-                <a href="#" className="inline-flex items-center gap-2 text-golden-600 hover:text-golden-700 font-semibold group mt-auto">
+                <Link href={`/blog/${post.slug}`} className="inline-flex items-center gap-2 text-golden-600 hover:text-golden-700 font-semibold group mt-auto">
                   Read More
                   <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
-                </a>
+                </Link>
               </div>
             </div>
           </motion.article>

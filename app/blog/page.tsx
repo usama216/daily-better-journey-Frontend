@@ -4,30 +4,29 @@ import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import AdBanner from '@/components/AdBanner'
 import { motion } from 'framer-motion'
+import Link from 'next/link'
+import { useGetPostsQuery, useGetCategoriesQuery } from '@/lib/api/blogApi'
 
 export default function BlogPage() {
-  const categories = [
-    {
-      title: 'Habits & Discipline',
-      description: 'Learn how to build structure, stay consistent, and keep your promises to yourself.'
-    },
-    {
-      title: 'Mindset & Growth',
-      description: 'Shift your thinking to overcome fear, comparison, and doubt.'
-    },
-    {
-      title: 'Emotional Intelligence',
-      description: 'Develop calmness, empathy, and awareness — even in stressful moments.'
-    },
-    {
-      title: 'Productivity & Focus',
-      description: 'Simplify your days and focus on what truly matters.'
-    },
-    {
-      title: 'Reflections & Life Lessons',
-      description: 'Personal essays and stories about growth, setbacks, and rediscovery.'
-    }
-  ]
+  const { data: postsData, isLoading } = useGetPostsQuery({})
+  const posts = (postsData?.data || postsData || [])
+    .filter((p: any) => p.status === 'published')
+
+  const getTextPreview = (html: string, maxLength = 160) => {
+    if (!html) return ''
+    const text = html.replace(/<[^>]*>/g, '')
+    const decoded = text
+      .replace(/&nbsp;/g, ' ')
+      .replace(/&amp;/g, '&')
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/&quot;/g, '"')
+    const trimmed = decoded.trim()
+    return trimmed.length > maxLength ? trimmed.substring(0, maxLength) + '...' : trimmed
+  }
+
+  const { data: categoriesData } = useGetCategoriesQuery(undefined)
+  const categories = (categoriesData?.data || categoriesData || [])
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-white to-charcoal-50">
@@ -95,7 +94,7 @@ export default function BlogPage() {
         <section className="mb-16">
           <h2 className="text-3xl font-bold text-charcoal-900 mb-8">Categories</h2>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {categories.map((category, index) => (
+            {categories.map((category: any, index: number) => (
               <motion.article
                 key={index}
                 initial={{ opacity: 0, y: 30 }}
@@ -106,48 +105,60 @@ export default function BlogPage() {
                 className="bg-white border-2 border-charcoal-100 rounded-2xl p-6 hover:border-golden-200 hover:shadow-xl transition-all cursor-pointer group"
               >
                 <h3 className="text-xl font-bold text-charcoal-900 mb-3 group-hover:text-golden-600 transition-colors">
-                  {category.title}
+                  {category.name}
                 </h3>
                 <p className="text-charcoal-600">
-                  {category.description}
+                  {category.description || '—'}
                 </p>
+                <Link href={`/blog/category/${category.slug}`} className="inline-flex items-center gap-2 text-golden-600 hover:text-golden-700 font-semibold group mt-4">
+                  Explore
+                  <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
               </motion.article>
             ))}
           </div>
         </section>
 
-        {/* Featured Articles */}
+        {/* Articles Listing */}
         <section className="mb-12">
-          <h2 className="text-3xl font-bold text-charcoal-900 mb-8">Featured Articles</h2>
-          <div className="grid gap-6 md:grid-cols-3">
-            {[
-              { title: 'Morning Habits That Shape Your Day', excerpt: 'Learn the power of mindful mornings and small routines...' },
-              { title: 'Learning Emotional Control', excerpt: 'Discover how to manage reactions and build emotional strength...' },
-              { title: 'Why Reflection Makes You Stronger', excerpt: 'How journaling helps you create balance and direction...' }
-            ].map((article, index) => (
-              <motion.article
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                whileHover={{ y: -5 }}
-                className="bg-white border-2 border-charcoal-100 rounded-2xl overflow-hidden hover:border-golden-200 hover:shadow-xl transition-all group"
-              >
-                <div className="h-48 bg-gradient-to-br from-golden-200 to-forest-200" aria-label="Article image placeholder"></div>
-                <div className="p-6">
-                  <h3 className="text-lg font-bold text-charcoal-900 mb-2 group-hover:text-golden-600 transition-colors">{article.title}</h3>
-                  <p className="text-charcoal-600 mb-4">{article.excerpt}</p>
-                  <a href="#" className="inline-flex items-center gap-2 text-golden-600 hover:text-golden-700 font-semibold group">
-                    Read More
-                    <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </a>
-                </div>
-              </motion.article>
-            ))}
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-3xl font-bold text-charcoal-900">Latest Articles</h2>
           </div>
+          {isLoading ? (
+            <p className="text-charcoal-600">Loading...</p>
+          ) : (
+            <div className="grid gap-6 md:grid-cols-3">
+              {posts.map((post: any, index: number) => (
+                <motion.article
+                  key={post.id || index}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.05 }}
+                  whileHover={{ y: -5 }}
+                  className="bg-white border-2 border-charcoal-100 rounded-2xl overflow-hidden hover:border-golden-200 hover:shadow-xl transition-all group h-full flex flex-col"
+                >
+                  <div className="h-48 bg-gradient-to-br from-golden-200 to-forest-200 flex-shrink-0">
+                    {post.featured_image ? (
+                      <img src={post.featured_image} alt={post.title} className="w-full h-full object-cover" />
+                    ) : null}
+                  </div>
+                  <div className="p-6 flex flex-col flex-1">
+                    <h3 className="text-lg font-bold text-charcoal-900 mb-2 group-hover:text-golden-600 transition-colors line-clamp-2">{post.title}</h3>
+                    <p className="text-charcoal-600 mb-4 line-clamp-3 flex-1">{post.excerpt ? getTextPreview(post.excerpt) : getTextPreview(post.content)}</p>
+                    <Link href={`/blog/${post.slug}`} className="inline-flex items-center gap-2 text-golden-600 hover:text-golden-700 font-semibold group mt-auto">
+                      Read More
+                      <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </Link>
+                  </div>
+                </motion.article>
+              ))}
+            </div>
+          )}
         </section>
 
         {/* CTA */}
