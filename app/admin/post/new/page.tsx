@@ -12,7 +12,6 @@ import 'react-quill/dist/quill.snow.css'
 export default function NewPostPage() {
   const router = useRouter()
   const [createPost, { isLoading }] = useCreatePostMutation()
-  const quillRef = useRef<any>(null)
   
   const [formData, setFormData] = useState({
     title: '',
@@ -208,7 +207,6 @@ export default function NewPostPage() {
                 </label>
                 <div className="border border-charcoal-300 rounded-lg">
                   <ReactQuill
-                    ref={quillRef}
                     theme="snow"
                     value={formData.content}
                     onChange={(html) => {

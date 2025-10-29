@@ -31,7 +31,6 @@ export default function EditPostPage() {
   
   const { data: postData, isLoading: isLoadingPost } = useGetPostQuery(id)
   const [updatePost, { isLoading: isUpdating }] = useUpdatePostMutation()
-  const quillRef = useRef<any>(null)
   
   const [formData, setFormData] = useState({
     title: '',
@@ -251,7 +250,6 @@ export default function EditPostPage() {
                 </label>
                 <div className="border border-charcoal-300 rounded-lg">
                   <ReactQuill
-                    ref={quillRef}
                     theme="snow"
                     value={formData.content}
                     onChange={(html) => {

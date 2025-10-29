@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion'
 
 interface AdBannerProps {
-  position: 'after-hero' | 'between-sections' | 'before-footer'
+  position: 'after-hero' | 'between-sections' | 'before-footer' | 'left-rail' | 'right-rail'
 }
 
 const AdBanner = ({ position }: AdBannerProps) => {
@@ -11,6 +11,8 @@ const AdBanner = ({ position }: AdBannerProps) => {
     'after-hero': 'h-32',
     'between-sections': 'h-20',
     'before-footer': 'h-24',
+    'left-rail': 'h-96',
+    'right-rail': 'h-48',
   }
 
   return (
