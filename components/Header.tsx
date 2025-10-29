@@ -38,8 +38,8 @@ const Header = () => {
               <Image 
                 src="/logo.png" 
                 alt="Daily Better Journey Logo" 
-                width={64}
-                height={64}
+                width={124}
+                height={124}
                 className="object-contain"
                 priority
               />

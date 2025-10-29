@@ -7,7 +7,7 @@ import { IoSparkles } from 'react-icons/io5'
 
 const AboutMission = () => {
   return (
-    <section className="relative bg-white py-24 overflow-hidden">
+    <section className="relative bg-white py-6 lg:py-24 overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute top-0 right-0 w-96 h-96 bg-forest-400 rounded-full filter blur-3xl"></div>

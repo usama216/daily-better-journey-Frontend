@@ -6,11 +6,11 @@ const DailyQuote = () => {
   const quote = "Improvement is not about being the best — it's about being better than yesterday."
 
   return (
-    <section className="relative z-10 bg-gradient-to-br from-golden-50 via-white to-forest-50 py-32 overflow-hidden">
+    <section className="relative z-10 bg-gradient-to-br from-forest-50 via-white to-forest-100 py-10 lg:py-32 overflow-hidden">
       {/* Enhanced Decorative Elements */}
-      <div className="absolute top-10 left-10 w-72 h-72 bg-golden-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+      <div className="absolute top-10 left-10 w-72 h-72 bg-forest-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
       <div className="absolute bottom-10 right-10 w-72 h-72 bg-forest-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
-      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-golden-300 rounded-full mix-blend-overlay filter blur-3xl opacity-10"></div>
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-forest-300 rounded-full mix-blend-overlay filter blur-3xl opacity-10"></div>
       
       <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
@@ -20,9 +20,9 @@ const DailyQuote = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="inline-block px-4 py-2 bg-golden-100 border border-golden-300 rounded-full mb-4"
+            className="inline-block px-4 py-2 bg-forest-100 border border-forest-300 rounded-full mb-4"
           >
-            <span className="text-golden-700 text-sm font-semibold uppercase tracking-wide">Inspiration</span>
+            <span className="text-forest-700 text-sm font-semibold uppercase tracking-wide">Inspiration</span>
           </motion.div>
           
           <motion.h2
@@ -41,14 +41,14 @@ const DailyQuote = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="group bg-white rounded-3xl p-8 md:p-16 lg:p-20 relative overflow-hidden shadow-2xl border-2 border-transparent hover:border-golden-200 transition-all duration-500"
+          className="group bg-white rounded-3xl p-8 md:p-16 lg:p-20 relative overflow-hidden shadow-2xl border-2 border-transparent hover:border-forest-200 transition-all duration-500"
         >
           {/* Enhanced Gradient Background */}
-          <div className="absolute inset-0 bg-gradient-to-br from-golden-50 via-white to-forest-50 opacity-80"></div>
-          <div className="absolute inset-0 bg-gradient-to-tr from-golden-100/50 via-transparent to-forest-100/50 group-hover:opacity-100 transition-opacity duration-500"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-forest-50 via-white to-forest-50 opacity-80"></div>
+          <div className="absolute inset-0 bg-gradient-to-tr from-forest-100/50 via-transparent to-forest-100/50 group-hover:opacity-100 transition-opacity duration-500"></div>
         
           {/* Decorative Corner Elements */}
-          <div className="absolute top-0 left-0 w-20 h-20 bg-gradient-to-br from-golden-400 to-transparent opacity-10"></div>
+          <div className="absolute top-0 left-0 w-20 h-20 bg-gradient-to-br from-forest-400 to-transparent opacity-10"></div>
           <div className="absolute bottom-0 right-0 w-20 h-20 bg-gradient-to-tl from-forest-400 to-transparent opacity-10"></div>
         
           {/* Quote Icon - Enhanced */}
@@ -57,7 +57,7 @@ const DailyQuote = () => {
             whileInView={{ scale: 1, rotate: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
-            className="absolute top-4 left-4 text-9xl text-golden-200 font-serif leading-none select-none opacity-60"
+            className="absolute top-4 left-4 text-9xl text-forest-200 font-serif leading-none select-none opacity-60"
           >
             &ldquo;
           </motion.div>
@@ -70,7 +70,7 @@ const DailyQuote = () => {
             
             {/* Author attribution */}
             <div className="mt-8 text-center">
-              <p className="text-sm font-semibold text-golden-600 uppercase tracking-wider">- Daily Better Journey</p>
+              <p className="text-sm font-semibold text-forest-600 uppercase tracking-wider">- Daily Better Journey</p>
             </div>
           </div>
 
@@ -80,7 +80,7 @@ const DailyQuote = () => {
             whileInView={{ scale: 1, rotate: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.4, type: "spring", stiffness: 200 }}
-            className="absolute bottom-4 right-6 text-9xl text-golden-200 font-serif leading-none select-none opacity-60"
+            className="absolute bottom-4 right-6 text-9xl text-forest-200 font-serif leading-none select-none opacity-60"
           >
             &rdquo;
           </motion.div>

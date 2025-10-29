@@ -33,19 +33,16 @@ const Footer = () => {
           {/* Logo and Description */}
           <div className="md:col-span-2 space-y-4">
             <div className="flex items-center space-x-3">
-              <div className="relative w-12 h-12">
+              <div className="relative w-126 h-126">
                 <Image 
                   src="/logo.png" 
                   alt="Daily Better Journey Logo" 
-                  width={48}
-                  height={48}
+                  width={126}
+                  height={126}
                   className="object-contain"
                 />
               </div>
-              <div className="flex flex-col">
-                <span className="text-white font-bold text-lg">DAILY BETTER</span>
-                <span className="text-white font-bold text-lg -mt-1">JOURNEY</span>
-              </div>
+             
             </div>
             <p className="text-white/70 text-sm leading-relaxed max-w-md">
               Join us on a journey of growth, habits, and self-awareness. Small steps lead to big changes.

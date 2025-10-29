@@ -30,7 +30,7 @@ const FeaturedArticles = () => {
   ]
 
   return (
-    <section className="relative z-10 bg-gradient-to-b from-white to-charcoal-50 py-20">
+    <section className="relative z-10 bg-gradient-to-b from-white to-charcoal-50 lg:py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       {/* Header */}
       <div className="text-center mb-12 md:mb-16">
@@ -74,12 +74,12 @@ const FeaturedArticles = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: index * 0.1 }}
             whileHover={{ y: -5 }}
-            className="group cursor-pointer"
+            className="group cursor-pointer h-full"
           >
             {/* Card Container */}
-            <div className="relative bg-white rounded-2xl overflow-hidden shadow-lg border border-charcoal-200 hover:shadow-2xl transition-all duration-300">
+            <div className="relative bg-white rounded-2xl overflow-hidden shadow-lg border border-charcoal-200 hover:shadow-2xl transition-all duration-300 h-full flex flex-col">
               {/* Image with Unsplash */}
-              <div className="relative w-full h-56 overflow-hidden bg-gradient-to-br from-golden-200 to-forest-200">
+              <div className="relative w-full h-56 overflow-hidden bg-gradient-to-br from-golden-200 to-forest-200 flex-shrink-0">
                 <img 
                   src={[
                     'https://images.unsplash.com/photo-1495385794356-15371f348c31?w=600&h=300&fit=crop',
@@ -101,19 +101,19 @@ const FeaturedArticles = () => {
               </div>
 
               {/* Content */}
-              <div className="p-6 md:p-8">
+              <div className="p-6 md:p-8 flex flex-col flex-1">
                 {/* Article Title */}
-                <h3 className="text-xl md:text-2xl font-bold text-charcoal-900 mb-3 group-hover:text-golden-600 transition-colors line-clamp-2 min-h-[3.5rem]">
+                <h3 className="text-xl md:text-2xl font-bold text-charcoal-900 mb-3 group-hover:text-golden-600 transition-colors line-clamp-2">
                   {article.title}
                 </h3>
                 
                 {/* Description */}
-                <p className="text-charcoal-600 mb-6 leading-relaxed text-base">
+                <p className="text-charcoal-600 mb-6 leading-relaxed text-base flex-1">
                   {article.description}
                 </p>
                 
                 {/* Read More Link */}
-                <a href="#" className="inline-flex items-center gap-2 text-golden-600 hover:text-golden-700 font-semibold group">
+                <a href="#" className="inline-flex items-center gap-2 text-golden-600 hover:text-golden-700 font-semibold group mt-auto">
                   Read More
                   <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />

@@ -62,7 +62,7 @@ export default function JourneyPage() {
           {[
             { label: 'Articles Published', value: '50+', icon: FaBook, color: 'from-golden-400 to-golden-600' },
             { label: 'Readers Growing', value: '500+', icon: FaHeart, color: 'from-forest-400 to-forest-600' },
-            { label: 'Categories', value: '5', icon: FaLightbulb, color: 'from-golden-400 to-forest-500' },
+            { label: 'Categories', value: '5+', icon: FaLightbulb, color: 'from-golden-400 to-forest-500' },
             { label: 'Weekly Growth', value: '100%', icon: FaChartLine, color: 'from-forest-400 to-golden-500' },
           ].map((stat, index) => {
             const IconComponent = stat.icon
