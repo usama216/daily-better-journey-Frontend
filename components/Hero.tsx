@@ -100,16 +100,7 @@ const Hero = () => {
                 </span>
                 <div className="absolute inset-0 bg-gradient-to-r from-golden-600 to-forest-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </motion.button>
-              
-              <Link href="/blog">
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="border-3 border-charcoal-800 text-charcoal-900 px-5 py-3 rounded-2xl font-bold text-sm hover:bg-charcoal-50 transition-all shadow-xl"
-                >
-                  Read Articles
-                </motion.button>
-              </Link>
+          
             </motion.div>
 
             {/* Trust Indicators - Enhanced Design */}
@@ -184,35 +175,9 @@ const Hero = () => {
                 <div className="absolute inset-0 bg-gradient-to-br from-golden-600/20 to-forest-600/20"></div>
               </div>
               
-              {/* Floating Badge */}
-              <motion.div
-                initial={{ scale: 0, rotate: -45 }}
-                animate={{ scale: 1, rotate: 0 }}
-                transition={{ delay: 1.5, type: "spring", stiffness: 200 }}
-                className="absolute -top-6 -left-6 bg-gradient-to-r from-golden-500 to-forest-600 text-white p-6 rounded-2xl shadow-2xl"
-              >
-                <IoSparkles className="w-8 h-8 mx-auto mb-2" />
-                <p className="text-sm font-bold mt-1">Small Steps</p>
-                <p className="text-xs opacity-90">Big Change</p>
-              </motion.div>
+             
               
-              {/* Floating Stats */}
-              <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 2, type: "spring" }}
-                className="absolute bottom-6 -left-6 bg-white p-4 rounded-2xl shadow-2xl border-2 border-forest-200"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-forest-400 to-forest-600 rounded-xl flex items-center justify-center">
-                    <HiOutlineHeart className="w-5 h-5 text-white" />
-                  </div>
-                  <div>
-                    <p className="font-black text-charcoal-900">Daily Growth</p>
-                    <p className="text-xs text-charcoal-600">Track your progress</p>
-                  </div>
-                </div>
-              </motion.div>
+          
             </div>
           </motion.div>
         </div>
