@@ -99,22 +99,34 @@ export default function Home() {
         {/* Ad Banner after Hero */}
         <AdBanner position="after-hero" />
         
-        {/* About the Mission */}
-        <AboutMission />
+   
         
         {/* Featured Articles */}
         <FeaturedArticles />
         
-        {/* Ad Banner between sections */}
+        {/* About the Mission */}
+        <AboutMission />
+        
+        {/* Ad Banner between sections - Leaderboard 728×90 */}
         <AdBanner position="between-sections" />
+        
+        {/* In-Article Ad - 300×250 Rectangle */}
+        <div className="py-6">
+          <AdBanner position="in-article" />
+        </div>
         
         {/* Daily Quote */}
         <DailyQuote />
         
+        {/* Square Ad - 250×250 */}
+        <div className="py-6">
+          <AdBanner position="square" />
+        </div>
+        
         {/* Newsletter */}
         <Newsletter />
         
-        {/* Ad Banner before footer */}
+        {/* Ad Banner before footer - Large Leaderboard 970×90 */}
         <AdBanner position="before-footer" />
         
         <Footer />

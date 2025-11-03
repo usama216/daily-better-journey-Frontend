@@ -58,3 +58,17 @@ body {
   animation-delay: 4s;
 }
 
+/* Blog Content Links Styling */
+.prose a,
+.blog-content a {
+  color: #2563eb !important;
+  text-decoration: underline !important;
+  cursor: pointer;
+}
+
+.prose a:hover,
+.blog-content a:hover {
+  color: #1e40af !important;
+  text-decoration: underline !important;
+}
+

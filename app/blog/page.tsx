@@ -87,7 +87,7 @@ export default function BlogPage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 -mt-12 relative z-10">
 
-        {/* Ad Banner */}
+        {/* Ad Banner - Leaderboard 728×90 */}
         <AdBanner position="between-sections" />
 
         {/* Categories */}
@@ -121,13 +121,26 @@ export default function BlogPage() {
           </div>
         </section>
 
+        {/* In-Article Rectangle Ad - 300×250 */}
+        <div className="my-12">
+          <AdBanner position="in-article" />
+        </div>
+
         {/* Articles Listing */}
         <section className="mb-12">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-3xl font-bold text-charcoal-900">Latest Articles</h2>
           </div>
           {isLoading ? (
-            <p className="text-charcoal-600">Loading...</p>
+            <div className="flex items-center justify-center py-20">
+              <div className="flex flex-col items-center gap-4">
+                <div className="relative w-16 h-16">
+                  <div className="absolute inset-0 border-4 border-charcoal-200 rounded-full"></div>
+                  <div className="absolute inset-0 border-4 border-golden-600 rounded-full border-t-transparent animate-spin"></div>
+                </div>
+                <p className="text-charcoal-600 font-medium">Loading articles...</p>
+              </div>
+            </div>
           ) : (
             <div className="grid gap-6 md:grid-cols-3">
               {posts.map((post: any, index: number) => (
@@ -160,6 +173,16 @@ export default function BlogPage() {
             </div>
           )}
         </section>
+
+        {/* Square Ad - 250×250 */}
+        <div className="my-12">
+          <AdBanner position="square" />
+        </div>
+        
+        {/* Large Leaderboard - 970×90 */}
+        <div className="my-12">
+          <AdBanner position="before-footer" />
+        </div>
 
         {/* CTA */}
         <motion.div 
