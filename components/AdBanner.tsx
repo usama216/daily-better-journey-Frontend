@@ -124,12 +124,12 @@ const AdBanner = ({ position }: AdBannerProps) => {
             }}
           >
             {/* 
-              REPLACE THIS WITH YOUR ADSENSE CODE:
+              TODO: Add your Ad Slot ID from Google AdSense
               
               <ins
                 className="adsbygoogle"
                 style={{ display: 'block' }}
-                data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                data-ad-client="ca-pub-7003431121839753"
                 data-ad-slot="XXXXXXXXXX"
                 data-ad-format="auto"
                 data-full-width-responsive="true"
@@ -152,12 +152,12 @@ const AdBanner = ({ position }: AdBannerProps) => {
             }}
           >
             {/* 
-              REPLACE THIS WITH YOUR ADSENSE CODE:
+              TODO: Add your Ad Slot ID from Google AdSense
               
               <ins
                 className="adsbygoogle"
                 style={{ display: 'inline-block', width: '320px', height: '100px' }}
-                data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                data-ad-client="ca-pub-7003431121839753"
                 data-ad-slot="XXXXXXXXXX"
               ></ins>
             */}
