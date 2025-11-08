@@ -36,7 +36,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <head>
+      <head />
+      <body className={inter.className}>
         {/* Google AdSense Script */}
         <Script
           async
@@ -44,8 +45,6 @@ export default function RootLayout({
           crossOrigin="anonymous"
           strategy="afterInteractive"
         />
-      </head>
-      <body className={inter.className}>
         <Providers>{children}</Providers>
       </body>
     </html>
