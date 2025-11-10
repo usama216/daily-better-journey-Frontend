@@ -1,0 +1,15 @@
+# Allow all crawlers
+User-agent: *
+Allow: /
+
+# Disallow admin pages
+User-agent: *
+Disallow: /admin/
+
+# AdSense Crawler
+User-agent: Mediapartners-Google
+Allow: /
+
+# Sitemap location
+Sitemap: https://dailybetterjourney.com/sitemap.xml
+
