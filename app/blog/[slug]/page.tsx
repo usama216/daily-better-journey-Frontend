@@ -6,6 +6,7 @@ import { useGetPostsQuery } from '@/lib/api/blogApi'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import AdBanner from '@/components/AdBanner'
+import CommentSection from '@/components/CommentSection'
 
 export default function BlogDetailPage() {
   const params = useParams<{ slug: string }>()
@@ -152,6 +153,13 @@ export default function BlogDetailPage() {
         <div className="mt-10">
           <AdBanner position="between-sections" />
         </div>
+
+        {/* Comment Section */}
+        {post && (
+          <div className="mt-16 max-w-4xl mx-auto">
+            <CommentSection postId={post.id} postSlug={post.slug} />
+          </div>
+        )}
 
         {/* Related Posts from Same Category */}
         {relatedPosts.length > 0 && (
