@@ -35,7 +35,7 @@ export default function CommentSection({ postId, postSlug }: CommentSectionProps
     try {
       setIsLoading(true)
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
-      const response = await fetch(`${apiUrl}/api/comments/${postId}`)
+      const response = await fetch(`${apiUrl}/comments/${postId}`)
       if (response.ok) {
         const data = await response.json()
         // Backend already filters approved comments
@@ -75,7 +75,7 @@ export default function CommentSection({ postId, postSlug }: CommentSectionProps
 
     try {
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
-      const response = await fetch(`${apiUrl}/api/comments`, {
+      const response = await fetch(`${apiUrl}/comments`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
