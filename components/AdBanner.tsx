@@ -83,29 +83,34 @@ const AdBanner = ({ position }: AdBannerProps) => {
   }
 
   const config = adConfigs[position]
+  const containerRef = useRef<HTMLElement | null>(null)
 
-  const initialized = useRef(false)
-
-  // Initialize AdSense when component mounts (only once per banner)
+  // Initialize AdSense only for unprocessed ad slots within this banner
   useEffect(() => {
-    if (initialized.current) return
     if (typeof window === 'undefined') return
+
+    const adSlots = containerRef.current?.querySelectorAll('ins.adsbygoogle') || []
+    if (!adSlots.length) return
 
     // @ts-ignore
     const adsQueue = window.adsbygoogle
     if (!adsQueue || typeof adsQueue.push !== 'function') return
 
-    try {
-      // @ts-ignore
-      adsQueue.push({})
-      initialized.current = true
-    } catch (err) {
-      console.log('AdSense error:', err)
-    }
+    adSlots.forEach((slot) => {
+      const processed = slot.getAttribute('data-ad-status') === 'done'
+      if (processed) return
+      try {
+        // @ts-ignore
+        adsQueue.push({})
+      } catch (err) {
+        console.log('AdSense error:', err)
+      }
+    })
   }, [])
 
   return (
     <aside
+      ref={containerRef as React.RefObject<HTMLDivElement>}
       className={`${config.containerClass} my-8`}
       role="complementary"
       aria-label="Advertisement"
