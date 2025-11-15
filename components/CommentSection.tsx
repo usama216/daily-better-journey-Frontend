@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
+console.log('API URL', process.env.NEXT_PUBLIC_API_URL) 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.dailybetterjourney.com/api'
 
 interface Comment {
   id: string
@@ -34,8 +36,7 @@ export default function CommentSection({ postId, postSlug }: CommentSectionProps
   const fetchComments = async () => {
     try {
       setIsLoading(true)
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
-      const response = await fetch(`${apiUrl}/comments/${postId}`)
+      const response = await fetch(`${API_BASE_URL}/comments/${postId}`)
       if (response.ok) {
         const data = await response.json()
         // Backend already filters approved comments
@@ -74,8 +75,7 @@ export default function CommentSection({ postId, postSlug }: CommentSectionProps
     }
 
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
-      const response = await fetch(`${apiUrl}/comments`, {
+      const response = await fetch(`${API_BASE_URL}/comments`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

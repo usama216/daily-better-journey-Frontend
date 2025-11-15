@@ -64,7 +64,7 @@ export default function NewPostPage() {
               const form = new FormData()
               form.append('file', file)
               
-              const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'}/upload`, {
+              const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://api.dailybetterjourney.com/api'}/upload`, {
                 method: 'POST',
                 body: form,
               })
@@ -267,7 +267,7 @@ export default function NewPostPage() {
                     try {
                       const form = new FormData()
                       form.append('file', file)
-                      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'}/upload`, {
+                      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://api.dailybetterjourney.com/api'}/upload`, {
                         method: 'POST',
                         body: form,
                       })
