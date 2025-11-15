@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 
 interface AdBannerProps {
   position: 
@@ -84,14 +84,21 @@ const AdBanner = ({ position }: AdBannerProps) => {
 
   const config = adConfigs[position]
 
-  // Initialize AdSense when component mounts
+  const initialized = useRef(false)
+
+  // Initialize AdSense when component mounts (only once per banner)
   useEffect(() => {
+    if (initialized.current) return
+    if (typeof window === 'undefined') return
+
+    // @ts-ignore
+    const adsQueue = window.adsbygoogle
+    if (!adsQueue || typeof adsQueue.push !== 'function') return
+
     try {
       // @ts-ignore
-      if (typeof window !== 'undefined' && window.adsbygoogle) {
-        // @ts-ignore
-        (window.adsbygoogle = window.adsbygoogle || []).push({})
-      }
+      adsQueue.push({})
+      initialized.current = true
     } catch (err) {
       console.log('AdSense error:', err)
     }

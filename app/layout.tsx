@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import Providers from '@/components/Providers'
+import AdSenseScript from '@/components/AdSenseScript'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -89,15 +90,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <head>
-        {/* Google AdSense Script (plain script to avoid data-nscript attribute) */}
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7003431121839753"
-          crossOrigin="anonymous"
-        ></script>
-      </head>
+      <head />
       <body className={inter.className}>
+        <AdSenseScript />
         <Providers>{children}</Providers>
       </body>
     </html>
