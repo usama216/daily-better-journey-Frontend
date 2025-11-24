@@ -6,6 +6,7 @@ import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import { MdOutlineEmail, MdOutlineLocationOn } from 'react-icons/md'
 import { FaLinkedin, FaInstagram, FaYoutube } from 'react-icons/fa6'
+import { useSubmitContactMutation } from '@/lib/api/contactApi'
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -13,18 +14,24 @@ export default function ContactPage() {
     email: '',
     message: ''
   })
-  const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
+  const [errorMessage, setErrorMessage] = useState('')
+  
+  const [submitContact, { isLoading: isSubmitting }] = useSubmitContactMutation()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setIsSubmitting(true)
-    // Here you would send the form data to your backend
-    setTimeout(() => {
-      setIsSubmitting(false)
+    setSubmitStatus('idle')
+    setErrorMessage('')
+    
+    try {
+      await submitContact(formData).unwrap()
       setSubmitStatus('success')
       setFormData({ name: '', email: '', message: '' })
-    }, 1000)
+    } catch (error: any) {
+      setSubmitStatus('error')
+      setErrorMessage(error?.data?.message || 'Failed to send message. Please try again.')
+    }
   }
 
   return (
@@ -212,6 +219,17 @@ export default function ContactPage() {
                 role="alert"
               >
                 ✓ Message sent successfully! We&apos;ll get back to you soon.
+              </motion.div>
+            )}
+
+            {submitStatus === 'error' && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="p-4 bg-red-50 border-2 border-red-200 text-red-800 rounded-xl font-semibold"
+                role="alert"
+              >
+                ✗ {errorMessage || 'Failed to send message. Please try again.'}
               </motion.div>
             )}
 

@@ -1,8 +1,11 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
+import { logout, getUser } from '@/lib/auth'
+import { MdLogout } from 'react-icons/md'
 import { 
   FaFileAlt, 
   FaPlus, 
@@ -14,7 +17,8 @@ import {
   FaTag,
   FaFolder,
   FaChartLine,
-  FaSave
+  FaSave,
+  FaEnvelope
 } from 'react-icons/fa'
 import { useGetPostsQuery, useDeletePostMutation, useUpdatePostStatusMutation, useGetCategoriesQuery, useCreateCategoryMutation, useUpdateCategoryMutation, useDeleteCategoryMutation } from '@/lib/api/blogApi'
 
@@ -220,7 +224,10 @@ function CategoriesTab({
 }
 
 export default function AdminDashboard() {
+  const router = useRouter()
   const [activeTab, setActiveTab] = useState<'posts' | 'categories' | 'tags' | 'stats'>('posts')
+  const [currentUser, setCurrentUser] = useState<{ name: string; email: string } | null>(null)
+  
   const { data: postsData, isLoading, refetch } = useGetPostsQuery({})
   const [deletePost] = useDeletePostMutation()
   const [updateStatus] = useUpdatePostStatusMutation()
@@ -229,6 +236,19 @@ export default function AdminDashboard() {
   const [createCategory] = useCreateCategoryMutation()
   const [updateCategory] = useUpdateCategoryMutation()
   const [deleteCategory] = useDeleteCategoryMutation()
+
+  useEffect(() => {
+    const user = getUser()
+    if (user) {
+      setCurrentUser(user)
+    }
+  }, [])
+
+  const handleLogout = () => {
+    if (confirm('Are you sure you want to logout?')) {
+      logout()
+    }
+  }
 
   const posts = postsData?.data || []
   const categories = (categoriesData?.data || categoriesData || [])
@@ -283,14 +303,25 @@ export default function AdminDashboard() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-charcoal-900">Admin Dashboard</h1>
-              <p className="text-sm text-charcoal-600 mt-1">Manage your blog content</p>
+              <p className="text-sm text-charcoal-600 mt-1">
+                {currentUser ? `Welcome, ${currentUser.name}` : 'Manage your blog content'}
+              </p>
             </div>
-            <Link
-              href="/admin/post/new"
-              className="flex items-center gap-2 bg-gradient-to-r from-forest-600 to-forest-700 text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition-all"
-            >
-              <FaPlus /> New Post
-            </Link>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={handleLogout}
+                className="flex items-center gap-2 px-4 py-2 bg-charcoal-100 hover:bg-charcoal-200 text-charcoal-700 rounded-lg font-semibold transition-colors"
+              >
+                <MdLogout className="w-4 h-4" />
+                Logout
+              </button>
+              <Link
+                href="/admin/post/new"
+                className="flex items-center gap-2 bg-gradient-to-r from-forest-600 to-forest-700 text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition-all"
+              >
+                <FaPlus /> New Post
+              </Link>
+            </div>
           </div>
         </div>
       </header>
@@ -362,25 +393,61 @@ export default function AdminDashboard() {
         <div className="bg-white rounded-xl shadow-md border border-charcoal-200 mb-6">
           <div className="border-b border-charcoal-200">
             <nav className="flex -mb-px">
-              {[
-                { id: 'posts', label: 'Posts', icon: FaFileAlt },
-                { id: 'categories', label: 'Categories', icon: FaFolder },
-                { id: 'tags', label: 'Tags', icon: FaTag },
-                { id: 'stats', label: 'Statistics', icon: FaChartLine }
-              ].map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id as any)}
-                  className={`flex items-center gap-2 px-6 py-4 font-medium text-sm border-b-2 transition-colors ${
-                    activeTab === tab.id
-                      ? 'border-forest-600 text-forest-600'
-                      : 'border-transparent text-charcoal-600 hover:text-charcoal-900 hover:border-charcoal-300'
-                  }`}
-                >
-                  <tab.icon />
-                  {tab.label}
-                </button>
-              ))}
+              <button
+                key="posts"
+                onClick={() => setActiveTab('posts')}
+                className={`flex items-center gap-2 px-6 py-4 font-medium text-sm border-b-2 transition-colors ${
+                  activeTab === 'posts'
+                    ? 'border-forest-600 text-forest-600'
+                    : 'border-transparent text-charcoal-600 hover:text-charcoal-900 hover:border-charcoal-300'
+                }`}
+              >
+                <FaFileAlt />
+                Posts
+              </button>
+              <button
+                key="categories"
+                onClick={() => setActiveTab('categories')}
+                className={`flex items-center gap-2 px-6 py-4 font-medium text-sm border-b-2 transition-colors ${
+                  activeTab === 'categories'
+                    ? 'border-forest-600 text-forest-600'
+                    : 'border-transparent text-charcoal-600 hover:text-charcoal-900 hover:border-charcoal-300'
+                }`}
+              >
+                <FaFolder />
+                Categories
+              </button>
+              <button
+                key="tags"
+                onClick={() => setActiveTab('tags')}
+                className={`flex items-center gap-2 px-6 py-4 font-medium text-sm border-b-2 transition-colors ${
+                  activeTab === 'tags'
+                    ? 'border-forest-600 text-forest-600'
+                    : 'border-transparent text-charcoal-600 hover:text-charcoal-900 hover:border-charcoal-300'
+                }`}
+              >
+                <FaTag />
+                Tags
+              </button>
+              <Link
+                href="/admin/contacts"
+                className="flex items-center gap-2 px-6 py-4 font-medium text-sm border-b-2 border-transparent text-charcoal-600 hover:text-charcoal-900 hover:border-charcoal-300 transition-colors"
+              >
+                <FaEnvelope />
+                Contacts
+              </Link>
+              <button
+                key="stats"
+                onClick={() => setActiveTab('stats')}
+                className={`flex items-center gap-2 px-6 py-4 font-medium text-sm border-b-2 transition-colors ${
+                  activeTab === 'stats'
+                    ? 'border-forest-600 text-forest-600'
+                    : 'border-transparent text-charcoal-600 hover:text-charcoal-900 hover:border-charcoal-300'
+                }`}
+              >
+                <FaChartLine />
+                Statistics
+              </button>
             </nav>
           </div>
 
