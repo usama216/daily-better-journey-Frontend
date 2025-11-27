@@ -12,34 +12,30 @@ module.exports = {
         disallow: ['/admin', '/admin/*'],
       },
       {
-        userAgent: 'Mediapartners-Google', // AdSense crawler
+        userAgent: 'Mediapartners-Google',
         allow: '/',
       },
-    ],
-    additionalSitemaps: [
-      'https://dailybetterjourney.com/sitemap.xml',
     ],
   },
   changefreq: 'daily',
   priority: 0.7,
   sitemapSize: 5000,
   transform: async (config, path) => {
-    // Custom priority for different pages
-    let priority = 0.7
-    let changefreq = 'daily'
+    let priority = 0.7;
+    let changefreq = 'daily';
 
     if (path === '/') {
-      priority = 1.0
-      changefreq = 'daily'
+      priority = 1.0;
+      changefreq = 'daily';
     } else if (path.startsWith('/blog')) {
-      priority = 0.9
-      changefreq = 'weekly'
+      priority = 0.9;
+      changefreq = 'weekly';
     } else if (path.startsWith('/journey')) {
-      priority = 0.8
-      changefreq = 'weekly'
+      priority = 0.8;
+      changefreq = 'weekly';
     } else if (path.startsWith('/contact')) {
-      priority = 0.6
-      changefreq = 'monthly'
+      priority = 0.6;
+      changefreq = 'monthly';
     }
 
     return {
@@ -47,7 +43,6 @@ module.exports = {
       changefreq,
       priority,
       lastmod: new Date().toISOString(),
-    }
+    };
   },
-}
-
+};
