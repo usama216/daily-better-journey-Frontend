@@ -3,6 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 // Base API configuration using RTK Query
 export const baseApi = createApi({
   reducerPath: 'api',
+  // https://api.dailybetterjourney.com
   baseQuery: fetchBaseQuery({
     baseUrl: process.env.NEXT_PUBLIC_API_URL || 'https://api.dailybetterjourney.com/api',
     prepareHeaders: (headers, { getState }) => {

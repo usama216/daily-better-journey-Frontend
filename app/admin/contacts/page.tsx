@@ -312,8 +312,9 @@ export default function AdminContactsPage() {
               >
                 <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
                   {/* Contact Info */}
-                  <div className="flex-1 space-y-3">
-                    <div className="flex items-start justify-between gap-4">
+                  <div className="flex-1 space-y-4">
+                    {/* Header Section */}
+                    <div className="flex items-start justify-between gap-4 pb-4 border-b border-charcoal-200">
                       <div>
                         <h3 className="text-xl font-bold text-charcoal-900 mb-1">{contact.name}</h3>
                         <div className="flex items-center gap-2 text-charcoal-600 mb-2">
@@ -343,26 +344,24 @@ export default function AdminContactsPage() {
 
                     {/* What brought you here */}
                     {contact.what_brought_you && (
-                      <div className="mt-3">
-                        <p className="text-xs font-semibold text-charcoal-600 uppercase tracking-wide mb-1">What brought you here?</p>
+                      <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
+                        <p className="text-xs font-semibold text-blue-700 uppercase tracking-wide mb-2">What brought you here?</p>
                         <p className="text-charcoal-800">{contact.what_brought_you}</p>
                       </div>
                     )}
 
                     {/* Challenge Description */}
                     {contact.challenge_description && (
-                      <div className="mt-3">
-                        <p className="text-xs font-semibold text-charcoal-600 uppercase tracking-wide mb-1">Challenge Description</p>
-                        <div className="bg-gradient-to-r from-charcoal-50 to-charcoal-100 rounded-lg p-4 border border-charcoal-200">
-                          <p className="text-charcoal-800 whitespace-pre-wrap leading-relaxed">{contact.challenge_description}</p>
-                        </div>
+                      <div className="bg-gradient-to-r from-charcoal-50 to-charcoal-100 rounded-lg p-4 border border-charcoal-200">
+                        <p className="text-xs font-semibold text-charcoal-600 uppercase tracking-wide mb-2">Challenge Description</p>
+                        <p className="text-charcoal-800 whitespace-pre-wrap leading-relaxed">{contact.challenge_description}</p>
                       </div>
                     )}
 
                     {/* Guidance Areas */}
                     {contact.guidance_areas && contact.guidance_areas.length > 0 && (
-                      <div className="mt-3">
-                        <p className="text-xs font-semibold text-charcoal-600 uppercase tracking-wide mb-2">Guidance Areas</p>
+                      <div className="bg-golden-50 rounded-lg p-4 border border-golden-200">
+                        <p className="text-xs font-semibold text-golden-700 uppercase tracking-wide mb-2">Guidance Areas</p>
                         <div className="flex flex-wrap gap-2">
                           {contact.guidance_areas.map((area: string, idx: number) => (
                             <span
@@ -374,8 +373,8 @@ export default function AdminContactsPage() {
                           ))}
                         </div>
                         {contact.other_guidance_area && (
-                          <div className="mt-2">
-                            <span className="text-xs font-semibold text-charcoal-600">Other: </span>
+                          <div className="mt-3 pt-3 border-t border-golden-200">
+                            <span className="text-xs font-semibold text-golden-700">Other: </span>
                             <span className="text-charcoal-800">{contact.other_guidance_area}</span>
                           </div>
                         )}
@@ -384,23 +383,23 @@ export default function AdminContactsPage() {
 
                     {/* Hope to achieve */}
                     {contact.hope_to_achieve && (
-                      <div className="mt-3">
-                        <p className="text-xs font-semibold text-charcoal-600 uppercase tracking-wide mb-1">Hope to achieve (30 days)</p>
-                        <p className="text-charcoal-800 whitespace-pre-wrap">{contact.hope_to_achieve}</p>
+                      <div className="bg-forest-50 rounded-lg p-4 border border-forest-200">
+                        <p className="text-xs font-semibold text-forest-700 uppercase tracking-wide mb-2">What do you hope to achieve in the next 30 days?</p>
+                        <p className="text-charcoal-800 whitespace-pre-wrap leading-relaxed">{contact.hope_to_achieve}</p>
                       </div>
                     )}
 
                     {/* Anything else */}
                     {contact.anything_else && (
-                      <div className="mt-3">
-                        <p className="text-xs font-semibold text-charcoal-600 uppercase tracking-wide mb-1">Additional Information</p>
-                        <p className="text-charcoal-800 whitespace-pre-wrap">{contact.anything_else}</p>
+                      <div className="bg-purple-50 rounded-lg p-4 border border-purple-200">
+                        <p className="text-xs font-semibold text-purple-700 uppercase tracking-wide mb-2">Anything else you want to share?</p>
+                        <p className="text-charcoal-800 whitespace-pre-wrap leading-relaxed">{contact.anything_else}</p>
                       </div>
                     )}
 
                     {/* Legacy message field (for backward compatibility) */}
                     {contact.message && (
-                      <div className="bg-gradient-to-r from-charcoal-50 to-charcoal-100 rounded-lg p-5 mt-4 border border-charcoal-200">
+                      <div className="bg-gradient-to-r from-charcoal-50 to-charcoal-100 rounded-lg p-4 border border-charcoal-200">
                         <p className="text-xs font-semibold text-charcoal-600 uppercase tracking-wide mb-2">Message</p>
                         <p className="text-charcoal-800 whitespace-pre-wrap leading-relaxed">{contact.message}</p>
                       </div>
