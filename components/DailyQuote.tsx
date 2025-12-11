@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion'
 
 const DailyQuote = () => {
-  const quote = "Improvement is not about being the best — it's about being better than yesterday."
+  const quote = "What lies behind us and what lies before us are tiny matters compared to what lies within us."
 
   return (
     <section className="relative z-10 bg-gradient-to-br from-forest-50 via-white to-forest-100 py-10 lg:py-32 overflow-hidden">
@@ -22,7 +22,7 @@ const DailyQuote = () => {
             transition={{ duration: 0.5 }}
             className="inline-block px-4 py-2 bg-forest-100 border border-forest-300 rounded-full mb-4"
           >
-            <span className="text-forest-700 text-sm font-semibold uppercase tracking-wide">Inspiration</span>
+            <span className="text-forest-700 text-sm font-semibold uppercase tracking-wide">A Gentle Reminder</span>
           </motion.div>
           
           <motion.h2
@@ -32,7 +32,7 @@ const DailyQuote = () => {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="text-4xl sm:text-5xl font-extrabold text-charcoal-900"
           >
-            Daily Quote
+        Trust Your Becoming
           </motion.h2>
         </div>
 
@@ -70,7 +70,7 @@ const DailyQuote = () => {
             
             {/* Author attribution */}
             <div className="mt-8 text-center">
-              <p className="text-sm font-semibold text-forest-600 uppercase tracking-wider">- Daily Better Journey</p>
+              <p className="text-sm font-semibold text-forest-600 uppercase tracking-wider">Ralph Waldo Emerson</p>
             </div>
           </div>
 

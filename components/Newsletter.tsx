@@ -31,7 +31,7 @@ const Newsletter = () => {
       {/* Grid Pattern Overlay */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:4rem_4rem]"></div>
       
-      <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <div className="relative mx-auto px-4 sm:px-6 lg:px-8 text-center">
     
         
         <motion.h2
@@ -41,7 +41,7 @@ const Newsletter = () => {
           transition={{ duration: 0.5, delay: 0.1 }}
           className="text-4xl sm:text-5xl font-extrabold text-white mb-6"
         >
-          Join the Journey
+          What If One Email Changed Your Day?
         </motion.h2>
 
         <motion.p
@@ -51,8 +51,7 @@ const Newsletter = () => {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="text-xl text-white/80 mb-12"
         >
-          Get weekly insights, stories, and growth tips straight to your inbox.
-        </motion.p>
+         Subscribe for short punches of insight that wake you up, shift your thinking, and spark real movement.  </motion.p>
 
         {/* Success/Error Messages */}
         {(isSuccess || isError) && (

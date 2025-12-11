@@ -7,6 +7,7 @@ import { FaSave, FaEye, FaImage, FaSpinner } from 'react-icons/fa'
 import { useGetPostQuery, useUpdatePostMutation, useGetCategoriesQuery } from '@/lib/api/blogApi'
 import { getAuthHeadersForFetch } from '@/lib/auth'
 import { usePopup } from '@/hooks/usePopup'
+import { getErrorMessage } from '@/lib/utils/errorHandler'
 
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false })
 import 'react-quill/dist/quill.snow.css'
@@ -89,22 +90,25 @@ export default function EditPostPage() {
                 body: form,
               })
               
-              if (!res.ok) {
-                throw new Error('Upload failed')
-              }
-              
               const json = await res.json()
+              
+              if (!res.ok) {
+                const errorMessage = json?.message || json?.error || 'Upload failed'
+                throw new Error(errorMessage)
+              }
               
               if (json?.url) {
                 // Insert image at saved position
                 quill.insertEmbed(index, 'image', json.url)
                 quill.setSelection(index + 1)
               } else {
-                showError('Upload Failed', 'Failed to upload image. Please try again.')
+                const errorMessage = json?.message || 'Failed to upload image. Please try again.'
+                showError('Upload Failed', errorMessage)
               }
             } catch (e: any) {
               console.error('Image upload error:', e)
-              showError('Upload Failed', 'Image upload failed: ' + (e.message || 'Unknown error'))
+              const errorMessage = e.message || 'Image upload failed. Please try again.'
+              showError('Upload Failed', errorMessage)
             }
           }
           input.click()
@@ -153,7 +157,8 @@ export default function EditPostPage() {
       await updatePost({ id, ...formData, status: 'draft' }).unwrap()
       router.push('/admin')
     } catch (error) {
-      showError('Save Failed', 'Failed to save draft. Please try again.')
+      const errorMessage = getErrorMessage(error, 'Failed to save draft. Please try again.')
+      showError('Save Failed', errorMessage)
     }
   }
 
@@ -162,7 +167,8 @@ export default function EditPostPage() {
       await updatePost({ id, ...formData, status: 'published' }).unwrap()
       router.push('/admin')
     } catch (error) {
-      showError('Publish Failed', 'Failed to publish post. Please try again.')
+      const errorMessage = getErrorMessage(error, 'Failed to publish post. Please try again.')
+      showError('Publish Failed', errorMessage)
     }
   }
 
@@ -311,11 +317,22 @@ export default function EditPostPage() {
                         body: form,
                       })
                       const json = await res.json()
+                      
+                      if (!res.ok) {
+                        const errorMessage = json?.message || json?.error || 'Upload failed'
+                        throw new Error(errorMessage)
+                      }
+                      
                       if (json?.url) {
                         setFormData(prev => ({ ...prev, featured_image: json.url }))
+                      } else {
+                        const errorMessage = json?.message || 'Failed to upload image. Please try again.'
+                        showError('Upload Failed', errorMessage)
                       }
-                    } catch (e) {
-                      showError('Upload Failed', 'Image upload failed. Please try again.')
+                    } catch (e: any) {
+                      console.error('Image upload error:', e)
+                      const errorMessage = e.message || 'Image upload failed. Please try again.'
+                      showError('Upload Failed', errorMessage)
                     }
                   }}
                   className="w-full text-sm"

@@ -22,6 +22,7 @@ import {
 } from 'react-icons/fa'
 import { useGetPostsQuery, useDeletePostMutation, useUpdatePostStatusMutation, useGetCategoriesQuery, useCreateCategoryMutation, useUpdateCategoryMutation, useDeleteCategoryMutation } from '@/lib/api/blogApi'
 import { usePopup } from '@/hooks/usePopup'
+import { getErrorMessage } from '@/lib/utils/errorHandler'
 
 function CategoriesTab({ 
   categories, 
@@ -280,7 +281,8 @@ export default function AdminDashboard() {
           refetch()
           // Popup will auto-close on success
         } catch (error) {
-          showError('Delete Failed', 'Failed to delete post. Please try again.')
+          const errorMessage = getErrorMessage(error, 'Failed to delete post. Please try again.')
+          showError('Delete Failed', errorMessage)
           // Popup stays open on error so user can see the error message
         }
       },
@@ -296,7 +298,8 @@ export default function AdminDashboard() {
       }).unwrap()
       refetch()
     } catch (error) {
-      showError('Update Failed', 'Failed to update post status. Please try again.')
+      const errorMessage = getErrorMessage(error, 'Failed to update post status. Please try again.')
+      showError('Update Failed', errorMessage)
     }
   }
 
@@ -555,12 +558,22 @@ export default function AdminDashboard() {
                 categories={categories}
                 isLoading={isLoadingCategories}
                 onCreateCategory={async (data) => {
-                  await createCategory(data).unwrap()
-                  refetchCategories()
+                  try {
+                    await createCategory(data).unwrap()
+                    refetchCategories()
+                  } catch (error) {
+                    const errorMessage = getErrorMessage(error, 'Failed to create category. Please try again.')
+                    showError('Create Failed', errorMessage)
+                  }
                 }}
                 onUpdateCategory={async (id, data) => {
-                  await updateCategory({ id, ...data }).unwrap()
-                  refetchCategories()
+                  try {
+                    await updateCategory({ id, ...data }).unwrap()
+                    refetchCategories()
+                  } catch (error) {
+                    const errorMessage = getErrorMessage(error, 'Failed to update category. Please try again.')
+                    showError('Update Failed', errorMessage)
+                  }
                 }}
                 onDeleteCategory={async (id) => {
                   showConfirm(
@@ -571,7 +584,8 @@ export default function AdminDashboard() {
                         await deleteCategory(id).unwrap()
                         refetchCategories()
                       } catch (error) {
-                        showError('Delete Failed', 'Failed to delete category. Please try again.')
+                        const errorMessage = getErrorMessage(error, 'Failed to delete category. Please try again.')
+                        showError('Delete Failed', errorMessage)
                       }
                     },
                     { type: 'danger', confirmText: 'Delete', cancelText: 'Cancel', autoCloseOnSuccess: true }

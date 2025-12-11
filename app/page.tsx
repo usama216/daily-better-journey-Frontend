@@ -9,13 +9,13 @@ import Footer from '@/components/Footer'
 import AdBanner from '@/components/AdBanner'
 
 export const metadata: Metadata = {
-  title: 'Daily Better Journey - Become Better Every Single Day | Personal Growth Blog',
-  description: 'Join a journey of growth, habits, and self-awareness that leads to the best version of you. Weekly insights, stories, and growth tips on personal development.',
+  title: 'Daily Better Journey | Your Space For Real Growth',
+  description: "Find guidance, reflections, and practical steps that support steady self-improvement. Empower your mindset, strengthen your habits, and create lasting change.",
   keywords: 'personal growth, self improvement, daily habits, emotional intelligence, mindfulness, self awareness, productivity, discipline, Daily Better Journey',
   authors: [{ name: 'R. Khan', url: 'https://dailybetterjourney.com' }],
   openGraph: {
-    title: 'Daily Better Journey - Become Better Every Single Day',
-    description: 'Join a journey of growth, habits, and self-awareness that leads to the best version of you.',
+    title: 'Daily Better Journey | Your Space For Real Growth',
+    description: "Find guidance, reflections, and practical steps that support steady self-improvement. Empower your mindset, strengthen your habits, and create lasting change.",
     type: 'website',
     locale: 'en_US',
     siteName: 'Daily Better Journey',
@@ -23,8 +23,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Daily Better Journey - Become Better Every Single Day',
-    description: 'Join a journey of growth, habits, and self-awareness that leads to the best version of you.',
+    title: 'Daily Better Journey | Your Space For Real Growth',
+    description: "Find guidance, reflections, and practical steps that support steady self-improvement. Empower your mindset, strengthen your habits, and create lasting change.",
+    images: ['https://dailybetterjourney.com/logo.png'],
   },
   robots: {
     index: true,

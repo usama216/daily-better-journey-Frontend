@@ -13,7 +13,7 @@ const AboutMission = () => {
         <div className="absolute top-0 right-0 w-96 h-96 bg-forest-400 rounded-full filter blur-3xl"></div>
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-golden-400 rounded-full filter blur-3xl"></div>
       </div>
-      
+
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           {/* Left Side - Text */}
@@ -25,25 +25,31 @@ const AboutMission = () => {
             className="space-y-6"
           >
             <div className="inline-block px-4 py-2 bg-golden-100 border border-golden-300 rounded-full mb-4">
-              <span className="text-golden-700 text-sm font-semibold uppercase tracking-wide">Our Mission</span>
+              <span className="text-golden-700 text-sm font-semibold uppercase tracking-wide">Get To Know Us</span>
             </div>
-            
+
             <h2 className="text-4xl sm:text-5xl font-extrabold text-charcoal-900 leading-tight">
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-golden-600 to-forest-600">
-                Small Steps.
+                Your Partner In
+
               </span>
               <br />
-              Big Change.
+              Everyday Progress
             </h2>
-            
-            <p className="text-lg text-charcoal-700 leading-relaxed">
-              At Daily Better Journey, we believe <span className="font-semibold text-forest-700">true transformation happens in small steps.</span> Each sunrise presents us with another opportunity to grow, reflect, and realign with our purpose.
-            </p>
-            
-            <p className="text-lg text-charcoal-700 leading-relaxed">
-              Whether you're building better habits, mastering your emotions, or finding focus, this is your home for becoming just a little bit better each day.
-            </p>
-            
+
+            <p className="text-md text-charcoal-700">
+              Daily Better Journey grew from a simple idea. Life feels a lot better when you have a place that helps you slow down, reset, and try again with a little more clarity.  </p>
+
+            <p className="text-md text-charcoal-700">
+              We wanted to create a space where growth feels doable, where you can learn at your own pace, and where small changes feel worth celebrating.  </p>
+            <div role="region" aria-label="Four habit prompts">
+              <ul className="list-disc pl-6 space-y-2 text-gray-800">
+                <li>Habits That Stick</li>
+                <li>Mindset That Supports</li>
+                <li>Focus That Lasts</li>
+                <li>Motivation That Feels Real</li>
+              </ul>
+            </div>
             <div className="flex gap-4">
               {['Growth', 'Habits', 'Mindfulness'].map((tag, i) => (
                 <div key={i} className="px-4 py-2 bg-charcoal-100 rounded-lg text-charcoal-700 font-medium">
@@ -52,7 +58,7 @@ const AboutMission = () => {
               ))}
             </div>
           </motion.div>
-          
+
           {/* Right Side - Visual */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}

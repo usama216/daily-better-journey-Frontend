@@ -40,7 +40,7 @@ const FeaturedArticles = () => {
           transition={{ duration: 0.5 }}
           className="inline-block px-4 py-2 bg-golden-100 border border-golden-300 rounded-full mb-4"
         >
-          <span className="text-golden-700 text-sm font-semibold uppercase tracking-wide">Latest</span>
+          <span className="text-golden-700 text-sm font-semibold uppercase tracking-wide">Latest Articles</span>
         </motion.div>
         
         <motion.h2
@@ -50,7 +50,7 @@ const FeaturedArticles = () => {
           transition={{ duration: 0.5, delay: 0.1 }}
           className="text-4xl sm:text-5xl font-extrabold text-charcoal-900 mb-4"
         >
-          Featured Articles
+          Fresh Stories To Lift Your Day
         </motion.h2>
         
         <motion.p
@@ -60,7 +60,8 @@ const FeaturedArticles = () => {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="text-lg text-charcoal-600 max-w-2xl mx-auto"
         >
-          Discover insights that transform your daily routine
+         Step into new ideas that spark curiosity, fuel motivation, and offer simple shifts you can use right now.
+
         </motion.p>
       </div>
 

@@ -52,7 +52,7 @@ export default function ContactPage() {
               transition={{ duration: 0.6 }}
               className="inline-block px-4 py-2 bg-golden-100 border border-golden-300 rounded-full mb-6"
             >
-              <span className="text-golden-700 text-sm font-semibold uppercase tracking-wide">Get In Touch</span>
+              <span className="text-golden-700 text-sm font-semibold uppercase tracking-wide">Let’s Talk</span>
             </motion.div>
             
             <motion.h1 
@@ -61,7 +61,7 @@ export default function ContactPage() {
               transition={{ duration: 0.6, delay: 0.1 }}
               className="text-5xl sm:text-6xl lg:text-7xl font-extrabold text-charcoal-900 mb-6"
             >
-              Let's Connect
+             Your Voice Matters Here
             </motion.h1>
             
             <motion.p 
@@ -70,8 +70,7 @@ export default function ContactPage() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="text-xl sm:text-2xl text-charcoal-700 max-w-3xl mx-auto leading-relaxed"
             >
-              We love hearing from readers, collaborators, and fellow creators. Whether you&apos;d like to share your story, pitch an idea, or explore a partnership—{' '}
-              <span className="font-bold text-forest-700">we&apos;re here to listen.</span>
+             If you landed here, something in you is already shifting. Do not ignore it. Reach out, ask what you need to ask, share what you want to share. Sometimes the simplest message is the first real step toward clarity. Tell us what you are facing, and we will guide you with honest, personalized support, completely free.
             </motion.p>
           </header>
         </div>

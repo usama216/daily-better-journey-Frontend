@@ -8,6 +8,7 @@ import { MdOutlineEmail, MdAccessTime, MdDelete, MdCheckCircle, MdArchive, MdVis
 import { FaEnvelope, FaEnvelopeOpen, FaCheckCircle, FaArchive } from 'react-icons/fa'
 import { logout, getUser } from '@/lib/auth'
 import { usePopup } from '@/hooks/usePopup'
+import { getErrorMessage } from '@/lib/utils/errorHandler'
 // Helper function to format date
 const formatDate = (dateString: string) => {
   const date = new Date(dateString)
@@ -55,7 +56,8 @@ export default function AdminContactsPage() {
           refetch()
         } catch (error) {
           console.error('Failed to delete:', error)
-          showError('Delete Failed', 'Failed to delete contact submission. Please try again.')
+          const errorMessage = getErrorMessage(error, 'Failed to delete contact submission. Please try again.')
+          showError('Delete Failed', errorMessage)
         }
       },
       { type: 'danger', confirmText: 'Delete', cancelText: 'Cancel', autoCloseOnSuccess: true }
@@ -68,7 +70,8 @@ export default function AdminContactsPage() {
       refetch()
     } catch (error) {
       console.error('Failed to update status:', error)
-      showError('Update Failed', 'Failed to update status. Please try again.')
+      const errorMessage = getErrorMessage(error, 'Failed to update status. Please try again.')
+      showError('Update Failed', errorMessage)
     }
   }
 

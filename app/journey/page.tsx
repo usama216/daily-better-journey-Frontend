@@ -25,7 +25,7 @@ export default function JourneyPage() {
               transition={{ duration: 0.6 }}
               className="inline-block px-4 py-2 bg-golden-100 border border-golden-300 rounded-full mb-6"
             >
-              <span className="text-golden-700 text-sm font-semibold uppercase tracking-wide">Our Story</span>
+              <span className="text-golden-700 text-sm font-semibold uppercase tracking-wide">Behind The Name</span>
             </motion.div>
             
             <motion.h1 
@@ -34,7 +34,8 @@ export default function JourneyPage() {
               transition={{ duration: 0.6, delay: 0.1 }}
               className="text-5xl sm:text-6xl lg:text-7xl font-extrabold text-charcoal-900 mb-6"
             >
-              The Journey to a Better You Starts Here
+              A Journey That Belongs To You
+
             </motion.h1>
             
             <motion.p 
@@ -43,8 +44,7 @@ export default function JourneyPage() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="text-xl sm:text-2xl text-charcoal-700 max-w-3xl mx-auto leading-relaxed"
             >
-              Every person is on a journey, not of competition, but of progress.
-            </motion.p>
+             This space exists to help you return to yourself and keep moving forward with intention. </motion.p>
           </header>
         </div>
       </section>
@@ -60,10 +60,10 @@ export default function JourneyPage() {
           className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-20"
         >
           {[
-            { label: 'Articles Published', value: '50+', icon: FaBook, color: 'from-golden-400 to-golden-600' },
-            { label: 'Readers Growing', value: '500+', icon: FaHeart, color: 'from-forest-400 to-forest-600' },
-            { label: 'Categories', value: '5+', icon: FaLightbulb, color: 'from-golden-400 to-forest-500' },
-            { label: 'Weekly Growth', value: '100%', icon: FaChartLine, color: 'from-forest-400 to-golden-500' },
+            { label: 'Stories To Guide You', value: '50+', icon: FaBook, color: 'from-golden-400 to-golden-600' },
+            { label: 'Lives Moving Forward', value: '500+', icon: FaHeart, color: 'from-forest-400 to-forest-600' },
+            { label: 'Journeys To Choose From', value: '5+', icon: FaLightbulb, color: 'from-golden-400 to-forest-500' },
+            { label: 'Growth Rising Each Week', value: '80%', icon: FaChartLine, color: 'from-forest-400 to-golden-500' },
           ].map((stat, index) => {
             const IconComponent = stat.icon
             return (
@@ -95,16 +95,14 @@ export default function JourneyPage() {
             transition={{ duration: 0.6 }}
             className="lg:col-span-2"
           >
-            <h2 className="text-3xl font-bold text-charcoal-900 mb-6">Our Mission</h2>
+            <h2 className="text-3xl font-bold text-charcoal-900 mb-6">Why I Started Daily Better Journey</h2>
             <p className="text-charcoal-700 leading-relaxed mb-6 text-lg">
-              Daily Better Journey was created to remind you that growth isn't an overnight event. It's a daily practice, made of small choices, quiet reflections, and steady habits.
-            </p>
+            Daily Better Journey began during a time when I felt stuck in my own life. I kept waiting for motivation to magically show up, until one day I realized nothing would change unless I changed something first.  </p>
             <p className="text-charcoal-700 leading-relaxed mb-6 text-lg">
-              This platform exists to share stories, methods, and mindsets that help you evolve, one step at a time. We believe in progress over perfection, consistency over intensity.
+            So I started small. Tiny habits, honest check ins, small choices that actually felt doable. Those small shifts helped me feel like myself again, and I wanted a place to share what worked in a simple, real way. 
             </p>
             <p className="text-charcoal-700 leading-relaxed text-lg">
-              Whether you're starting your growth journey or looking to deepen existing practices, you'll find practical wisdom, personal stories, and actionable insights here.
-            </p>
+            This space is my way of passing that forward. If you are looking for steady, honest growth without the pressure to be perfect, you are in the right place. </p>
           </motion.div>
 
           {/* Image/Visual */}
@@ -141,30 +139,29 @@ export default function JourneyPage() {
           transition={{ duration: 0.6 }}
           className="mb-20"
         >
-          <h2 className="text-4xl font-bold text-charcoal-900 mb-12 text-center">What You'll Find Here</h2>
+          <h2 className="text-4xl font-bold text-charcoal-900 mb-12 text-center">What Awaits You Here</h2>
           <div className="grid md:grid-cols-2 gap-6">
             {[
               { 
-                title: 'Science-Backed Tips', 
-                desc: 'Evidence-based self-improvement strategies backed by research and real-world application',
+                title: 'Ideas That Make Sense', 
+                desc: 'Finest insights pulled from psychology and lived experience, explained in a way that helps you actually use them in the middle of real life.',
                 Icon: FaFlask,
                 gradient: 'from-golden-400 to-golden-600'
               },
               { 
-                title: 'Habit Building', 
-                desc: 'Practical methods to build lasting habits and create sustainable change in your daily life',
-                Icon: FaDumbbell,
+                title: 'Habits That Feel Possible', 
+                desc: 'Small, doable practices that meet you where you are. No giant overhauls, just steps that quietly shift your days in the right direction.',                Icon: FaDumbbell,
                 gradient: 'from-forest-400 to-forest-600'
               },
               { 
-                title: 'Emotional Intelligence', 
-                desc: 'Personal reflections on discipline, emotional awareness, and mindful living',
+                title: 'Understanding Yourself Better', 
+                desc: 'Stories and reflections that help you see your patterns, handle your emotions with more kindness, and respond instead of react.',
                 Icon: FaBrain,
                 gradient: 'from-golden-400 to-forest-500'
               },
               { 
-                title: 'Journaling & Focus', 
-                desc: 'Guided exercises and prompts for self-awareness, clarity, and intentional growth',
+                title: 'Space To Think Clearly', 
+                desc: 'Prompts and exercises that slow down the noise. A place to sort your thoughts, find your focus, and map out where you want to go next.',
                 Icon: FaPenNib,
                 gradient: 'from-forest-400 to-golden-500'
               }
@@ -206,8 +203,7 @@ export default function JourneyPage() {
             
             <div className="relative z-10">
               <blockquote className="text-2xl sm:text-3xl md:text-4xl font-light italic text-charcoal-800 leading-relaxed mb-8 text-center">
-                I started this blog to share what I've learned about growth, not from grand achievements, but from small, consistent changes.
-              </blockquote>
+              The biggest shift in my life happened when I stopped chasing the perfect version of myself and started showing up for the real one.    </blockquote>
               <p className="text-center text-charcoal-900 font-bold text-lg">— R. Khan, Founder</p>
               <p className="text-center text-charcoal-600 mt-2">Daily Better Journey</p>
             </div>

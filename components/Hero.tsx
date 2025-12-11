@@ -7,16 +7,18 @@ import { useState, useEffect } from 'react'
 import { FaStar } from 'react-icons/fa6'
 import { HiOutlineHeart } from 'react-icons/hi2'
 import { IoSparkles } from 'react-icons/io5'
+import NewsletterSubscriptionPopup from './NewsletterSubscriptionPopup'
 
 const Hero = () => {
   const [currentSlide, setCurrentSlide] = useState(0)
+  const [showNewsletterPopup, setShowNewsletterPopup] = useState(false)
 
   const slides = [
     {
-      badge: 'Weekly Insights Available Now',
-      title: 'Become Better,',
-      highlight: 'Every Single Day',
-      description: 'Join a journey of growth, habits, and self-awareness that leads to the best version of you.',
+      badge: 'Boost Daily Productivity',
+      title: 'Create Focus That',
+      highlight: 'Carries You Forward',
+      description: 'Try simple productivity methods that simplify your day, clear mental clutter, and guide your progress with calm.',
       image: 'https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=800&h=800&fit=crop',
       stats: [
         { number: '500+', label: 'Readers', sublabel: 'Growing daily' },
@@ -24,10 +26,10 @@ const Hero = () => {
       ]
     },
     {
-      badge: 'Transform Your Life Today',
-      title: 'Build Better',
-      highlight: 'Habits That Stick',
-      description: 'Discover proven strategies to create lasting habits and achieve your personal growth goals.',
+      badge: 'Build Better Habits',
+      title: 'Shape Days That',
+      highlight: ' Feel Truly Yours',
+      description: 'Discover small, simple habits that turn everyday moments into tiny wins and gradually build real, lasting momentum in your life.',
       image: 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800&h=800&fit=crop',
       stats: [
         { number: '100+', label: 'Tips', sublabel: 'Practical advice' },
@@ -35,10 +37,10 @@ const Hero = () => {
       ]
     },
     {
-      badge: 'Start Your Journey Now',
-      title: 'Master Your',
-      highlight: 'Mindset & Goals',
-      description: 'Learn powerful techniques to develop emotional intelligence and achieve meaningful success.',
+      badge: 'Grow Your Mindset',
+      title: 'Train Your Mind',
+      highlight: 'To Support You',
+      description: 'Learn gentle mindset tools that quiet fear, spark clarity, and help you show up with gradual confidence.',
       image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&h=800&fit=crop',
       stats: [
         { number: '10K+', label: 'Members', sublabel: 'Community strong' },
@@ -158,21 +160,20 @@ const Hero = () => {
                 transition={{ duration: 0.5, delay: 0.4 }}
                 className="flex sm:flex-row items-start gap-4 pt-4"
               >
-                <Link href="/blog">
-                  <motion.button
-                    whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(0,0,0,0.15)" }}
-                    whileTap={{ scale: 0.95 }}
-                    className="group relative bg-gradient-to-r from-charcoal-900 to-charcoal-800 text-white px-5 py-3 rounded-2xl font-bold text-sm shadow-2xl overflow-hidden"
-                  >
-                    <span className="relative z-10 flex items-center gap-3">
-                      Join the Journey
-                      <svg className="w-6 h-6 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                      </svg>
-                    </span>
-                    <div className="absolute inset-0 bg-gradient-to-r from-golden-600 to-forest-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  </motion.button>
-                </Link>
+                <motion.button
+                  onClick={() => setShowNewsletterPopup(true)}
+                  whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(0,0,0,0.15)" }}
+                  whileTap={{ scale: 0.95 }}
+                  className="group relative bg-gradient-to-r from-charcoal-900 to-charcoal-800 text-white px-5 py-3 rounded-2xl font-bold text-sm shadow-2xl overflow-hidden"
+                >
+                  <span className="relative z-10 flex items-center gap-3">
+                    Join the Journey
+                    <svg className="w-6 h-6 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                    </svg>
+                  </span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-golden-600 to-forest-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </motion.button>
               </motion.div>
 
               {/* Trust Indicators */}
@@ -238,6 +239,12 @@ const Hero = () => {
           ))}
         </div>
       </div>
+
+      {/* Newsletter Subscription Popup */}
+      <NewsletterSubscriptionPopup 
+        isOpen={showNewsletterPopup} 
+        onClose={() => setShowNewsletterPopup(false)} 
+      />
     </section>
   )
 }

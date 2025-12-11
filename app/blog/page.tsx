@@ -47,7 +47,8 @@ export default function BlogPage() {
               transition={{ duration: 0.6 }}
               className="inline-block px-4 py-2 bg-golden-100 border border-golden-300 rounded-full mb-6"
             >
-              <span className="text-golden-700 text-sm font-semibold uppercase tracking-wide">Articles</span>
+              <span className="text-golden-700 text-sm font-semibold uppercase tracking-wide">Explore The Blog
+              </span>
             </motion.div>
             
             <motion.h1 
@@ -56,7 +57,7 @@ export default function BlogPage() {
               transition={{ duration: 0.6, delay: 0.1 }}
               className="text-5xl sm:text-6xl lg:text-7xl font-extrabold text-charcoal-900 mb-6"
             >
-              The Blog
+              A Space For Growth And Curiosity
             </motion.h1>
             
             <motion.p 
@@ -65,7 +66,8 @@ export default function BlogPage() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="text-xl sm:text-2xl text-charcoal-700 max-w-3xl mx-auto leading-relaxed"
             >
-              Stories, methods, and mindsets for growth
+              Explore writing that encourages deeper clarity, softer moments, and small steps toward a better you.
+
             </motion.p>
           </header>
 
@@ -78,8 +80,7 @@ export default function BlogPage() {
           >
             <blockquote className="text-center">
               <p className="text-2xl sm:text-3xl text-charcoal-800 italic leading-relaxed">
-                &ldquo;Discipline isn&apos;t punishment. It&apos;s freedom, the freedom to follow through, to trust yourself, to build a life you&apos;re proud of.&rdquo;
-              </p>
+              The future depends on what you do today. Your decisions, your discipline, and the way you choose to show up are shaping the life you will experience tomorrow.   </p>
             </blockquote>
           </motion.div>
         </div>
