@@ -7,6 +7,7 @@ import { useGetContactsQuery, useUpdateContactStatusMutation, useDeleteContactMu
 import { MdOutlineEmail, MdAccessTime, MdDelete, MdCheckCircle, MdArchive, MdVisibility, MdArrowBack, MdLogout } from 'react-icons/md'
 import { FaEnvelope, FaEnvelopeOpen, FaCheckCircle, FaArchive } from 'react-icons/fa'
 import { logout, getUser } from '@/lib/auth'
+import { usePopup } from '@/hooks/usePopup'
 // Helper function to format date
 const formatDate = (dateString: string) => {
   const date = new Date(dateString)
@@ -26,6 +27,7 @@ export default function AdminContactsPage() {
   const { data, isLoading, error, refetch } = useGetContactsQuery({ status: statusFilter || undefined })
   const [updateStatus] = useUpdateContactStatusMutation()
   const [deleteContact] = useDeleteContactMutation()
+  const { showError, showConfirm, PopupComponent } = usePopup()
 
   useEffect(() => {
     const user = getUser()
@@ -35,20 +37,29 @@ export default function AdminContactsPage() {
   }, [])
 
   const handleLogout = () => {
-    if (confirm('Are you sure you want to logout?')) {
-      logout()
-    }
+    showConfirm(
+      'Confirm Logout',
+      'Are you sure you want to logout?',
+      () => logout(),
+      { type: 'warning', confirmText: 'Logout', cancelText: 'Cancel' }
+    )
   }
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this contact submission? This action cannot be undone.')) return
-    try {
-      await deleteContact(id).unwrap()
-      refetch()
-    } catch (error) {
-      console.error('Failed to delete:', error)
-      alert('Failed to delete contact submission. Please try again.')
-    }
+    showConfirm(
+      'Delete Contact Submission',
+      'Are you sure you want to delete this contact submission? This action cannot be undone.',
+      async () => {
+        try {
+          await deleteContact(id).unwrap()
+          refetch()
+        } catch (error) {
+          console.error('Failed to delete:', error)
+          showError('Delete Failed', 'Failed to delete contact submission. Please try again.')
+        }
+      },
+      { type: 'danger', confirmText: 'Delete', cancelText: 'Cancel', autoCloseOnSuccess: true }
+    )
   }
 
   const handleStatusUpdate = async (id: string, newStatus: 'new' | 'read' | 'replied' | 'archived') => {
@@ -57,7 +68,7 @@ export default function AdminContactsPage() {
       refetch()
     } catch (error) {
       console.error('Failed to update status:', error)
-      alert('Failed to update status. Please try again.')
+      showError('Update Failed', 'Failed to update status. Please try again.')
     }
   }
 
@@ -150,6 +161,7 @@ export default function AdminContactsPage() {
   }
 
   return (
+    <>
     <div className="min-h-screen bg-gradient-to-br from-charcoal-50 to-charcoal-100">
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-charcoal-200">
@@ -382,6 +394,8 @@ export default function AdminContactsPage() {
         </div>
       </div>
     </div>
+    <PopupComponent />
+    </>
   )
 }
 

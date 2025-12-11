@@ -66,3 +66,16 @@ export const getAuthHeader = (): { Authorization: string } | {} => {
   return { Authorization: `Bearer ${token}` }
 }
 
+// Get headers with authentication token for fetch API calls
+// Useful for FormData uploads where we can't use Content-Type header
+export const getAuthHeadersForFetch = (): HeadersInit => {
+  const token = getToken()
+  const headers: HeadersInit = {}
+  
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`
+  }
+  
+  return headers
+}
+

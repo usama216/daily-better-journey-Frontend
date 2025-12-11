@@ -5,6 +5,8 @@ import { useRouter, useParams } from 'next/navigation'
 import dynamic from 'next/dynamic'
 import { FaSave, FaEye, FaImage, FaSpinner } from 'react-icons/fa'
 import { useGetPostQuery, useUpdatePostMutation, useGetCategoriesQuery } from '@/lib/api/blogApi'
+import { getAuthHeadersForFetch } from '@/lib/auth'
+import { usePopup } from '@/hooks/usePopup'
 
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false })
 import 'react-quill/dist/quill.snow.css'
@@ -31,6 +33,7 @@ export default function EditPostPage() {
   
   const { data: postData, isLoading: isLoadingPost } = useGetPostQuery(id)
   const [updatePost, { isLoading: isUpdating }] = useUpdatePostMutation()
+  const { showError, PopupComponent } = usePopup()
   
   const [formData, setFormData] = useState({
     title: '',
@@ -82,6 +85,7 @@ export default function EditPostPage() {
               
               const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://api.dailybetterjourney.com/api'}/upload`, {
                 method: 'POST',
+                headers: getAuthHeadersForFetch(),
                 body: form,
               })
               
@@ -96,18 +100,18 @@ export default function EditPostPage() {
                 quill.insertEmbed(index, 'image', json.url)
                 quill.setSelection(index + 1)
               } else {
-                alert('Failed to upload image. Please try again.')
+                showError('Upload Failed', 'Failed to upload image. Please try again.')
               }
             } catch (e: any) {
               console.error('Image upload error:', e)
-              alert('Image upload failed: ' + (e.message || 'Unknown error'))
+              showError('Upload Failed', 'Image upload failed: ' + (e.message || 'Unknown error'))
             }
           }
           input.click()
         }
       }
     }
-  }), [])
+  }), [showError])
 
   useEffect(() => {
     if (postData?.data) {
@@ -149,7 +153,7 @@ export default function EditPostPage() {
       await updatePost({ id, ...formData, status: 'draft' }).unwrap()
       router.push('/admin')
     } catch (error) {
-      alert('Failed to save draft. Please try again.')
+      showError('Save Failed', 'Failed to save draft. Please try again.')
     }
   }
 
@@ -158,7 +162,7 @@ export default function EditPostPage() {
       await updatePost({ id, ...formData, status: 'published' }).unwrap()
       router.push('/admin')
     } catch (error) {
-      alert('Failed to publish post. Please try again.')
+      showError('Publish Failed', 'Failed to publish post. Please try again.')
     }
   }
 
@@ -174,6 +178,7 @@ export default function EditPostPage() {
   }
 
   return (
+    <>
     <div className="min-h-screen bg-gradient-to-br from-charcoal-50 to-charcoal-100">
       <header className="bg-white shadow-sm border-b border-charcoal-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -302,6 +307,7 @@ export default function EditPostPage() {
                       form.append('file', file)
                       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://api.dailybetterjourney.com/api'}/upload`, {
                         method: 'POST',
+                        headers: getAuthHeadersForFetch(),
                         body: form,
                       })
                       const json = await res.json()
@@ -309,7 +315,7 @@ export default function EditPostPage() {
                         setFormData(prev => ({ ...prev, featured_image: json.url }))
                       }
                     } catch (e) {
-                      alert('Image upload failed')
+                      showError('Upload Failed', 'Image upload failed. Please try again.')
                     }
                   }}
                   className="w-full text-sm"
@@ -400,5 +406,7 @@ export default function EditPostPage() {
         </div>
       </div>
     </div>
+    <PopupComponent />
+    </>
   )
 }

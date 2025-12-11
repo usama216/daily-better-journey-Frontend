@@ -21,6 +21,7 @@ import {
   FaEnvelope
 } from 'react-icons/fa'
 import { useGetPostsQuery, useDeletePostMutation, useUpdatePostStatusMutation, useGetCategoriesQuery, useCreateCategoryMutation, useUpdateCategoryMutation, useDeleteCategoryMutation } from '@/lib/api/blogApi'
+import { usePopup } from '@/hooks/usePopup'
 
 function CategoriesTab({ 
   categories, 
@@ -231,6 +232,7 @@ export default function AdminDashboard() {
   const { data: postsData, isLoading, refetch } = useGetPostsQuery({})
   const [deletePost] = useDeletePostMutation()
   const [updateStatus] = useUpdatePostStatusMutation()
+  const { showError, showConfirm, PopupComponent } = usePopup()
 
   const { data: categoriesData, isLoading: isLoadingCategories, refetch: refetchCategories } = useGetCategoriesQuery(undefined)
   const [createCategory] = useCreateCategoryMutation()
@@ -245,9 +247,12 @@ export default function AdminDashboard() {
   }, [])
 
   const handleLogout = () => {
-    if (confirm('Are you sure you want to logout?')) {
-      logout()
-    }
+    showConfirm(
+      'Confirm Logout',
+      'Are you sure you want to logout?',
+      () => logout(),
+      { type: 'warning', confirmText: 'Logout', cancelText: 'Cancel' }
+    )
   }
 
   const posts = postsData?.data || []
@@ -266,14 +271,21 @@ export default function AdminDashboard() {
   }
 
   const handleDelete = async (id: string) => {
-    if (confirm('Are you sure you want to delete this post?')) {
-      try {
-        await deletePost(id).unwrap()
-        refetch()
-      } catch (error) {
-        alert('Failed to delete post')
-      }
-    }
+    showConfirm(
+      'Delete Post',
+      'Are you sure you want to delete this post? This action cannot be undone.',
+      async () => {
+        try {
+          await deletePost(id).unwrap()
+          refetch()
+          // Popup will auto-close on success
+        } catch (error) {
+          showError('Delete Failed', 'Failed to delete post. Please try again.')
+          // Popup stays open on error so user can see the error message
+        }
+      },
+      { type: 'danger', confirmText: 'Delete', cancelText: 'Cancel', autoCloseOnSuccess: true }
+    )
   }
 
   const handleToggleStatus = async (id: string, currentStatus: string) => {
@@ -284,7 +296,7 @@ export default function AdminDashboard() {
       }).unwrap()
       refetch()
     } catch (error) {
-      alert('Failed to update post status')
+      showError('Update Failed', 'Failed to update post status. Please try again.')
     }
   }
 
@@ -296,6 +308,7 @@ export default function AdminDashboard() {
   }
 
   return (
+    <>
     <div className="min-h-screen bg-gradient-to-br from-charcoal-50 to-charcoal-100">
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-charcoal-200">
@@ -550,10 +563,19 @@ export default function AdminDashboard() {
                   refetchCategories()
                 }}
                 onDeleteCategory={async (id) => {
-                  if (confirm('Are you sure you want to delete this category?')) {
-                    await deleteCategory(id).unwrap()
-                    refetchCategories()
-                  }
+                  showConfirm(
+                    'Delete Category',
+                    'Are you sure you want to delete this category? This action cannot be undone.',
+                    async () => {
+                      try {
+                        await deleteCategory(id).unwrap()
+                        refetchCategories()
+                      } catch (error) {
+                        showError('Delete Failed', 'Failed to delete category. Please try again.')
+                      }
+                    },
+                    { type: 'danger', confirmText: 'Delete', cancelText: 'Cancel', autoCloseOnSuccess: true }
+                  )
                 }}
               />
             )}
@@ -575,5 +597,7 @@ export default function AdminDashboard() {
         </div>
       </div>
     </div>
+    <PopupComponent />
+    </>
   )
 }
