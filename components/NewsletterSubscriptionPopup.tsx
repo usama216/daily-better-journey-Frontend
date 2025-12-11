@@ -103,9 +103,8 @@ const NewsletterSubscriptionPopup = ({ isOpen, onClose }: NewsletterSubscription
                   <h2 className="text-3xl font-extrabold text-white mb-2">
                     Join the Journey
                   </h2>
-                  <p className="text-white/80 text-lg">
-                    Get weekly insights, stories, and growth tips straight to your inbox.
-                  </p>
+                  <p className="text-white/80 text-sm">
+                  Subscribe for short punches of insight that wake you up, shift your thinking, and spark real movement. </p>
                 </div>
 
                 {/* Success Message */}

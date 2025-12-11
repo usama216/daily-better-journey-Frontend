@@ -3,7 +3,13 @@ import { baseApi } from './baseApi'
 export interface ContactSubmission {
   name: string
   email: string
-  message: string
+  message?: string // Keep for backward compatibility
+  what_brought_you?: string
+  challenge_description?: string
+  guidance_areas?: string[] // Array of selected areas
+  other_guidance_area?: string // For "Other" option
+  hope_to_achieve?: string
+  anything_else?: string
 }
 
 export interface ContactResponse {
@@ -23,7 +29,13 @@ export interface ContactSubmissionData {
   id: string
   name: string
   email: string
-  message: string
+  message?: string
+  what_brought_you?: string
+  challenge_description?: string
+  guidance_areas?: string[]
+  other_guidance_area?: string
+  hope_to_achieve?: string
+  anything_else?: string
   status: 'new' | 'read' | 'replied' | 'archived'
   created_at: string
   updated_at: string

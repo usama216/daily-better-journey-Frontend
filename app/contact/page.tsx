@@ -8,16 +8,56 @@ import { MdOutlineEmail, MdOutlineLocationOn } from 'react-icons/md'
 import { FaLinkedin, FaInstagram, FaYoutube } from 'react-icons/fa6'
 import { useSubmitContactMutation } from '@/lib/api/contactApi'
 
+const GUIDANCE_AREAS = [
+  'Habits and routines',
+  'Emotional awareness',
+  'Productivity and focus',
+  'Mindset and confidence',
+  'Self discipline',
+  'Journaling and clarity',
+  'Other'
+]
+
 export default function ContactPage() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    message: ''
+    what_brought_you: '',
+    challenge_description: '',
+    guidance_areas: [] as string[],
+    other_guidance_area: '',
+    hope_to_achieve: '',
+    anything_else: ''
   })
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [errorMessage, setErrorMessage] = useState('')
   
   const [submitContact, { isLoading: isSubmitting }] = useSubmitContactMutation()
+
+  const handleGuidanceAreaChange = (area: string) => {
+    setFormData(prev => {
+      if (area === 'Other') {
+        // Toggle Other
+        const hasOther = prev.guidance_areas.includes('Other')
+        return {
+          ...prev,
+          guidance_areas: hasOther
+            ? prev.guidance_areas.filter(a => a !== 'Other')
+            : [...prev.guidance_areas, 'Other'],
+          other_guidance_area: hasOther ? '' : prev.other_guidance_area
+        }
+      } else {
+        // Toggle regular area
+        const hasArea = prev.guidance_areas.includes(area)
+        return {
+          ...prev,
+          guidance_areas: hasArea
+            ? prev.guidance_areas.filter(a => a !== area)
+            : [...prev.guidance_areas, area]
+        }
+      }
+    })
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -27,7 +67,16 @@ export default function ContactPage() {
     try {
       await submitContact(formData).unwrap()
       setSubmitStatus('success')
-      setFormData({ name: '', email: '', message: '' })
+      setFormData({
+        name: '',
+        email: '',
+        what_brought_you: '',
+        challenge_description: '',
+        guidance_areas: [],
+        other_guidance_area: '',
+        hope_to_achieve: '',
+        anything_else: ''
+      })
     } catch (error: any) {
       setSubmitStatus('error')
       setErrorMessage(error?.data?.message || 'Failed to send message. Please try again.')
@@ -52,7 +101,7 @@ export default function ContactPage() {
               transition={{ duration: 0.6 }}
               className="inline-block px-4 py-2 bg-golden-100 border border-golden-300 rounded-full mb-6"
             >
-              <span className="text-golden-700 text-sm font-semibold uppercase tracking-wide">Let’s Talk</span>
+              <span className="text-golden-700 text-sm font-semibold uppercase tracking-wide">Let's Talk</span>
             </motion.div>
             
             <motion.h1 
@@ -68,7 +117,7 @@ export default function ContactPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-xl sm:text-2xl text-charcoal-700 max-w-3xl mx-auto leading-relaxed"
+              className="text-xl sm:text-2xl text-charcoal-700 max-w-6xl mx-auto leading-relaxed"
             >
              If you landed here, something in you is already shifting. Do not ignore it. Reach out, ask what you need to ask, share what you want to share. Sometimes the simplest message is the first real step toward clarity. Tell us what you are facing, and we will guide you with honest, personalized support, completely free.
             </motion.p>
@@ -86,6 +135,23 @@ export default function ContactPage() {
             transition={{ duration: 0.6 }}
             className="space-y-6"
           >
+            {/* Contact Info Cards */}
+            
+            {/* Intro Content */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="bg-gradient-to-br from-golden-50 to-forest-50 rounded-2xl p-8 border-2 border-golden-200 mb-6"
+            >
+              <h2 className="text-2xl font-bold text-charcoal-900 mb-3">
+                Tell us what you are struggling with.
+              </h2>
+              <p className="text-charcoal-700 leading-relaxed">
+                Share your challenges, habits you want to improve, emotional blocks, or areas in your life where you feel stuck. The more you open up, the more tailored and meaningful the guidance will be.
+              </p>
+            </motion.div>
+
             {/* Email Card */}
             <motion.div
               whileHover={{ scale: 1.02, y: -5 }}
@@ -162,9 +228,10 @@ export default function ContactPage() {
             className="bg-white rounded-2xl p-8 shadow-xl border border-charcoal-100 space-y-6"
             aria-label="Contact form"
           >
+            {/* Full Name */}
             <div>
               <label htmlFor="name" className="block text-sm font-bold text-charcoal-900 mb-3">
-                Your Name
+                Full Name *
               </label>
               <input
                 type="text"
@@ -174,13 +241,14 @@ export default function ContactPage() {
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 className="w-full px-5 py-4 border-2 border-charcoal-200 rounded-xl focus:outline-none focus:border-golden-500 focus:ring-2 focus:ring-golden-200 transition-all text-charcoal-900 placeholder-charcoal-400"
-                placeholder="Enter your name"
+                placeholder="Enter your full name"
               />
             </div>
 
+            {/* Email Address */}
             <div>
               <label htmlFor="email" className="block text-sm font-bold text-charcoal-900 mb-3">
-                Email Address
+                Email Address *
               </label>
               <input
                 type="email"
@@ -194,19 +262,107 @@ export default function ContactPage() {
               />
             </div>
 
+            {/* What brought you here today? */}
             <div>
-              <label htmlFor="message" className="block text-sm font-bold text-charcoal-900 mb-3">
-                Message
+              <label htmlFor="what_brought_you" className="block text-sm font-bold text-charcoal-900 mb-3">
+                What brought you here today? <span className="text-charcoal-500 font-normal text-xs"></span>
+              </label>
+              <input
+                type="text"
+                id="what_brought_you"
+                name="what_brought_you"
+                value={formData.what_brought_you}
+                onChange={(e) => setFormData({ ...formData, what_brought_you: e.target.value })}
+                className="w-full px-5 py-4 border-2 border-charcoal-200 rounded-xl focus:outline-none focus:border-golden-500 focus:ring-2 focus:ring-golden-200 transition-all text-charcoal-900 placeholder-charcoal-400"
+                placeholder="A brief reason for reaching out..."
+              />
+            </div>
+
+            {/* Challenge Description */}
+            <div>
+              <label htmlFor="challenge_description" className="block text-sm font-bold text-charcoal-900 mb-3">
+                Describe the challenge you want help with. <span className="text-charcoal-500 font-normal text-xs"></span>
               </label>
               <textarea
-                id="message"
-                name="message"
-                rows={6}
-                required
-                value={formData.message}
-                onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                id="challenge_description"
+                name="challenge_description"
+                rows={5}
+                value={formData.challenge_description}
+                onChange={(e) => setFormData({ ...formData, challenge_description: e.target.value })}
                 className="w-full px-5 py-4 border-2 border-charcoal-200 rounded-xl focus:outline-none focus:border-golden-500 focus:ring-2 focus:ring-golden-200 transition-all text-charcoal-900 placeholder-charcoal-400 resize-none"
-                placeholder="Tell us what's on your mind..."
+                placeholder="Tell us about the challenges you're facing..."
+              />
+            </div>
+
+            {/* Guidance Areas */}
+            <div>
+              <label className="block text-sm font-bold text-charcoal-900 mb-2">
+                Which areas do you want guidance in?
+              </label>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {GUIDANCE_AREAS.map((area) => (
+                  <label
+                    key={area}
+                    className="flex items-center gap-2 p-2 rounded-lg hover:bg-charcoal-50 cursor-pointer transition-colors"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={formData.guidance_areas.includes(area)}
+                      onChange={() => handleGuidanceAreaChange(area)}
+                      className="w-4 h-4 text-golden-600 border-charcoal-300 rounded focus:ring-2 focus:ring-golden-500 flex-shrink-0"
+                    />
+                    <span className="text-sm text-charcoal-700">{area}</span>
+                  </label>
+                ))}
+              </div>
+              
+              {/* Other input field */}
+              {formData.guidance_areas.includes('Other') && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  className="mt-2"
+                >
+                  <input
+                    type="text"
+                    value={formData.other_guidance_area}
+                    onChange={(e) => setFormData({ ...formData, other_guidance_area: e.target.value })}
+                    className="w-full px-4 py-3 border-2 border-charcoal-200 rounded-xl focus:outline-none focus:border-golden-500 focus:ring-2 focus:ring-golden-200 transition-all text-charcoal-900 placeholder-charcoal-400 text-sm"
+                    placeholder="Please specify..."
+                  />
+                </motion.div>
+              )}
+            </div>
+
+            {/* Hope to achieve */}
+            <div>
+              <label htmlFor="hope_to_achieve" className="block text-sm font-bold text-charcoal-900 mb-3">
+                What do you hope to achieve in the next 30 days?
+              </label>
+              <textarea
+                id="hope_to_achieve"
+                name="hope_to_achieve"
+                rows={4}
+                value={formData.hope_to_achieve}
+                onChange={(e) => setFormData({ ...formData, hope_to_achieve: e.target.value })}
+                className="w-full px-5 py-4 border-2 border-charcoal-200 rounded-xl focus:outline-none focus:border-golden-500 focus:ring-2 focus:ring-golden-200 transition-all text-charcoal-900 placeholder-charcoal-400 resize-none"
+                placeholder="Share your goals and aspirations..."
+              />
+            </div>
+
+            {/* Anything else */}
+            <div>
+              <label htmlFor="anything_else" className="block text-sm font-bold text-charcoal-900 mb-3">
+                Anything else you want to share?
+              </label>
+              <textarea
+                id="anything_else"
+                name="anything_else"
+                rows={4}
+                value={formData.anything_else}
+                onChange={(e) => setFormData({ ...formData, anything_else: e.target.value })}
+                className="w-full px-5 py-4 border-2 border-charcoal-200 rounded-xl focus:outline-none focus:border-golden-500 focus:ring-2 focus:ring-golden-200 transition-all text-charcoal-900 placeholder-charcoal-400 resize-none"
+                placeholder="Any additional information you'd like to share..."
               />
             </div>
 

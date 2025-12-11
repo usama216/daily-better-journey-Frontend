@@ -45,8 +45,8 @@ const Footer = () => {
              
             </div>
             <p className="text-white/70 text-sm leading-relaxed max-w-md">
-              Join us on a journey of growth, habits, and self-awareness. Small steps lead to big changes.
-            </p>
+            A space for real people who want steady growth, honest guidance, and a life built with intention.
+  </p>
             <div className="flex gap-3">
               {socialLinks.map((social, index) => {
                 const IconComponent = social.Icon
@@ -120,7 +120,7 @@ const Footer = () => {
           
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-8 border-t border-white/10">
             <p className="text-white/60 text-sm">
-              Copyright © 2025 Daily Better Journey. All Rights Reserved.
+              Copyright © {new Date().getFullYear()} Daily Better Journey. All Rights Reserved.
             </p>
             <div className="flex gap-6 text-sm text-white/60">
               <a href="#" className="hover:text-golden-400 transition-colors">Privacy Policy</a>

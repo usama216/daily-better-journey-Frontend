@@ -341,9 +341,70 @@ export default function AdminContactsPage() {
                       </span>
                     </div>
 
-                    <div className="bg-gradient-to-r from-charcoal-50 to-charcoal-100 rounded-lg p-5 mt-4 border border-charcoal-200">
-                      <p className="text-charcoal-800 whitespace-pre-wrap leading-relaxed">{contact.message}</p>
-                    </div>
+                    {/* What brought you here */}
+                    {contact.what_brought_you && (
+                      <div className="mt-3">
+                        <p className="text-xs font-semibold text-charcoal-600 uppercase tracking-wide mb-1">What brought you here?</p>
+                        <p className="text-charcoal-800">{contact.what_brought_you}</p>
+                      </div>
+                    )}
+
+                    {/* Challenge Description */}
+                    {contact.challenge_description && (
+                      <div className="mt-3">
+                        <p className="text-xs font-semibold text-charcoal-600 uppercase tracking-wide mb-1">Challenge Description</p>
+                        <div className="bg-gradient-to-r from-charcoal-50 to-charcoal-100 rounded-lg p-4 border border-charcoal-200">
+                          <p className="text-charcoal-800 whitespace-pre-wrap leading-relaxed">{contact.challenge_description}</p>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Guidance Areas */}
+                    {contact.guidance_areas && contact.guidance_areas.length > 0 && (
+                      <div className="mt-3">
+                        <p className="text-xs font-semibold text-charcoal-600 uppercase tracking-wide mb-2">Guidance Areas</p>
+                        <div className="flex flex-wrap gap-2">
+                          {contact.guidance_areas.map((area: string, idx: number) => (
+                            <span
+                              key={idx}
+                              className="px-3 py-1 bg-golden-100 text-golden-800 rounded-full text-sm font-medium"
+                            >
+                              {area}
+                            </span>
+                          ))}
+                        </div>
+                        {contact.other_guidance_area && (
+                          <div className="mt-2">
+                            <span className="text-xs font-semibold text-charcoal-600">Other: </span>
+                            <span className="text-charcoal-800">{contact.other_guidance_area}</span>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Hope to achieve */}
+                    {contact.hope_to_achieve && (
+                      <div className="mt-3">
+                        <p className="text-xs font-semibold text-charcoal-600 uppercase tracking-wide mb-1">Hope to achieve (30 days)</p>
+                        <p className="text-charcoal-800 whitespace-pre-wrap">{contact.hope_to_achieve}</p>
+                      </div>
+                    )}
+
+                    {/* Anything else */}
+                    {contact.anything_else && (
+                      <div className="mt-3">
+                        <p className="text-xs font-semibold text-charcoal-600 uppercase tracking-wide mb-1">Additional Information</p>
+                        <p className="text-charcoal-800 whitespace-pre-wrap">{contact.anything_else}</p>
+                      </div>
+                    )}
+
+                    {/* Legacy message field (for backward compatibility) */}
+                    {contact.message && (
+                      <div className="bg-gradient-to-r from-charcoal-50 to-charcoal-100 rounded-lg p-5 mt-4 border border-charcoal-200">
+                        <p className="text-xs font-semibold text-charcoal-600 uppercase tracking-wide mb-2">Message</p>
+                        <p className="text-charcoal-800 whitespace-pre-wrap leading-relaxed">{contact.message}</p>
+                      </div>
+                    )}
                   </div>
 
                   {/* Actions */}
