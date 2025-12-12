@@ -5,7 +5,7 @@ export const baseApi = createApi({
   reducerPath: 'api',
   // https://api.dailybetterjourney.com
   baseQuery: fetchBaseQuery({
-    baseUrl: process.env.NEXT_PUBLIC_API_URL || 'https://api.dailybetterjourney.com/api',
+    baseUrl: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api',
     prepareHeaders: (headers, { getState }) => {
       headers.set('Content-Type', 'application/json')
       

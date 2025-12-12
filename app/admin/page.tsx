@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { logout, getUser } from '@/lib/auth'
-import { MdLogout } from 'react-icons/md'
+import { MdLogout, MdOutlineEmail, MdAccessTime, MdDelete, MdCheckCircle, MdArchive, MdVisibility, MdCancel } from 'react-icons/md'
 import { 
   FaFileAlt, 
   FaPlus, 
@@ -18,11 +18,27 @@ import {
   FaFolder,
   FaChartLine,
   FaSave,
-  FaEnvelope
+  FaEnvelope,
+  FaCheckCircle,
+  FaArchive
 } from 'react-icons/fa'
 import { useGetPostsQuery, useDeletePostMutation, useUpdatePostStatusMutation, useGetCategoriesQuery, useCreateCategoryMutation, useUpdateCategoryMutation, useDeleteCategoryMutation } from '@/lib/api/blogApi'
+import { useGetContactsQuery, useUpdateContactStatusMutation, useDeleteContactMutation } from '@/lib/api/contactApi'
+import { useGetNewsletterSubscribersQuery, useDeleteNewsletterSubscriberMutation } from '@/lib/api/newsletterApi'
 import { usePopup } from '@/hooks/usePopup'
 import { getErrorMessage } from '@/lib/utils/errorHandler'
+
+// Helper function to format date
+const formatDate = (dateString: string) => {
+  const date = new Date(dateString)
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  })
+}
 
 function CategoriesTab({ 
   categories, 
@@ -225,9 +241,485 @@ function CategoriesTab({
   )
 }
 
+function ContactsTab({ showError, showConfirm }: { showError: any, showConfirm: any }) {
+  const [statusFilter, setStatusFilter] = useState<string>('')
+  const { data, isLoading, error, refetch } = useGetContactsQuery({ status: statusFilter || undefined })
+  const [updateStatus] = useUpdateContactStatusMutation()
+  const [deleteContact] = useDeleteContactMutation()
+
+  const handleDelete = async (id: string) => {
+    showConfirm(
+      'Delete Contact Submission',
+      'Are you sure you want to delete this contact submission? This action cannot be undone.',
+      async () => {
+        try {
+          await deleteContact(id).unwrap()
+          refetch()
+        } catch (error) {
+          const errorMessage = getErrorMessage(error, 'Failed to delete contact submission. Please try again.')
+          showError('Delete Failed', errorMessage)
+        }
+      },
+      { type: 'danger', confirmText: 'Delete', cancelText: 'Cancel', autoCloseOnSuccess: true }
+    )
+  }
+
+  const handleStatusUpdate = async (id: string, newStatus: 'new' | 'read' | 'replied' | 'archived') => {
+    try {
+      await updateStatus({ id, status: newStatus }).unwrap()
+      refetch()
+    } catch (error) {
+      const errorMessage = getErrorMessage(error, 'Failed to update status. Please try again.')
+      showError('Update Failed', errorMessage)
+    }
+  }
+
+  const getStatusBadgeColor = (status: string) => {
+    switch (status) {
+      case 'new':
+        return 'bg-blue-100 text-blue-800 border-blue-200'
+      case 'read':
+        return 'bg-gray-100 text-gray-800 border-gray-200'
+      case 'replied':
+        return 'bg-green-100 text-green-800 border-green-200'
+      case 'archived':
+        return 'bg-yellow-100 text-yellow-800 border-yellow-200'
+      default:
+        return 'bg-gray-100 text-gray-800 border-gray-200'
+    }
+  }
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <div className="flex flex-col items-center gap-4">
+          <div className="relative w-12 h-12">
+            <div className="absolute inset-0 border-4 border-charcoal-200 rounded-full"></div>
+            <div className="absolute inset-0 border-4 border-golden-600 rounded-full border-t-transparent animate-spin"></div>
+          </div>
+          <p className="text-charcoal-600 font-medium">Loading contacts...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="bg-red-50 border-2 border-red-200 rounded-xl p-6">
+        <p className="text-red-800 font-semibold mb-2">Error loading contact submissions</p>
+        <button
+          onClick={() => refetch()}
+          className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-semibold"
+        >
+          Try Again
+        </button>
+      </div>
+    )
+  }
+
+  const contacts = data?.data || []
+  const total = data?.pagination?.total || contacts.length
+
+  const statusCounts = {
+    new: contacts.filter((c) => c.status === 'new').length,
+    read: contacts.filter((c) => c.status === 'read').length,
+    replied: contacts.filter((c) => c.status === 'replied').length,
+    archived: contacts.filter((c) => c.status === 'archived').length,
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-charcoal-50 rounded-lg p-4 border border-charcoal-200"
+        >
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-charcoal-600">Total</p>
+              <p className="text-2xl font-bold text-charcoal-900 mt-1">{total}</p>
+            </div>
+            <FaEnvelope className="text-3xl text-blue-500 opacity-20" />
+          </div>
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="bg-blue-50 rounded-lg p-4 border border-blue-200"
+        >
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-blue-600">New</p>
+              <p className="text-2xl font-bold text-blue-600 mt-1">{statusCounts.new}</p>
+            </div>
+            <FaEnvelope className="text-3xl text-blue-500 opacity-20" />
+          </div>
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="bg-green-50 rounded-lg p-4 border border-green-200"
+        >
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-green-600">Replied</p>
+              <p className="text-2xl font-bold text-green-600 mt-1">{statusCounts.replied}</p>
+            </div>
+            <FaCheckCircle className="text-3xl text-green-500 opacity-20" />
+          </div>
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="bg-yellow-50 rounded-lg p-4 border border-yellow-200"
+        >
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-yellow-600">Archived</p>
+              <p className="text-2xl font-bold text-yellow-600 mt-1">{statusCounts.archived}</p>
+            </div>
+            <FaArchive className="text-3xl text-yellow-500 opacity-20" />
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Filters */}
+      <div className="bg-charcoal-50 rounded-lg p-4 border border-charcoal-200">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <label className="font-semibold text-charcoal-900">Filter by Status:</label>
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className="px-4 py-2 border-2 border-charcoal-200 rounded-lg focus:outline-none focus:border-forest-500 focus:ring-2 focus:ring-forest-200 transition-colors"
+            >
+              <option value="">All ({total})</option>
+              <option value="new">New ({statusCounts.new})</option>
+              <option value="read">Read ({statusCounts.read})</option>
+              <option value="replied">Replied ({statusCounts.replied})</option>
+              <option value="archived">Archived ({statusCounts.archived})</option>
+            </select>
+          </div>
+          <button
+            onClick={() => refetch()}
+            className="px-4 py-2 bg-charcoal-100 hover:bg-charcoal-200 text-charcoal-700 rounded-lg font-semibold transition-colors"
+          >
+            Refresh
+          </button>
+        </div>
+      </div>
+
+      {/* Contacts List */}
+      <div className="space-y-4">
+        {contacts.length === 0 ? (
+          <div className="bg-white rounded-xl shadow-sm border border-charcoal-200 p-12 text-center">
+            <MdOutlineEmail className="w-16 h-16 text-charcoal-300 mx-auto mb-4" />
+            <p className="text-charcoal-600 text-lg font-semibold">No contact submissions found</p>
+          </div>
+        ) : (
+          contacts.map((contact: any, index: number) => (
+            <motion.div
+              key={contact.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.05 }}
+              className="bg-white rounded-xl shadow-md border border-charcoal-200 p-6 hover:shadow-lg transition-all"
+            >
+              <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
+                <div className="flex-1 space-y-3">
+                  <div className="flex items-start justify-between gap-4 pb-3 border-b border-charcoal-200">
+                    <div>
+                      <h3 className="text-lg font-bold text-charcoal-900 mb-1">{contact.name}</h3>
+                      <div className="flex items-center gap-2 text-charcoal-600 mb-2">
+                        <MdOutlineEmail className="w-4 h-4" />
+                        <a href={`mailto:${contact.email}`} className="hover:text-golden-600 transition-colors">
+                          {contact.email}
+                        </a>
+                      </div>
+                      <div className="flex items-center gap-2 text-charcoal-500 text-sm">
+                        <MdAccessTime className="w-4 h-4" />
+                        <span>{formatDate(contact.created_at)}</span>
+                      </div>
+                    </div>
+                    <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${getStatusBadgeColor(contact.status)}`}>
+                      {contact.status.charAt(0).toUpperCase() + contact.status.slice(1)}
+                    </span>
+                  </div>
+                  {contact.message && (
+                    <div className="bg-charcoal-50 rounded-lg p-4 border border-charcoal-200">
+                      <p className="text-charcoal-800 whitespace-pre-wrap">{contact.message}</p>
+                    </div>
+                  )}
+                </div>
+                <div className="flex flex-row lg:flex-col gap-2 lg:min-w-[200px]">
+                  <a
+                    href={`mailto:${contact.email}?subject=Re: Contact Form Submission`}
+                    className="flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-forest-600 to-forest-700 hover:from-forest-700 hover:to-forest-800 text-white rounded-lg transition-all font-semibold text-sm"
+                  >
+                    <MdOutlineEmail className="w-4 h-4" />
+                    Reply
+                  </a>
+                  {contact.status !== 'read' && (
+                    <button
+                      onClick={() => handleStatusUpdate(contact.id, 'read')}
+                      className="flex items-center justify-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-lg transition-colors font-semibold text-sm"
+                    >
+                      <MdVisibility className="w-4 h-4" />
+                      Mark Read
+                    </button>
+                  )}
+                  {contact.status !== 'replied' && (
+                    <button
+                      onClick={() => handleStatusUpdate(contact.id, 'replied')}
+                      className="flex items-center justify-center gap-2 px-4 py-2 bg-green-100 hover:bg-green-200 text-green-800 rounded-lg transition-colors font-semibold text-sm"
+                    >
+                      <MdCheckCircle className="w-4 h-4" />
+                      Mark Replied
+                    </button>
+                  )}
+                  {contact.status !== 'archived' && (
+                    <button
+                      onClick={() => handleStatusUpdate(contact.id, 'archived')}
+                      className="flex items-center justify-center gap-2 px-4 py-2 bg-yellow-100 hover:bg-yellow-200 text-yellow-800 rounded-lg transition-colors font-semibold text-sm"
+                    >
+                      <MdArchive className="w-4 h-4" />
+                      Archive
+                    </button>
+                  )}
+                  <button
+                    onClick={() => handleDelete(contact.id)}
+                    className="flex items-center justify-center gap-2 px-4 py-2 bg-red-100 hover:bg-red-200 text-red-800 rounded-lg transition-colors font-semibold text-sm"
+                  >
+                    <MdDelete className="w-4 h-4" />
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          ))
+        )}
+      </div>
+    </div>
+  )
+}
+
+function NewsletterTab({ showError, showConfirm }: { showError: any, showConfirm: any }) {
+  const [activeFilter, setActiveFilter] = useState<string>('')
+  const { data, isLoading, error, refetch } = useGetNewsletterSubscribersQuery({ 
+    is_active: activeFilter || undefined 
+  })
+  const [deleteSubscriber] = useDeleteNewsletterSubscriberMutation()
+
+  const handleDelete = async (id: string, email: string) => {
+    showConfirm(
+      'Delete Newsletter Subscriber',
+      `Are you sure you want to delete ${email}? This action cannot be undone.`,
+      async () => {
+        try {
+          await deleteSubscriber(id).unwrap()
+          refetch()
+        } catch (error) {
+          const errorMessage = getErrorMessage(error, 'Failed to delete subscriber. Please try again.')
+          showError('Delete Failed', errorMessage)
+        }
+      },
+      { type: 'danger', confirmText: 'Delete', cancelText: 'Cancel', autoCloseOnSuccess: true }
+    )
+  }
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <div className="flex flex-col items-center gap-4">
+          <div className="relative w-12 h-12">
+            <div className="absolute inset-0 border-4 border-charcoal-200 rounded-full"></div>
+            <div className="absolute inset-0 border-4 border-golden-600 rounded-full border-t-transparent animate-spin"></div>
+          </div>
+          <p className="text-charcoal-600 font-medium">Loading newsletter subscribers...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="bg-red-50 border-2 border-red-200 rounded-xl p-6">
+        <p className="text-red-800 font-semibold mb-2">Error loading newsletter subscribers</p>
+        <button
+          onClick={() => refetch()}
+          className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-semibold"
+        >
+          Try Again
+        </button>
+      </div>
+    )
+  }
+
+  const subscribers = data?.data || []
+  const total = data?.pagination?.total || subscribers.length
+
+  const statusCounts = {
+    active: subscribers.filter((s) => s.is_active).length,
+    inactive: subscribers.filter((s) => !s.is_active).length,
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-charcoal-50 rounded-lg p-4 border border-charcoal-200"
+        >
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-charcoal-600">Total Subscribers</p>
+              <p className="text-2xl font-bold text-charcoal-900 mt-1">{total}</p>
+            </div>
+            <FaEnvelope className="text-3xl text-blue-500 opacity-20" />
+          </div>
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="bg-green-50 rounded-lg p-4 border border-green-200"
+        >
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-green-600">Active</p>
+              <p className="text-2xl font-bold text-green-600 mt-1">{statusCounts.active}</p>
+            </div>
+            <MdCheckCircle className="text-3xl text-green-500 opacity-20" />
+          </div>
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="bg-gray-50 rounded-lg p-4 border border-gray-200"
+        >
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-gray-600">Inactive</p>
+              <p className="text-2xl font-bold text-gray-600 mt-1">{statusCounts.inactive}</p>
+            </div>
+            <MdCancel className="text-3xl text-gray-500 opacity-20" />
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Filters */}
+      <div className="bg-charcoal-50 rounded-lg p-4 border border-charcoal-200">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <label className="font-semibold text-charcoal-900">Filter by Status:</label>
+            <select
+              value={activeFilter}
+              onChange={(e) => setActiveFilter(e.target.value)}
+              className="px-4 py-2 border-2 border-charcoal-200 rounded-lg focus:outline-none focus:border-forest-500 focus:ring-2 focus:ring-forest-200 transition-colors"
+            >
+              <option value="">All ({total})</option>
+              <option value="true">Active ({statusCounts.active})</option>
+              <option value="false">Inactive ({statusCounts.inactive})</option>
+            </select>
+          </div>
+          <button
+            onClick={() => refetch()}
+            className="px-4 py-2 bg-charcoal-100 hover:bg-charcoal-200 text-charcoal-700 rounded-lg font-semibold transition-colors"
+          >
+            Refresh
+          </button>
+        </div>
+      </div>
+
+      {/* Subscribers List */}
+      <div className="space-y-4">
+        {subscribers.length === 0 ? (
+          <div className="bg-white rounded-xl shadow-sm border border-charcoal-200 p-12 text-center">
+            <MdOutlineEmail className="w-16 h-16 text-charcoal-300 mx-auto mb-4" />
+            <p className="text-charcoal-600 text-lg font-semibold">No newsletter subscribers found</p>
+          </div>
+        ) : (
+          subscribers.map((subscriber: any, index: number) => (
+            <motion.div
+              key={subscriber.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.05 }}
+              className="bg-white rounded-xl shadow-md border border-charcoal-200 p-6 hover:shadow-lg transition-all"
+            >
+              <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                <div className="flex-1 space-y-2">
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-3 mb-2">
+                        <MdOutlineEmail className="w-5 h-5 text-charcoal-600" />
+                        <a
+                          href={`mailto:${subscriber.email}`}
+                          className="text-lg font-bold text-charcoal-900 hover:text-golden-600 transition-colors"
+                        >
+                          {subscriber.email}
+                        </a>
+                      </div>
+                      <div className="flex items-center gap-4 text-sm text-charcoal-500">
+                        <div className="flex items-center gap-1">
+                          <MdAccessTime className="w-4 h-4" />
+                          <span>Subscribed: {formatDate(subscriber.subscribed_at)}</span>
+                        </div>
+                        {subscriber.unsubscribed_at && (
+                          <div className="flex items-center gap-1">
+                            <MdCancel className="w-4 h-4" />
+                            <span>Unsubscribed: {formatDate(subscriber.unsubscribed_at)}</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    <span
+                      className={`px-3 py-1 rounded-full text-xs font-semibold border ${
+                        subscriber.is_active
+                          ? 'bg-green-100 text-green-800 border-green-200'
+                          : 'bg-gray-100 text-gray-800 border-gray-200'
+                      }`}
+                    >
+                      {subscriber.is_active ? 'Active' : 'Inactive'}
+                    </span>
+                  </div>
+                </div>
+                <div className="flex flex-row lg:flex-col gap-2 lg:min-w-[150px]">
+                  <a
+                    href={`mailto:${subscriber.email}`}
+                    className="flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-forest-600 to-forest-700 hover:from-forest-700 hover:to-forest-800 text-white rounded-lg transition-all font-semibold text-sm"
+                  >
+                    <MdOutlineEmail className="w-4 h-4" />
+                    Email
+                  </a>
+                  <button
+                    onClick={() => handleDelete(subscriber.id, subscriber.email)}
+                    className="flex items-center justify-center gap-2 px-4 py-2 bg-red-100 hover:bg-red-200 text-red-800 rounded-lg transition-colors font-semibold text-sm"
+                  >
+                    <MdDelete className="w-4 h-4" />
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          ))
+        )}
+      </div>
+    </div>
+  )
+}
+
 export default function AdminDashboard() {
   const router = useRouter()
-  const [activeTab, setActiveTab] = useState<'posts' | 'categories' | 'tags' | 'stats'>('posts')
+  const [activeTab, setActiveTab] = useState<'posts' | 'categories' | 'contacts' | 'newsletter'>('posts')
   const [currentUser, setCurrentUser] = useState<{ name: string; email: string } | null>(null)
   
   const { data: postsData, isLoading, refetch } = useGetPostsQuery({})
@@ -434,35 +926,28 @@ export default function AdminDashboard() {
                 Categories
               </button>
               <button
-                key="tags"
-                onClick={() => setActiveTab('tags')}
+                key="contacts"
+                onClick={() => setActiveTab('contacts')}
                 className={`flex items-center gap-2 px-6 py-4 font-medium text-sm border-b-2 transition-colors ${
-                  activeTab === 'tags'
+                  activeTab === 'contacts'
                     ? 'border-forest-600 text-forest-600'
                     : 'border-transparent text-charcoal-600 hover:text-charcoal-900 hover:border-charcoal-300'
                 }`}
-              >
-                <FaTag />
-                Tags
-              </button>
-              <Link
-                href="/admin/contacts"
-                className="flex items-center gap-2 px-6 py-4 font-medium text-sm border-b-2 border-transparent text-charcoal-600 hover:text-charcoal-900 hover:border-charcoal-300 transition-colors"
               >
                 <FaEnvelope />
                 Contacts
-              </Link>
+              </button>
               <button
-                key="stats"
-                onClick={() => setActiveTab('stats')}
+                key="newsletter"
+                onClick={() => setActiveTab('newsletter')}
                 className={`flex items-center gap-2 px-6 py-4 font-medium text-sm border-b-2 transition-colors ${
-                  activeTab === 'stats'
+                  activeTab === 'newsletter'
                     ? 'border-forest-600 text-forest-600'
                     : 'border-transparent text-charcoal-600 hover:text-charcoal-900 hover:border-charcoal-300'
                 }`}
               >
-                <FaChartLine />
-                Statistics
+                <FaEnvelope />
+                Newsletter
               </button>
             </nav>
           </div>
@@ -594,18 +1079,12 @@ export default function AdminDashboard() {
               />
             )}
 
-            {activeTab === 'tags' && (
-              <div className="text-center py-12">
-                <FaTag className="text-6xl text-charcoal-300 mx-auto mb-4" />
-                <p className="text-charcoal-600">Tags management coming soon...</p>
-              </div>
+            {activeTab === 'contacts' && (
+              <ContactsTab showError={showError} showConfirm={showConfirm} />
             )}
 
-            {activeTab === 'stats' && (
-              <div className="text-center py-12">
-                <FaChartLine className="text-6xl text-charcoal-300 mx-auto mb-4" />
-                <p className="text-charcoal-600">Detailed statistics coming soon...</p>
-              </div>
+            {activeTab === 'newsletter' && (
+              <NewsletterTab showError={showError} showConfirm={showConfirm} />
             )}
           </div>
         </div>

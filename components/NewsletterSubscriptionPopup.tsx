@@ -13,6 +13,7 @@ export interface NewsletterSubscriptionPopupProps {
 
 const NewsletterSubscriptionPopup = ({ isOpen, onClose }: NewsletterSubscriptionPopupProps) => {
   const [email, setEmail] = useState('')
+  const [errorMessage, setErrorMessage] = useState<string>('')
   const [subscribe, { isLoading, isSuccess, isError }] = useSubscribeToNewsletterMutation()
 
   useEffect(() => {
@@ -20,6 +21,7 @@ const NewsletterSubscriptionPopup = ({ isOpen, onClose }: NewsletterSubscription
       document.body.style.overflow = 'hidden'
       // Reset form when popup opens
       setEmail('')
+      setErrorMessage('')
     } else {
       document.body.style.overflow = 'unset'
     }
@@ -40,11 +42,15 @@ const NewsletterSubscriptionPopup = ({ isOpen, onClose }: NewsletterSubscription
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setErrorMessage('')
     try {
       await subscribe({ email }).unwrap()
       setEmail('')
-    } catch (error) {
+    } catch (error: any) {
       console.error('Failed to subscribe:', error)
+      // Extract error message from response
+      const message = error?.data?.message || error?.message || 'Failed to subscribe. Please try again.'
+      setErrorMessage(message)
     }
   }
 
@@ -122,14 +128,14 @@ const NewsletterSubscriptionPopup = ({ isOpen, onClose }: NewsletterSubscription
                 )}
 
                 {/* Error Message */}
-                {isError && (
+                {errorMessage && (
                   <motion.div
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="mb-6 p-4 bg-red-500/20 border border-red-400/50 rounded-xl"
                   >
                     <p className="text-red-100 font-semibold">
-                      Failed to subscribe. Please try again.
+                      {errorMessage}
                     </p>
                   </motion.div>
                 )}

@@ -7,15 +7,20 @@ import { MdOutlineLock } from 'react-icons/md'
 
 const Newsletter = () => {
   const [email, setEmail] = useState('')
+  const [errorMessage, setErrorMessage] = useState<string>('')
   const [subscribe, { isLoading, isSuccess, isError }] = useSubscribeToNewsletterMutation()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setErrorMessage('')
     try {
       await subscribe({ email }).unwrap()
       setEmail('')
-    } catch (error) {
+    } catch (error: any) {
       console.error('Failed to subscribe:', error)
+      // Extract error message from response
+      const message = error?.data?.message || error?.message || 'Failed to subscribe. Please try again.'
+      setErrorMessage(message)
     }
   }
 
@@ -54,7 +59,7 @@ const Newsletter = () => {
          Subscribe for short punches of insight that wake you up, shift your thinking, and spark real movement.  </motion.p>
 
         {/* Success/Error Messages */}
-        {(isSuccess || isError) && (
+        {(isSuccess || errorMessage) && (
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -64,7 +69,7 @@ const Newsletter = () => {
                 : 'bg-red-50 border border-red-200 text-red-800'
             }`}
           >
-            {isSuccess ? '✓ Successfully subscribed to newsletter!' : '✗ Failed to subscribe. Please try again.'}
+            {isSuccess ? '✓ Successfully subscribed to newsletter!' : `✗ ${errorMessage}`}
           </motion.div>
         )}
 

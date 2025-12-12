@@ -50,13 +50,7 @@ const AboutMission = () => {
                 <li>Motivation That Feels Real</li>
               </ul>
             </div>
-            <div className="flex gap-4">
-              {['Growth', 'Habits', 'Mindfulness'].map((tag, i) => (
-                <div key={i} className="px-4 py-2 bg-charcoal-100 rounded-lg text-charcoal-700 font-medium">
-                  {tag}
-                </div>
-              ))}
-            </div>
+        
           </motion.div>
 
           {/* Right Side - Visual */}

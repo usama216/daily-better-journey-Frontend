@@ -37,8 +37,8 @@ const Footer = () => {
                 <Image 
                   src="/logo.png" 
                   alt="Daily Better Journey Logo" 
-                  width={126}
-                  height={126}
+                  width={100}
+                  height={100}
                   className="object-contain"
                 />
               </div>
