@@ -36,7 +36,7 @@ const Header = () => {
               onClick={closeMenu}
             >
               <Image 
-                src="/logo.png" 
+                src="/logo-new.png" 
                 alt="Daily Better Journey Logo" 
                 width={60}
                 height={60}

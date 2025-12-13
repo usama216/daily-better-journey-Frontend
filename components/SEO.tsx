@@ -25,7 +25,7 @@ export default function SEO({
   title = 'Daily Better Journey - Become Better Every Single Day',
   description = 'Join a journey of growth, habits, and self-awareness that leads to the best version of you. Weekly insights, stories, and growth tips.',
   canonical,
-  ogImage = '/logo.png',
+  ogImage = '/logo-new.png',
   ogType = 'website',
   article,
   breadcrumbs,
@@ -88,11 +88,11 @@ export default function SEO({
         additionalLinkTags={[
           {
             rel: 'icon',
-            href: '/logo.png',
+            href: '/logo-new.png',
           },
           {
             rel: 'apple-touch-icon',
-            href: '/logo.png',
+            href: '/logo-new.png',
           },
         ]}
       />
@@ -131,7 +131,7 @@ export default function SEO({
             '@type': 'Organization',
             name: 'Daily Better Journey',
             url: siteUrl,
-            logo: `${siteUrl}/logo.png`,
+            logo: `${siteUrl}/logo-new.png`,
             sameAs: [
               // Add your social media URLs here
               'https://twitter.com/dailybetterjourney',

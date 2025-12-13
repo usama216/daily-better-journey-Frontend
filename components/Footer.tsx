@@ -35,7 +35,7 @@ const Footer = () => {
             <div className="flex items-center space-x-3">
               <div className="relative w-126 h-126">
                 <Image 
-                  src="/logo.png" 
+                  src="/logo-new.png" 
                   alt="Daily Better Journey Logo" 
                   width={100}
                   height={100}

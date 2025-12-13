@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     siteName: 'Daily Better Journey',
     images: [
       {
-        url: '/logo.png',
+        url: '/logo-new.png',
         width: 1200,
         height: 630,
         alt: 'Daily Better Journey Logo',
@@ -54,7 +54,7 @@ export const metadata: Metadata = {
     title: 'Daily Better Journey - Become Better Every Single Day',
     description: 'Join a journey of growth, habits, and self-awareness that leads to the best version of you.',
     creator: '@dailybetterjourney',
-    images: ['/logo.png'],
+    images: ['/logo-new.png'],
   },
   robots: {
     index: true,
@@ -72,14 +72,14 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: '/logo.png', sizes: 'any' },
-      { url: '/logo.png', sizes: '32x32', type: 'image/png' },
-      { url: '/logo.png', sizes: '16x16', type: 'image/png' },
+      { url: '/logo-new.png', sizes: 'any' },
+      { url: '/logo-new.png', sizes: '32x32', type: 'image/png' },
+      { url: '/logo-new.png', sizes: '16x16', type: 'image/png' },
     ],
     apple: [
-      { url: '/logo.png', sizes: '180x180', type: 'image/png' },
+      { url: '/logo-new.png', sizes: '180x180', type: 'image/png' },
     ],
-    shortcut: '/logo.png',
+    shortcut: '/logo-new.png',
   },
 }
 

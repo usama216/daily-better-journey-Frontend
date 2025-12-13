@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Daily Better Journey | Your Space For Real Growth',
     description: "Find guidance, reflections, and practical steps that support steady self-improvement. Empower your mindset, strengthen your habits, and create lasting change.",
-    images: ['https://dailybetterjourney.com/logo.png'],
+    images: ['https://dailybetterjourney.com/logo-new.png'],
   },
   robots: {
     index: true,
@@ -67,7 +67,7 @@ export default function Home() {
     '@type': 'Organization',
     name: 'Daily Better Journey',
     url: 'https://dailybetterjourney.com',
-    logo: 'https://dailybetterjourney.com/logo.png',
+    logo: 'https://dailybetterjourney.com/logo-new.png',
     contactPoint: {
       '@type': 'ContactPoint',
       email: 'hello@dailybetterjourney.com',
