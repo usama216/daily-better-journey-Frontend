@@ -140,7 +140,8 @@ const Footer = () => {
               Copyright © {new Date().getFullYear()} Daily Better Journey. All Rights Reserved.
             </p>
             <div className="flex flex-wrap gap-6 text-sm text-white/60 justify-center sm:justify-end">
-               <Link href="/terms" className="hover:text-golden-400 transition-colors">Terms & Conditions</Link>
+              <Link href="/privacy" className="hover:text-golden-400 transition-colors">Privacy Policy</Link>
+              <Link href="/terms" className="hover:text-golden-400 transition-colors">Terms & Conditions</Link>
               <Link href="/disclaimer" className="hover:text-golden-400 transition-colors">Disclaimer</Link>
             </div>
           </div>
