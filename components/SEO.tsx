@@ -140,6 +140,8 @@ export default function SEO({
             ],
             contactPoint: {
               '@type': 'ContactPoint',
+              telephone: '+447411504773',
+              email: 'support@dailybetterjourney.com',
               contactType: 'Customer Service',
               availableLanguage: ['English'],
             },

@@ -29,7 +29,7 @@ const Footer = () => {
       
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         {/* Main Footer Content */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-12 mb-12">
           {/* Logo and Description */}
           <div className="md:col-span-2 space-y-4">
             <div className="flex items-center space-x-3">
@@ -86,6 +86,23 @@ const Footer = () => {
             </ul>
           </div>
 
+          {/* Contact Info */}
+          <div>
+            <h3 className="text-white font-bold text-lg mb-4">Contact</h3>
+            <ul className="space-y-2 text-white/70 text-sm">
+              <li>
+                <a href="mailto:support@dailybetterjourney.com" className="hover:text-golden-400 transition-colors">
+                  support@dailybetterjourney.com
+                </a>
+              </li>
+              <li>
+                <a href="tel:+447411504773" className="hover:text-golden-400 transition-colors">
+                  +44 7411 504773
+                </a>
+              </li>
+            </ul>
+          </div>
+
           {/* Newsletter */}
           <div>
             <h3 className="text-white font-bold text-lg mb-4">Newsletter</h3>
@@ -122,9 +139,9 @@ const Footer = () => {
             <p className="text-white/60 text-sm">
               Copyright © {new Date().getFullYear()} Daily Better Journey. All Rights Reserved.
             </p>
-            <div className="flex gap-6 text-sm text-white/60">
-              <a href="#" className="hover:text-golden-400 transition-colors">Privacy Policy</a>
-              <a href="#" className="hover:text-golden-400 transition-colors">Terms of Service</a>
+            <div className="flex flex-wrap gap-6 text-sm text-white/60 justify-center sm:justify-end">
+               <Link href="/terms" className="hover:text-golden-400 transition-colors">Terms & Conditions</Link>
+              <Link href="/disclaimer" className="hover:text-golden-400 transition-colors">Disclaimer</Link>
             </div>
           </div>
         </div>

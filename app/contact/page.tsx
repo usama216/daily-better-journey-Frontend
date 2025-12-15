@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
-import { MdOutlineEmail, MdOutlineLocationOn } from 'react-icons/md'
+import { MdOutlineEmail, MdOutlineLocationOn, MdOutlinePhone } from 'react-icons/md'
 import { FaLinkedin, FaInstagram, FaYoutube } from 'react-icons/fa6'
 import { useSubmitContactMutation } from '@/lib/api/contactApi'
 
@@ -161,8 +161,22 @@ export default function ContactPage() {
                 <MdOutlineEmail className="w-7 h-7 text-white" />
               </div>
               <h3 className="text-xl font-bold text-charcoal-900 mb-2">Email</h3>
-              <a href="mailto:hello@dailybetterjourney.com" className="text-charcoal-600 hover:text-golden-600 transition-colors">
-                hello@dailybetterjourney.com
+              <a href="mailto:support@dailybetterjourney.com" className="text-charcoal-600 hover:text-golden-600 transition-colors">
+                support@dailybetterjourney.com
+              </a>
+            </motion.div>
+
+            {/* Phone Card */}
+            <motion.div
+              whileHover={{ scale: 1.02, y: -5 }}
+              className="bg-white rounded-2xl p-8 shadow-xl border border-charcoal-100 hover:border-forest-200 transition-all group"
+            >
+              <div className="w-14 h-14 bg-gradient-to-br from-forest-400 to-forest-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <MdOutlinePhone className="w-7 h-7 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-charcoal-900 mb-2">Phone</h3>
+              <a href="tel:+447411504773" className="text-charcoal-600 hover:text-forest-600 transition-colors">
+                +44 7411 504773
               </a>
             </motion.div>
 

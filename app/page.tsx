@@ -70,7 +70,8 @@ export default function Home() {
     logo: 'https://dailybetterjourney.com/logo-new.png',
     contactPoint: {
       '@type': 'ContactPoint',
-      email: 'hello@dailybetterjourney.com',
+      telephone: '+447411504773',
+      email: 'support@dailybetterjourney.com',
       contactType: 'Customer Service',
     },
     sameAs: [
