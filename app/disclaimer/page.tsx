@@ -3,17 +3,10 @@
 import { motion } from 'framer-motion'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
-import SEO from '@/components/SEO'
 
 export default function DisclaimerPage() {
   return (
-    <>
-      <SEO
-        title="Disclaimer"
-        description="Disclaimer for Daily Better Journey. Important information about the use of our website and content."
-        canonical="https://dailybetterjourney.com/disclaimer"
-      />
-      <main className="min-h-screen bg-gradient-to-b from-white to-charcoal-50">
+    <main className="min-h-screen bg-gradient-to-b from-white to-charcoal-50">
         <Header />
       
       {/* Hero Section */}
@@ -109,7 +102,6 @@ export default function DisclaimerPage() {
 
         <Footer />
       </main>
-    </>
   )
 }
 

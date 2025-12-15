@@ -3,17 +3,10 @@
 import { motion } from 'framer-motion'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
-import SEO from '@/components/SEO'
 
 export default function TermsPage() {
   return (
-    <>
-      <SEO
-        title="Terms & Conditions"
-        description="Terms & Conditions for Daily Better Journey. Read our terms of service and usage policies."
-        canonical="https://dailybetterjourney.com/terms"
-      />
-      <main className="min-h-screen bg-gradient-to-b from-white to-charcoal-50">
+    <main className="min-h-screen bg-gradient-to-b from-white to-charcoal-50">
         <Header />
       
       {/* Hero Section */}
@@ -132,7 +125,6 @@ export default function TermsPage() {
 
         <Footer />
       </main>
-    </>
   )
 }
 
