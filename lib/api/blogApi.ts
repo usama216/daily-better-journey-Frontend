@@ -53,7 +53,14 @@ export const blogApi = baseApi.injectEndpoints({
       invalidatesTags: ['Post'],
     }),
     getPosts: builder.query({
-      query: () => '/posts',
+      query: (params?: { page?: number; limit?: number; offset?: number }) => {
+        const searchParams = new URLSearchParams()
+        if (params?.page) searchParams.set('page', params.page.toString())
+        if (params?.limit) searchParams.set('limit', params.limit.toString())
+        if (params?.offset !== undefined) searchParams.set('offset', params.offset.toString())
+        const queryString = searchParams.toString()
+        return `/posts${queryString ? `?${queryString}` : ''}`
+      },
       providesTags: ['Post'],
     }),
     getPostsByCategorySlug: builder.query({

@@ -721,8 +721,10 @@ export default function AdminDashboard() {
   const router = useRouter()
   const [activeTab, setActiveTab] = useState<'posts' | 'categories' | 'contacts' | 'newsletter'>('posts')
   const [currentUser, setCurrentUser] = useState<{ name: string; email: string } | null>(null)
+  const [currentPage, setCurrentPage] = useState(1)
+  const postsPerPage = 10
   
-  const { data: postsData, isLoading, refetch } = useGetPostsQuery({})
+  const { data: postsData, isLoading, refetch } = useGetPostsQuery({ page: currentPage, limit: postsPerPage })
   const [deletePost] = useDeletePostMutation()
   const [updateStatus] = useUpdatePostStatusMutation()
   const { showError, showConfirm, PopupComponent } = usePopup()
@@ -750,6 +752,8 @@ export default function AdminDashboard() {
 
   const posts = postsData?.data || []
   const categories = (categoriesData?.data || categoriesData || [])
+  const pagination = postsData?.pagination || { total: posts.length, page: 1, totalPages: 1, limit: postsPerPage }
+  const totalPosts = pagination.total
 
   // Function to strip HTML tags and get plain text preview
   const getTextPreview = (html: string, maxLength: number = 150) => {
@@ -795,11 +799,18 @@ export default function AdminDashboard() {
     }
   }
 
+  // Calculate stats from all posts (we might need to fetch all for accurate stats)
+  // For now, we'll calculate from current page data
   const stats = {
-    totalPosts: posts.length,
+    totalPosts: totalPosts, // Use total from pagination
     publishedPosts: posts.filter((p: any) => p.status === 'published').length,
     draftPosts: posts.filter((p: any) => p.status === 'draft').length,
     totalViews: posts.reduce((sum: number, p: any) => sum + (p.views || 0), 0)
+  }
+  
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   return (
@@ -1033,6 +1044,75 @@ export default function AdminDashboard() {
                         </div>
                       </motion.div>
                     ))}
+                    
+                    {/* Pagination Controls */}
+                    {pagination.totalPages > 1 && (
+                      <div className="flex items-center justify-between mt-8 pt-6 border-t border-charcoal-200">
+                        <div className="text-sm text-charcoal-600">
+                          Showing {((pagination.page - 1) * pagination.limit) + 1} to {Math.min(pagination.page * pagination.limit, pagination.total)} of {pagination.total} posts
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => handlePageChange(pagination.page - 1)}
+                            disabled={pagination.page === 1}
+                            className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
+                              pagination.page === 1
+                                ? 'bg-charcoal-100 text-charcoal-400 cursor-not-allowed'
+                                : 'bg-charcoal-200 text-charcoal-700 hover:bg-charcoal-300'
+                            }`}
+                          >
+                            Previous
+                          </button>
+                          
+                          <div className="flex items-center gap-1">
+                            {Array.from({ length: pagination.totalPages }, (_, i) => i + 1)
+                              .filter((pageNum) => {
+                                // Show first page, last page, current page, and pages around current
+                                return (
+                                  pageNum === 1 ||
+                                  pageNum === pagination.totalPages ||
+                                  Math.abs(pageNum - pagination.page) <= 1
+                                )
+                              })
+                              .map((pageNum, index, array) => {
+                                // Add ellipsis if there's a gap
+                                const prevPage = array[index - 1]
+                                const showEllipsis = prevPage && pageNum - prevPage > 1
+                                
+                                return (
+                                  <div key={pageNum} className="flex items-center gap-1">
+                                    {showEllipsis && (
+                                      <span className="px-2 text-charcoal-500">...</span>
+                                    )}
+                                    <button
+                                      onClick={() => handlePageChange(pageNum)}
+                                      className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
+                                        pagination.page === pageNum
+                                          ? 'bg-forest-600 text-white'
+                                          : 'bg-charcoal-200 text-charcoal-700 hover:bg-charcoal-300'
+                                      }`}
+                                    >
+                                      {pageNum}
+                                    </button>
+                                  </div>
+                                )
+                              })}
+                          </div>
+                          
+                          <button
+                            onClick={() => handlePageChange(pagination.page + 1)}
+                            disabled={pagination.page === pagination.totalPages}
+                            className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
+                              pagination.page === pagination.totalPages
+                                ? 'bg-charcoal-100 text-charcoal-400 cursor-not-allowed'
+                                : 'bg-charcoal-200 text-charcoal-700 hover:bg-charcoal-300'
+                            }`}
+                          >
+                            Next
+                          </button>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
