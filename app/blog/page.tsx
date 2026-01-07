@@ -5,9 +5,11 @@ import Footer from '@/components/Footer'
 import AdBanner from '@/components/AdBanner'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useGetPostsQuery, useGetCategoriesQuery } from '@/lib/api/blogApi'
 
 export default function BlogPage() {
+  const router = useRouter()
   const { data: postsData, isLoading } = useGetPostsQuery({})
   const posts = (postsData?.data || postsData || [])
     .filter((p: any) => p.status === 'published')
@@ -103,7 +105,8 @@ export default function BlogPage() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 whileHover={{ y: -5 }}
-                className="bg-white border-2 border-charcoal-100 rounded-2xl p-6 hover:border-golden-200 hover:shadow-xl transition-all cursor-pointer group"
+                onClick={() => router.push(`/blog/category/${category.slug}`)}
+                className="bg-white border-2 cursor-pointer border-charcoal-100 rounded-2xl p-6 hover:border-golden-200 hover:shadow-xl transition-all cursor-pointer group"
               >
                 <h3 className="text-xl font-bold text-charcoal-900 mb-3 group-hover:text-golden-600 transition-colors">
                   {category.name}
@@ -152,7 +155,9 @@ export default function BlogPage() {
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: index * 0.05 }}
                   whileHover={{ y: -5 }}
-                  className="bg-white border-2 border-charcoal-100 rounded-2xl overflow-hidden hover:border-golden-200 hover:shadow-xl transition-all group h-full flex flex-col"
+                  onClick={() => router.push(`/blog/${post.slug}`)}
+                  
+                  className="bg-white cursor-pointer border-2 border-charcoal-100 rounded-2xl overflow-hidden hover:border-golden-200 hover:shadow-xl transition-all group h-full flex flex-col"
                 >
                   <div className="h-48 bg-gradient-to-br from-golden-200 to-forest-200 flex-shrink-0">
                     {post.featured_image ? (

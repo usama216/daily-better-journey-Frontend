@@ -3,9 +3,11 @@
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { useGetPostsQuery } from '@/lib/api/blogApi'
+import { useRouter } from 'next/navigation'
 
 const FeaturedArticles = () => {
   const { data: postsData } = useGetPostsQuery({})
+  const router = useRouter()
   const posts = (postsData?.data || postsData || [])
     .filter((p: any) => p.status === 'published' && p.is_featured)
     .slice(0, 3)
@@ -75,6 +77,7 @@ const FeaturedArticles = () => {
             transition={{ duration: 0.5, delay: index * 0.1 }}
             whileHover={{ y: -5 }}
             className="group cursor-pointer h-full"
+            onClick={() => router.push(`/blog/${post.slug}`)}
           >
             {/* Card Container */}
             <div className="relative bg-white rounded-2xl overflow-hidden shadow-lg border border-charcoal-200 hover:shadow-2xl transition-all duration-300 h-full flex flex-col">

@@ -2,11 +2,12 @@
 
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { useGetPostsByCategorySlugQuery } from '@/lib/api/blogApi'
 import Link from 'next/link'
 
 export default function CategoryPage() {
+  const router = useRouter()
   const params = useParams<{ slug: string }>()
   const slug = params?.slug as string
   const { data, isLoading } = useGetPostsByCategorySlugQuery(slug, { skip: !slug })
@@ -39,7 +40,7 @@ export default function CategoryPage() {
         ) : (
           <div className="grid gap-6 md:grid-cols-3">
             {posts.map((post: any) => (
-              <article key={post.id} className="bg-white border-2 border-charcoal-100 rounded-2xl overflow-hidden hover:border-golden-200 hover:shadow-xl transition-all group h-full flex flex-col">
+              <article onClick={() => router.push(`/blog/${post.slug}`)} key={post.id} className="bg-white cursor-pointer border-2 border-charcoal-100 rounded-2xl overflow-hidden hover:border-golden-200 hover:shadow-xl transition-all group h-full flex flex-col">
                 <div className="h-48 bg-charcoal-100 flex-shrink-0">
                   {post.featured_image ? <img src={post.featured_image} alt={post.title} className="w-full h-full object-cover" /> : null}
                 </div>
