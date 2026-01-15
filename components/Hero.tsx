@@ -111,7 +111,7 @@ const Hero = () => {
             initial={{ opacity: 0, x: 100 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -100 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.3 }}
             className="grid lg:grid-cols-2 gap-12 items-center"
           >
             {/* Left Side - Content */}
@@ -120,7 +120,7 @@ const Hero = () => {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.1 }}
+                transition={{ duration: 0.3, delay: 0 }}
                 className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-golden-100 to-forest-100 border-2 border-golden-300 rounded-full shadow-sm"
               >
                 <span className="relative flex h-2 w-2">
@@ -134,7 +134,7 @@ const Hero = () => {
               <motion.h1
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
+                transition={{ duration: 0.3, delay: 0.05 }}
                 className="text-3xl sm:text-4xl lg:text-5xl font-black leading-tight"
               >
                 <span className="block text-charcoal-900 mb-2">{slides[currentSlide].title}</span>
@@ -147,7 +147,7 @@ const Hero = () => {
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.3 }}
+                transition={{ duration: 0.3, delay: 0.1 }}
                 className="text-md sm:text-lg text-charcoal-700 leading-relaxed max-w-lg"
               >
                 {slides[currentSlide].description}
@@ -157,7 +157,7 @@ const Hero = () => {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.4 }}
+                transition={{ duration: 0.3, delay: 0.15 }}
                 className="flex sm:flex-row items-start gap-4 pt-4"
               >
                 <motion.button
@@ -180,7 +180,7 @@ const Hero = () => {
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ duration: 0.5, delay: 0.5 }}
+                transition={{ duration: 0.3, delay: 0.2 }}
                 className="flex flex-wrap items-center gap-8 pt-8 border-t border-charcoal-200"
               >
                 {slides[currentSlide].stats.map((stat, idx) => (
@@ -205,7 +205,7 @@ const Hero = () => {
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
+              transition={{ duration: 0.3, delay: 0.1 }}
               className="relative hidden lg:block"
             >
               <div className="relative aspect-square max-w-lg mx-auto">

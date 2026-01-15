@@ -22,7 +22,7 @@ const Header = () => {
       <motion.nav
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.5 }}
+        transition={{ duration: 0.3 }}
         className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
         aria-label="Main navigation"
       >
@@ -55,7 +55,7 @@ const Header = () => {
                   <motion.span
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.1 }}
+                    transition={{ delay: index * 0.05 }}
                     whileHover={{ scale: 1.05 }}
                     className="text-charcoal-800 hover:text-golden-600 font-medium transition-colors cursor-pointer"
                   >

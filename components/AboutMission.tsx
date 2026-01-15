@@ -21,7 +21,7 @@ const AboutMission = () => {
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.3 }}
             className="space-y-6"
           >
             <div className="inline-block px-4 py-2 bg-golden-100 border border-golden-300 rounded-full mb-4">
@@ -58,7 +58,7 @@ const AboutMission = () => {
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.3 }}
             className="relative"
           >
             <div className="grid grid-cols-2 gap-4">
@@ -75,7 +75,7 @@ const AboutMission = () => {
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: i * 0.1 }}
+                    transition={{ duration: 0.3, delay: i * 0.05 }}
                     whileHover={{ scale: 1.05 }}
                     className="aspect-square bg-gradient-to-br flex flex-col items-center justify-center rounded-2xl p-6 shadow-lg border border-white/20"
                     style={{ background: `linear-gradient(135deg, var(--tw-gradient-stops))`, backgroundImage: `linear-gradient(135deg, ${item.color === 'from-forest-400 to-forest-600' ? '#4ade80, #16a34a' : item.color === 'from-golden-400 to-golden-600' ? '#facc15, #eab308' : '#facc15, #22c55e'})` }}

@@ -19,7 +19,7 @@ const DailyQuote = () => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.3 }}
             className="inline-block px-4 py-2 bg-forest-100 border border-forest-300 rounded-full mb-4"
           >
             <span className="text-forest-700 text-sm font-semibold uppercase tracking-wide">A Gentle Reminder</span>
@@ -29,7 +29,7 @@ const DailyQuote = () => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.1 }}
+            transition={{ duration: 0.3, delay: 0.05 }}
             className="text-4xl sm:text-5xl font-extrabold text-charcoal-900"
           >
         Trust Your Becoming
@@ -40,7 +40,7 @@ const DailyQuote = () => {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.3 }}
           className="group bg-white rounded-3xl p-8 md:p-16 lg:p-20 relative overflow-hidden shadow-2xl border-2 border-transparent hover:border-forest-200 transition-all duration-500"
         >
           {/* Enhanced Gradient Background */}
@@ -56,7 +56,7 @@ const DailyQuote = () => {
             initial={{ scale: 0, rotate: -45 }}
             whileInView={{ scale: 1, rotate: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
+            transition={{ delay: 0.1, type: "spring", stiffness: 200 }}
             className="absolute top-4 left-4 text-9xl text-forest-200 font-serif leading-none select-none opacity-60"
           >
             &ldquo;
@@ -79,7 +79,7 @@ const DailyQuote = () => {
             initial={{ scale: 0, rotate: 45 }}
             whileInView={{ scale: 1, rotate: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.4, type: "spring", stiffness: 200 }}
+            transition={{ delay: 0.15, type: "spring", stiffness: 200 }}
             className="absolute bottom-4 right-6 text-9xl text-forest-200 font-serif leading-none select-none opacity-60"
           >
             &rdquo;

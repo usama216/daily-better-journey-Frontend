@@ -39,7 +39,7 @@ const FeaturedArticles = () => {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.3 }}
           className="inline-block px-4 py-2 bg-golden-100 border border-golden-300 rounded-full mb-4"
         >
           <span className="text-golden-700 text-sm font-semibold uppercase tracking-wide">Latest Articles</span>
@@ -49,7 +49,7 @@ const FeaturedArticles = () => {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.1 }}
+          transition={{ duration: 0.3, delay: 0.05 }}
           className="text-4xl sm:text-5xl font-extrabold text-charcoal-900 mb-4"
         >
           Fresh Stories To Lift Your Day
@@ -59,7 +59,7 @@ const FeaturedArticles = () => {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.2 }}
+          transition={{ duration: 0.3, delay: 0.1 }}
           className="text-lg text-charcoal-600 max-w-2xl mx-auto"
         >
          Step into new ideas that spark curiosity, fuel motivation, and offer simple shifts you can use right now.
@@ -74,7 +74,7 @@ const FeaturedArticles = () => {
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: index * 0.1 }}
+            transition={{ duration: 0.3, delay: index * 0.05 }}
             whileHover={{ y: -5 }}
             className="group cursor-pointer h-full"
             onClick={() => router.push(`/blog/${post.slug}`)}
@@ -134,7 +134,7 @@ const FeaturedArticles = () => {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.3 }}
         >
           <motion.a
             href="/blog"
