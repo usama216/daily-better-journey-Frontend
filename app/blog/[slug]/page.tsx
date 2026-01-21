@@ -1,73 +1,150 @@
-'use client'
-
-import { useMemo } from 'react'
-import { useParams, useRouter } from 'next/navigation'
-import { useGetPostsQuery } from '@/lib/api/blogApi'
+import { notFound } from 'next/navigation'
+import type { Metadata } from 'next'
+import { fetchPostBySlug, fetchPosts } from '@/lib/api/serverApi'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import AdBanner from '@/components/AdBanner'
 import CommentSection from '@/components/CommentSection'
 
-export default function BlogDetailPage() {
-  const params = useParams<{ slug: string }>()
-  const router = useRouter()
-  const { data: postsData, isLoading } = useGetPostsQuery({})
-  const posts = (postsData?.data || postsData || [])
+interface PageProps {
+  params: Promise<{ slug: string }>
+}
 
-  const post = useMemo(() => {
-    const slug = params?.slug
-    if (!slug) return null
-    return posts.find((p: any) => p.slug === slug)
-  }, [params, posts])
-
-  const featured = useMemo(() => {
-    return posts.filter((p: any) => p.status === 'published' && p.is_featured && p.slug !== post?.slug).slice(0, 5)
-  }, [posts, post])
-
-  const relatedPosts = useMemo(() => {
-    if (!post?.category_id) return []
-    return posts
-      .filter((p: any) => 
-        p.status === 'published' && 
-        p.category_id === post.category_id && 
-        p.slug !== post.slug
-      )
-      .slice(0, 3)
-  }, [posts, post])
-
-  if (isLoading) {
-    return (
-      <main className="min-h-screen bg-gradient-to-b from-white to-charcoal-50">
-        <Header />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 flex items-center justify-center min-h-[60vh]">
-          <div className="flex flex-col items-center gap-4">
-            <div className="relative w-16 h-16">
-              <div className="absolute inset-0 border-4 border-charcoal-200 rounded-full"></div>
-              <div className="absolute inset-0 border-4 border-golden-600 rounded-full border-t-transparent animate-spin"></div>
-            </div>
-            <p className="text-charcoal-600 font-medium">Loading article...</p>
-          </div>
-        </div>
-        <Footer />
-      </main>
-    )
+// Generate metadata for SEO
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params
+  const post = await fetchPostBySlug(slug)
+  
+  if (!post) {
+    return {
+      title: 'Post Not Found | Daily Better Journey',
+    }
   }
 
-  if (!post) {
-    return (
-      <main className="min-h-screen bg-gradient-to-b from-white to-charcoal-50">
-        <Header />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <p className="text-charcoal-600">Post not found.</p>
-          <button onClick={() => router.push('/blog')} className="mt-4 text-golden-700 underline">Back to Blog</button>
-        </div>
-        <Footer />
-      </main>
-    )
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://dailybetterjourney.com'
+  const postUrl = `${siteUrl}/blog/${slug}`
+  const description = post.meta_description || post.excerpt || post.content?.replace(/<[^>]*>/g, '').substring(0, 160) || 'Read this article on Daily Better Journey'
+  const ogImage = post.featured_image || `${siteUrl}/logo-new.png`
+
+  return {
+    title: `${post.title} | Daily Better Journey`,
+    description,
+    keywords: post.meta_keywords || 'personal growth, self improvement, daily habits, emotional intelligence, mindfulness, self awareness',
+    authors: [{ name: 'Daily Better Journey' }],
+    openGraph: {
+      title: post.title,
+      description,
+      type: 'article',
+      locale: 'en_US',
+      url: postUrl,
+      siteName: 'Daily Better Journey',
+      images: [
+        {
+          url: ogImage,
+          width: 1200,
+          height: 630,
+          alt: post.title,
+        },
+      ],
+      publishedTime: post.created_at,
+      modifiedTime: post.updated_at || post.created_at,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title,
+      description,
+      images: [ogImage],
+    },
+    robots: {
+      index: post.status === 'published',
+      follow: true,
+      googleBot: {
+        index: post.status === 'published',
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
+    },
+    alternates: {
+      canonical: postUrl,
+    },
+  }
+}
+
+// Generate static params for better performance (optional, can be removed if you have too many posts)
+export async function generateStaticParams() {
+  try {
+    const posts = await fetchPosts()
+    return posts
+      .filter((p: any) => p.status === 'published')
+      .map((post: any) => ({
+        slug: post.slug,
+      }))
+  } catch (error) {
+    return []
+  }
+}
+
+export default async function BlogDetailPage({ params }: PageProps) {
+  const { slug } = await params
+  const post = await fetchPostBySlug(slug)
+
+  if (!post || post.status !== 'published') {
+    notFound()
+  }
+
+  // Fetch all posts for related posts and featured posts
+  const allPosts = await fetchPosts()
+  const publishedPosts = allPosts.filter((p: any) => p.status === 'published')
+  
+  const featured = publishedPosts
+    .filter((p: any) => p.is_featured && p.slug !== post.slug)
+    .slice(0, 5)
+
+  const relatedPosts = post.category_id
+    ? publishedPosts
+        .filter((p: any) => 
+          p.category_id === post.category_id && 
+          p.slug !== post.slug
+        )
+        .slice(0, 3)
+    : []
+
+  // Structured Data for Article
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title,
+    description: post.meta_description || post.excerpt || post.content?.replace(/<[^>]*>/g, '').substring(0, 160) || '',
+    image: post.featured_image || `${process.env.NEXT_PUBLIC_SITE_URL || 'https://dailybetterjourney.com'}/logo-new.png`,
+    datePublished: post.created_at,
+    dateModified: post.updated_at || post.created_at,
+    author: {
+      '@type': 'Organization',
+      name: 'Daily Better Journey',
+      url: process.env.NEXT_PUBLIC_SITE_URL || 'https://dailybetterjourney.com',
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Daily Better Journey',
+      logo: {
+        '@type': 'ImageObject',
+        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://dailybetterjourney.com'}/logo-new.png`,
+      },
+    },
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `${process.env.NEXT_PUBLIC_SITE_URL || 'https://dailybetterjourney.com'}/blog/${slug}`,
+    },
   }
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-white to-charcoal-50">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
       <Header />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
