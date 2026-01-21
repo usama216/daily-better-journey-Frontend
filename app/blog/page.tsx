@@ -91,7 +91,7 @@ export default function BlogPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 -mt-12 relative z-10">
 
         {/* Ad Banner - Leaderboard 728×90 */}
-        <AdBanner position="between-sections" />
+        {/* <AdBanner position="between-sections" /> */}
 
         {/* Categories */}
         <section className="mb-16">
@@ -127,7 +127,7 @@ export default function BlogPage() {
 
         {/* In-Article Rectangle Ad - 300×250 */}
         <div className="my-12">
-          <AdBanner position="in-article" />
+          {/* <AdBanner position="in-article" /> */}
         </div>
 
         {/* Articles Listing */}
@@ -182,12 +182,12 @@ export default function BlogPage() {
 
         {/* Square Ad - 250×250 */}
         <div className="my-12">
-          <AdBanner position="square" />
+          {/* <AdBanner position="square" /> */}
         </div>
         
         {/* Large Leaderboard - 970×90 */}
         <div className="my-12">
-          <AdBanner position="before-footer" />
+          {/* <AdBanner position="before-footer" /> */}
         </div>
 
         {/* CTA */}

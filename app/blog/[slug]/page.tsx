@@ -152,7 +152,7 @@ export default async function BlogDetailPage({ params }: PageProps) {
           {/* Left Ad (xl+) */}
           <aside className="hidden xl:block">
             <div className="sticky top-20">
-              <AdBanner position="left-rail" />
+              {/* <AdBanner position="left-rail" /> */}
             </div>
           </aside>
 
@@ -174,12 +174,12 @@ export default async function BlogDetailPage({ params }: PageProps) {
               
               {/* In-Article Ad - 300×250 Rectangle (Native Feel) */}
               <div className="my-8">
-                <AdBanner position="in-article" />
+                {/* <AdBanner position="in-article" /> */}
               </div>
               
               {/* Mobile Anchor Ad - Bottom Sticky for Mobile */}
               <div className="md:hidden my-6">
-                <AdBanner position="mobile-anchor" />
+                {/* <AdBanner position="mobile-anchor" /> */}
               </div>
             </div>
           </article>
@@ -188,13 +188,13 @@ export default async function BlogDetailPage({ params }: PageProps) {
           <aside className="hidden xl:block">
             <div className="sticky top-20 space-y-6">
               {/* Medium Rectangle 300×250 - BEST PERFORMER */}
-              <AdBanner position="right-rail" />
+              {/* <AdBanner position="right-rail" /> */}
               
               {/* Large Rectangle 336×280 - High Visibility */}
-              <AdBanner position="sidebar-rectangle" />
+              {/* <AdBanner position="sidebar-rectangle" /> */}
               
               {/* Half Page 300×600 - High Revenue */}
-              <AdBanner position="half-page" />
+              {/* <AdBanner position="half-page" /> */}
               
               {/* Featured Posts */}
               <div className="bg-white rounded-xl shadow border border-charcoal-200 p-4">
@@ -221,14 +221,14 @@ export default async function BlogDetailPage({ params }: PageProps) {
               </div>
               
               {/* Square Ad 250×250 */}
-              <AdBanner position="square" />
+              {/* <AdBanner position="square" /> */}
             </div>
           </aside>
         </div>
 
         {/* Bottom Ad - Leaderboard */}
         <div className="mt-10">
-          <AdBanner position="between-sections" />
+          {/* <AdBanner position="between-sections" /> */}
         </div>
 
         {/* Comment Section */}
@@ -289,7 +289,7 @@ export default async function BlogDetailPage({ params }: PageProps) {
         
         {/* Large Leaderboard before Footer - 970×90 */}
         <div className="mt-16">
-          <AdBanner position="before-footer" />
+          {/* <AdBanner position="before-footer" /> */}
         </div>
       </div>
 

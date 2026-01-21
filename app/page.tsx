@@ -99,7 +99,7 @@ export default function Home() {
         <Hero />
         
         {/* Ad Banner after Hero */}
-        <AdBanner position="after-hero" />
+        {/* <AdBanner position="after-hero" /> */}
         
    
         
@@ -110,11 +110,11 @@ export default function Home() {
         <AboutMission />
         
         {/* Ad Banner between sections - Leaderboard 728×90 */}
-        <AdBanner position="between-sections" />
+        {/* <AdBanner position="between-sections" /> */}
         
         {/* In-Article Ad - 300×250 Rectangle */}
         <div className="py-6">
-          <AdBanner position="in-article" />
+          {/* <AdBanner position="in-article" /> */}
         </div>
         
         {/* Daily Quote */}
@@ -122,14 +122,14 @@ export default function Home() {
         
         {/* Square Ad - 250×250 */}
         <div className="py-6">
-          <AdBanner position="square" />
+          {/* <AdBanner position="square" /> */}
         </div>
         
         {/* Newsletter */}
         <Newsletter />
         
         {/* Ad Banner before footer - Large Leaderboard 970×90 */}
-        <AdBanner position="before-footer" />
+        {/* <AdBanner position="before-footer" /> */}
         
         <Footer />
       </div>
