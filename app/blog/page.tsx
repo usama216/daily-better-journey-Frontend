@@ -1,5 +1,6 @@
 'use client'
 
+import { useState, useMemo } from 'react'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import AdBanner from '@/components/AdBanner'
@@ -10,8 +11,9 @@ import { useGetPostsQuery, useGetCategoriesQuery } from '@/lib/api/blogApi'
 
 export default function BlogPage() {
   const router = useRouter()
+  const [searchQuery, setSearchQuery] = useState('')
   const { data: postsData, isLoading } = useGetPostsQuery({})
-  const posts = (postsData?.data || postsData || [])
+  const allPosts = (postsData?.data || postsData || [])
     .filter((p: any) => p.status === 'published')
 
   const getTextPreview = (html: string, maxLength = 160) => {
@@ -26,6 +28,22 @@ export default function BlogPage() {
     const trimmed = decoded.trim()
     return trimmed.length > maxLength ? trimmed.substring(0, maxLength) + '...' : trimmed
   }
+
+  // Filter posts based on search query
+  const posts = useMemo(() => {
+    if (!searchQuery.trim()) {
+      return allPosts
+    }
+
+    const query = searchQuery.toLowerCase().trim()
+    return allPosts.filter((post: any) => {
+      const title = (post.title || '').toLowerCase()
+      const excerpt = getTextPreview(post.excerpt || '', 1000).toLowerCase()
+      const content = getTextPreview(post.content || '', 1000).toLowerCase()
+      
+      return title.includes(query) || excerpt.includes(query) || content.includes(query)
+    })
+  }, [allPosts, searchQuery])
 
   const { data: categoriesData } = useGetCategoriesQuery(undefined)
   const categories = (categoriesData?.data || categoriesData || [])
@@ -130,10 +148,79 @@ export default function BlogPage() {
           {/* <AdBanner position="in-article" /> */}
         </div>
 
+        {/* Search Bar */}
+        <section className="mb-12">
+          <div className="max-w-2xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="relative"
+            >
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder="Search articles by title, content, or keywords..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full px-6 py-4 pl-14 pr-12 text-charcoal-900 bg-white border-2 border-charcoal-200 rounded-2xl focus:outline-none focus:border-golden-500 focus:ring-2 focus:ring-golden-200 transition-all shadow-sm hover:shadow-md"
+                />
+                <div className="absolute left-4 top-1/2 -translate-y-1/2">
+                  <svg
+                    className="w-5 h-5 text-charcoal-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                    />
+                  </svg>
+                </div>
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery('')}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-charcoal-400 hover:text-charcoal-600 transition-colors"
+                    aria-label="Clear search"
+                  >
+                    <svg
+                      className="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </button>
+                )}
+              </div>
+              {searchQuery && (
+                <motion.p
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="mt-3 text-sm text-charcoal-600 text-center"
+                >
+                  Found {posts.length} {posts.length === 1 ? 'article' : 'articles'} matching "{searchQuery}"
+                </motion.p>
+              )}
+            </motion.div>
+          </div>
+        </section>
+
         {/* Articles Listing */}
         <section className="mb-12">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-3xl font-bold text-charcoal-900">Latest Articles</h2>
+            <h2 className="text-3xl font-bold text-charcoal-900">
+              {searchQuery ? `Search Results` : 'Latest Articles'}
+            </h2>
           </div>
           {isLoading ? (
             <div className="flex items-center justify-center py-20">
@@ -143,6 +230,40 @@ export default function BlogPage() {
                   <div className="absolute inset-0 border-4 border-golden-600 rounded-full border-t-transparent animate-spin"></div>
                 </div>
                 <p className="text-charcoal-600 font-medium">Loading articles...</p>
+              </div>
+            </div>
+          ) : posts.length === 0 ? (
+            <div className="text-center py-20">
+              <div className="max-w-md mx-auto">
+                <svg
+                  className="w-24 h-24 mx-auto text-charcoal-300 mb-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1.5}
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  />
+                </svg>
+                <h3 className="text-2xl font-bold text-charcoal-900 mb-2">
+                  No articles found
+                </h3>
+                <p className="text-charcoal-600 mb-6">
+                  {searchQuery
+                    ? `We couldn't find any articles matching "${searchQuery}". Try different keywords or browse all articles.`
+                    : 'No articles available at the moment.'}
+                </p>
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery('')}
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-golden-600 text-white rounded-xl font-semibold hover:bg-golden-700 transition-colors"
+                  >
+                    Clear Search
+                  </button>
+                )}
               </div>
             </div>
           ) : (
