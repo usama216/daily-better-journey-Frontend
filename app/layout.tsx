@@ -6,8 +6,7 @@ import Providers from '@/components/Providers'
 import AdSenseScript from '@/components/AdSenseScript'
 
 const inter = Inter({ subsets: ['latin'] })
-const GA_MEASUREMENT_ID =
-  process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || 'G-4Q5DHY7MMS'
+
 const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID || 'GTM-TNVXVF69'
 
 export const metadata: Metadata = {
@@ -114,18 +113,7 @@ export default function RootLayout({
             style={{ display: 'none', visibility: 'hidden' }}
           />
         </noscript>
-        <Script
-          src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
-          strategy="afterInteractive"
-        />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', '${GA_MEASUREMENT_ID}');
-          `}
-        </Script>
+       
         <AdSenseScript />
         <Providers>{children}</Providers>
       </body>
