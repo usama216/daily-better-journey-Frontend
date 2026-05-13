@@ -1,9 +1,13 @@
 'use client'
 
 import dynamic from 'next/dynamic'
+import type { ComponentType } from 'react'
 
 const NextTopLoader = dynamic(
-  () => import('nextjs-toploader').then((mod) => mod.default),
+  () =>
+    import('nextjs-toploader').then((mod) => ({
+      default: mod.default as ComponentType<Record<string, unknown>>,
+    })),
   { ssr: false }
 )
 
