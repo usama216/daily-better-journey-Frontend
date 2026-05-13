@@ -65,30 +65,11 @@ const Hero = () => {
     <section className="relative min-h-[90vh] flex items-center overflow-hidden bg-white">
       {/* Background with subtle pattern */}
       <div className="absolute inset-0 bg-gradient-to-br from-golden-50/30 via-white to-forest-50/30"></div>
-      
-      {/* Side Ad Slots - AdSense Wide Skyscraper 160×600 (visible on xl and above) */}
-      {/* <aside className="hidden xl:flex absolute left-4 top-6 z-20" style={{ width: '160px', height: '600px' }}>
-        <div className="w-full h-full flex items-center justify-center bg-gradient-to-b from-gray-50 to-gray-100 border-2 border-dashed border-gray-300 rounded-xl shadow-sm">
-        
-          <div className="text-center text-gray-400 text-xs uppercase tracking-wider rotate-180 [writing-mode:vertical-rl]">
-            160×600 AdSense
-          </div>
-        </div>
-      </aside>
-      <aside className="hidden xl:flex absolute right-4 top-6 z-20" style={{ width: '160px', height: '600px' }}>
-        <div className="w-full h-full flex items-center justify-center bg-gradient-to-b from-gray-50 to-gray-100 border-2 border-dashed border-gray-300 rounded-xl shadow-sm">
-      
-          <div className="text-center text-gray-400 text-xs uppercase tracking-wider rotate-180 [writing-mode:vertical-rl]">
-            160×600 AdSense
-          </div>
-        </div>
-      </aside> */}
 
-     
       <div className="absolute top-20 left-10 w-64 h-64 bg-golden-300 rounded-full filter blur-3xl opacity-20 animate-pulse"></div>
       <div className="absolute bottom-20 right-10 w-80 h-80 bg-forest-300 rounded-full filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '1s' }}></div>
       
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-32 py-20 w-full">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 w-full">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentSlide}

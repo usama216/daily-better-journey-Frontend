@@ -3,14 +3,11 @@
 import { useState, useMemo } from 'react'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
-import AdBanner from '@/components/AdBanner'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { useGetPostsQuery, useGetCategoriesQuery } from '@/lib/api/blogApi'
 
 export default function BlogPage() {
-  const router = useRouter()
   const [searchQuery, setSearchQuery] = useState('')
   const { data: postsData, isLoading } = useGetPostsQuery({})
   const allPosts = (postsData?.data || postsData || [])
@@ -108,45 +105,41 @@ export default function BlogPage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 -mt-12 relative z-10">
 
-        {/* Ad Banner - Leaderboard 728×90 */}
-        {/* <AdBanner position="between-sections" /> */}
-
         {/* Categories */}
         <section className="mb-16">
           <h2 className="text-3xl font-bold text-charcoal-900 mb-8">Categories</h2>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {categories.map((category: any, index: number) => (
-              <motion.article
+              <Link
                 key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                whileHover={{ y: -5 }}
-                onClick={() => router.push(`/blog/category/${category.slug}`)}
-                className="bg-white border-2 cursor-pointer border-charcoal-100 rounded-2xl p-6 hover:border-golden-200 hover:shadow-xl transition-all cursor-pointer group"
+                href={`/blog/category/${category.slug}`}
+                className="block h-full rounded-2xl no-underline text-inherit focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-golden-500"
               >
-                <h3 className="text-xl font-bold text-charcoal-900 mb-3 group-hover:text-golden-600 transition-colors">
-                  {category.name}
-                </h3>
-                <p className="text-charcoal-600">
-                  {category.description || '—'}
-                </p>
-                <Link href={`/blog/category/${category.slug}`} className="inline-flex items-center gap-2 text-golden-600 hover:text-golden-700 font-semibold group mt-4">
-                  Explore
-                  <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </Link>
-              </motion.article>
+                <motion.article
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  whileHover={{ y: -5 }}
+                  className="bg-white border-2 cursor-pointer border-charcoal-100 rounded-2xl p-6 hover:border-golden-200 hover:shadow-xl transition-all cursor-pointer group h-full"
+                >
+                  <h3 className="text-xl font-bold text-charcoal-900 mb-3 group-hover:text-golden-600 transition-colors">
+                    {category.name}
+                  </h3>
+                  <p className="text-charcoal-600">
+                    {category.description || '—'}
+                  </p>
+                  <span className="inline-flex items-center gap-2 text-golden-600 group-hover:text-golden-700 font-semibold group mt-4">
+                    Explore
+                    <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </span>
+                </motion.article>
+              </Link>
             ))}
           </div>
         </section>
-
-        {/* In-Article Rectangle Ad - 300×250 */}
-        <div className="my-12">
-          {/* <AdBanner position="in-article" /> */}
-        </div>
 
         {/* Search Bar */}
         <section className="mb-12">
@@ -269,47 +262,40 @@ export default function BlogPage() {
           ) : (
             <div className="grid gap-6 md:grid-cols-3">
               {posts.map((post: any, index: number) => (
-                <motion.article
+                <Link
                   key={post.id || index}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.05 }}
-                  whileHover={{ y: -5 }}
-                  onClick={() => router.push(`/blog/${post.slug}`)}
-                  
-                  className="bg-white cursor-pointer border-2 border-charcoal-100 rounded-2xl overflow-hidden hover:border-golden-200 hover:shadow-xl transition-all group h-full flex flex-col"
+                  href={`/blog/${post.slug}`}
+                  className="block h-full rounded-2xl no-underline text-inherit focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-golden-500"
                 >
-                  <div className="h-48 bg-gradient-to-br from-golden-200 to-forest-200 flex-shrink-0">
-                    {post.featured_image ? (
-                      <img src={post.featured_image} alt={post.title} className="w-full h-full object-cover" />
-                    ) : null}
-                  </div>
-                  <div className="p-6 flex flex-col flex-1">
-                    <h3 className="text-lg font-bold text-charcoal-900 mb-2 group-hover:text-golden-600 transition-colors line-clamp-2">{post.title}</h3>
-                    <p className="text-charcoal-600 mb-4 line-clamp-3 flex-1">{post.excerpt ? getTextPreview(post.excerpt) : getTextPreview(post.content)}</p>
-                    <Link href={`/blog/${post.slug}`} className="inline-flex items-center gap-2 text-golden-600 hover:text-golden-700 font-semibold group mt-auto">
-                      Read More
-                      <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                      </svg>
-                    </Link>
-                  </div>
-                </motion.article>
+                  <motion.article
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: index * 0.05 }}
+                    whileHover={{ y: -5 }}
+                    className="bg-white cursor-pointer border-2 border-charcoal-100 rounded-2xl overflow-hidden hover:border-golden-200 hover:shadow-xl transition-all group h-full flex flex-col"
+                  >
+                    <div className="h-48 bg-gradient-to-br from-golden-200 to-forest-200 flex-shrink-0">
+                      {post.featured_image ? (
+                        <img src={post.featured_image} alt={post.title} className="w-full h-full object-cover" />
+                      ) : null}
+                    </div>
+                    <div className="p-6 flex flex-col flex-1">
+                      <h3 className="text-lg font-bold text-charcoal-900 mb-2 group-hover:text-golden-600 transition-colors line-clamp-2">{post.title}</h3>
+                      <p className="text-charcoal-600 mb-4 line-clamp-3 flex-1">{post.excerpt ? getTextPreview(post.excerpt) : getTextPreview(post.content)}</p>
+                      <span className="inline-flex items-center gap-2 text-golden-600 group-hover:text-golden-700 font-semibold group mt-auto">
+                        Read More
+                        <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </span>
+                    </div>
+                  </motion.article>
+                </Link>
               ))}
             </div>
           )}
         </section>
-
-        {/* Square Ad - 250×250 */}
-        <div className="my-12">
-          {/* <AdBanner position="square" /> */}
-        </div>
-        
-        {/* Large Leaderboard - 970×90 */}
-        <div className="my-12">
-          {/* <AdBanner position="before-footer" /> */}
-        </div>
 
         {/* CTA */}
         <motion.div 

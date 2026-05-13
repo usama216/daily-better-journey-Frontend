@@ -3,11 +3,9 @@
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { useGetPostsQuery } from '@/lib/api/blogApi'
-import { useRouter } from 'next/navigation'
 
 const FeaturedArticles = () => {
   const { data: postsData } = useGetPostsQuery({})
-  const router = useRouter()
   const posts = (postsData?.data || postsData || [])
     .filter((p: any) => p.status === 'published' && p.is_featured)
     .slice(0, 3)
@@ -69,18 +67,21 @@ const FeaturedArticles = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mb-12 md:mb-16">
         {posts.map((post: any, index: number) => (
-          <motion.article
+          <Link
             key={index}
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.3, delay: index * 0.05 }}
-            whileHover={{ y: -5 }}
-            className="group cursor-pointer h-full"
-            onClick={() => router.push(`/blog/${post.slug}`)}
+            href={`/blog/${post.slug}`}
+            className="block h-full no-underline text-inherit focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-golden-500"
           >
-            {/* Card Container */}
-            <div className="relative bg-white rounded-2xl overflow-hidden shadow-lg border border-charcoal-200 hover:shadow-2xl transition-all duration-300 h-full flex flex-col">
+            <motion.article
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.3, delay: index * 0.05 }}
+              whileHover={{ y: -5 }}
+              className="group cursor-pointer h-full"
+            >
+              {/* Card Container */}
+              <div className="relative bg-white rounded-2xl overflow-hidden shadow-lg border border-charcoal-200 hover:shadow-2xl transition-all duration-300 h-full flex flex-col">
               {/* Image with Unsplash */}
               <div className="relative w-full h-56 overflow-hidden bg-gradient-to-br from-golden-200 to-forest-200 flex-shrink-0">
                 {post.featured_image ? (
@@ -116,16 +117,17 @@ const FeaturedArticles = () => {
                 </p>
                 
                 {/* Read More Link */}
-                <Link href={`/blog/${post.slug}`} className="inline-flex items-center gap-2 text-golden-600 hover:text-golden-700 font-semibold group mt-auto">
+                <span className="inline-flex items-center gap-2 text-golden-600 hover:text-golden-700 font-semibold group mt-auto">
                   Read More
                   <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
-                </Link>
+                </span>
               </div>
             </div>
           </motion.article>
-  ))}
+          </Link>
+        ))}
 </div>
 
       {/* CTA Button */}
@@ -136,17 +138,21 @@ const FeaturedArticles = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.3 }}
         >
-          <motion.a
+          <Link
             href="/blog"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
             className="group inline-flex items-center gap-3 bg-charcoal-900 text-white px-10 py-4 rounded-xl font-semibold text-lg shadow-xl hover:shadow-2xl transition-all"
           >
-            <span>Explore the Blog</span>
-            <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-            </svg>
-          </motion.a>
+            <motion.span
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="inline-flex items-center gap-3"
+            >
+              <span>Explore the Blog</span>
+              <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </motion.span>
+          </Link>
         </motion.div>
       </div>
       </div>

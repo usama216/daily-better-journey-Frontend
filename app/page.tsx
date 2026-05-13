@@ -6,7 +6,6 @@ import FeaturedArticles from '@/components/FeaturedArticles'
 import DailyQuote from '@/components/DailyQuote'
 import Newsletter from '@/components/Newsletter'
 import Footer from '@/components/Footer'
-import AdBanner from '@/components/AdBanner'
 
 export const metadata: Metadata = {
   title: 'Daily Better Journey | Your Space For Real Growth',
@@ -97,40 +96,19 @@ export default function Home() {
         <Header />
         
         <Hero />
-        
-        {/* Ad Banner after Hero */}
-        {/* <AdBanner position="after-hero" /> */}
-        
-   
-        
+
         {/* Featured Articles */}
         <FeaturedArticles />
         
         {/* About the Mission */}
         <AboutMission />
-        
-        {/* Ad Banner between sections - Leaderboard 728×90 */}
-        {/* <AdBanner position="between-sections" /> */}
-        
-        {/* In-Article Ad - 300×250 Rectangle */}
-        <div className="py-6">
-          {/* <AdBanner position="in-article" /> */}
-        </div>
-        
+
         {/* Daily Quote */}
         <DailyQuote />
-        
-        {/* Square Ad - 250×250 */}
-        <div className="py-6">
-          {/* <AdBanner position="square" /> */}
-        </div>
-        
+
         {/* Newsletter */}
         <Newsletter />
-        
-        {/* Ad Banner before footer - Large Leaderboard 970×90 */}
-        {/* <AdBanner position="before-footer" /> */}
-        
+
         <Footer />
       </div>
     </>

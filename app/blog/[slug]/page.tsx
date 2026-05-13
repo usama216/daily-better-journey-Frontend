@@ -3,7 +3,6 @@ import type { Metadata } from 'next'
 import { fetchPostBySlug, fetchPosts } from '@/lib/api/serverApi'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
-import AdBanner from '@/components/AdBanner'
 import CommentSection from '@/components/CommentSection'
 
 interface PageProps {
@@ -147,57 +146,36 @@ export default async function BlogDetailPage({ params }: PageProps) {
       />
       <Header />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        <div className="grid grid-cols-1 xl:grid-cols-[1fr_minmax(0,_800px)_1fr] gap-6">
-          {/* Left Ad (xl+) */}
-          <aside className="hidden xl:block">
-            <div className="sticky top-20">
-              {/* <AdBanner position="left-rail" /> */}
-            </div>
-          </aside>
-
-          {/* Content */}
-          <article className="bg-white rounded-2xl shadow border border-charcoal-200 overflow-hidden">
+      <div className="max-w-7xl xl:max-w-[1360px] 2xl:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-10 xl:px-12 py-10 md:py-14">
+        <div
+          className={
+            featured.length > 0
+              ? 'grid grid-cols-1 lg:grid-cols-[minmax(0,_1fr)_min(100%,_300px)] xl:grid-cols-[minmax(0,_1fr)_min(100%,_340px)] gap-10 lg:gap-12 xl:gap-16'
+              : 'max-w-5xl xl:max-w-6xl mx-auto'
+          }
+        >
+          <article className="bg-white rounded-2xl shadow border border-charcoal-200 overflow-hidden min-w-0">
             {post.featured_image ? (
-              <div className="w-full h-72 md:h-96 bg-charcoal-100">
+              <div className="w-full h-72 sm:h-80 md:h-96 lg:h-[28rem] xl:h-[32rem] bg-charcoal-100">
                 <img src={post.featured_image} alt={post.title} className="w-full h-full object-cover" />
               </div>
             ) : null}
-            <div className="p-6 md:p-10">
-              <h1 className="text-3xl md:text-4xl font-extrabold text-charcoal-900 mb-3">{post.title}</h1>
-              <div className="text-sm text-charcoal-500 mb-8">
+            <div className="p-6 sm:p-8 md:p-12 lg:p-14 xl:p-16">
+              <h1 className="text-3xl sm:text-4xl md:text-[2.5rem] xl:text-5xl font-extrabold text-charcoal-900 mb-3 leading-tight tracking-tight">
+                {post.title}
+              </h1>
+              <div className="text-sm md:text-base text-charcoal-500 mb-8 md:mb-10">
                 {post.created_at ? new Date(post.created_at).toLocaleDateString() : ''}
               </div>
-              <div className="prose prose-lg max-w-none prose-headings:text-charcoal-900 prose-p:text-charcoal-800 prose-a:text-blue-600 prose-a:underline hover:prose-a:text-blue-800 blog-content">
+              <div className="prose prose-lg max-w-none prose-headings:text-charcoal-900 prose-p:text-charcoal-800 prose-a:text-blue-600 prose-a:underline hover:prose-a:text-blue-800 blog-content [&_h2]:scroll-mt-24 [&_h3]:scroll-mt-24">
                 <div dangerouslySetInnerHTML={{ __html: post.content || '' }} />
-              </div>
-              
-              {/* In-Article Ad - 300×250 Rectangle (Native Feel) */}
-              <div className="my-8">
-                {/* <AdBanner position="in-article" /> */}
-              </div>
-              
-              {/* Mobile Anchor Ad - Bottom Sticky for Mobile */}
-              <div className="md:hidden my-6">
-                {/* <AdBanner position="mobile-anchor" /> */}
               </div>
             </div>
           </article>
 
-          {/* Right Ad (xl+) */}
-          <aside className="hidden xl:block">
-            <div className="sticky top-20 space-y-6">
-              {/* Medium Rectangle 300×250 - BEST PERFORMER */}
-              {/* <AdBanner position="right-rail" /> */}
-              
-              {/* Large Rectangle 336×280 - High Visibility */}
-              {/* <AdBanner position="sidebar-rectangle" /> */}
-              
-              {/* Half Page 300×600 - High Revenue */}
-              {/* <AdBanner position="half-page" /> */}
-              
-              {/* Featured Posts */}
-              <div className="bg-white rounded-xl shadow border border-charcoal-200 p-4">
+          {featured.length > 0 ? (
+            <aside className="lg:sticky lg:top-20 lg:self-start">
+              <div className="bg-white rounded-xl shadow border border-charcoal-200 p-5 xl:p-6">
                 <h3 className="text-base font-semibold text-charcoal-900 mb-3">Featured Posts</h3>
                 <ul className="space-y-3">
                   {featured.map((fp: any) => (
@@ -219,34 +197,26 @@ export default async function BlogDetailPage({ params }: PageProps) {
                   ))}
                 </ul>
               </div>
-              
-              {/* Square Ad 250×250 */}
-              {/* <AdBanner position="square" /> */}
-            </div>
-          </aside>
-        </div>
-
-        {/* Bottom Ad - Leaderboard */}
-        <div className="mt-10">
-          {/* <AdBanner position="between-sections" /> */}
+            </aside>
+          ) : null}
         </div>
 
         {/* Comment Section */}
         {post && (
-          <div className="mt-16 max-w-4xl mx-auto">
+          <div className="mt-16 lg:mt-20 max-w-5xl xl:max-w-6xl mx-auto px-0 sm:px-1">
             <CommentSection postId={post.id} postSlug={post.slug} />
           </div>
         )}
 
         {/* Related Posts from Same Category */}
         {relatedPosts.length > 0 && (
-          <div className="mt-16 mb-10">
-            <div className="mb-8">
-              <h2 className="text-3xl font-bold text-charcoal-900 mb-2">Related Articles</h2>
-              <p className="text-charcoal-600">More from the same category</p>
+          <div className="mt-16 lg:mt-20 mb-10 md:mb-14">
+            <div className="mb-8 md:mb-10">
+              <h2 className="text-3xl md:text-4xl font-bold text-charcoal-900 mb-2">Related Articles</h2>
+              <p className="text-charcoal-600 text-lg">More from the same category</p>
             </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8">
               {relatedPosts.map((relatedPost: any) => (
                 <a
                   key={relatedPost.id}
@@ -286,11 +256,7 @@ export default async function BlogDetailPage({ params }: PageProps) {
             </div>
           </div>
         )}
-        
-        {/* Large Leaderboard before Footer - 970×90 */}
-        <div className="mt-16">
-          {/* <AdBanner position="before-footer" /> */}
-        </div>
+
       </div>
 
       <Footer />

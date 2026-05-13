@@ -82,7 +82,7 @@ export default function SEO({
           },
           {
             name: 'google-adsense-account',
-            content: 'ca-pub-7003431121839753',
+            content: process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID || 'ca-pub-7003431121839753',
           },
         ]}
         additionalLinkTags={[

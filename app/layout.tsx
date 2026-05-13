@@ -7,6 +7,8 @@ import AdSenseScript from '@/components/AdSenseScript'
 
 const inter = Inter({ subsets: ['latin'] })
 
+const ADSENSE_CLIENT = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID || 'ca-pub-7003431121839753'
+
 const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID || 'GTM-TNVXVF69'
 
 export const metadata: Metadata = {
@@ -71,7 +73,7 @@ export const metadata: Metadata = {
     },
   },
   other: {
-    'google-adsense-account': 'ca-pub-7003431121839753',
+    'google-adsense-account': ADSENSE_CLIENT,
   },
   icons: {
     icon: [
@@ -113,7 +115,6 @@ export default function RootLayout({
             style={{ display: 'none', visibility: 'hidden' }}
           />
         </noscript>
-       
         <AdSenseScript />
         <Providers>{children}</Providers>
       </body>
