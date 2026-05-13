@@ -6,25 +6,35 @@ import FeaturedArticles from '@/components/FeaturedArticles'
 import DailyQuote from '@/components/DailyQuote'
 import Newsletter from '@/components/Newsletter'
 import Footer from '@/components/Footer'
+import JsonLd from '@/components/JsonLd'
+import { absoluteUrl, getSiteUrl } from '@/lib/site'
+
+const site = getSiteUrl()
 
 export const metadata: Metadata = {
   title: 'Daily Better Journey | Your Space For Real Growth',
-  description: "Find guidance, reflections, and practical steps that support steady self-improvement. Empower your mindset, strengthen your habits, and create lasting change.",
-  keywords: 'personal growth, self improvement, daily habits, emotional intelligence, mindfulness, self awareness, productivity, discipline, Daily Better Journey',
-  authors: [{ name: 'R. Khan', url: 'https://dailybetterjourney.com' }],
+  description:
+    'Find guidance, reflections, and practical steps that support steady self-improvement. Empower your mindset, strengthen your habits, and create lasting change.',
+  keywords:
+    'personal growth, self improvement, daily habits, emotional intelligence, mindfulness, self awareness, productivity, discipline, Daily Better Journey',
+  authors: [{ name: 'R. Khan', url: site }],
+  alternates: { canonical: '/' },
   openGraph: {
     title: 'Daily Better Journey | Your Space For Real Growth',
-    description: "Find guidance, reflections, and practical steps that support steady self-improvement. Empower your mindset, strengthen your habits, and create lasting change.",
+    description:
+      'Find guidance, reflections, and practical steps that support steady self-improvement. Empower your mindset, strengthen your habits, and create lasting change.',
     type: 'website',
     locale: 'en_US',
     siteName: 'Daily Better Journey',
-    url: 'https://dailybetterjourney.com',
+    url: '/',
+    images: [{ url: '/logo-new.png', width: 1200, height: 630, alt: 'Daily Better Journey' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Daily Better Journey | Your Space For Real Growth',
-    description: "Find guidance, reflections, and practical steps that support steady self-improvement. Empower your mindset, strengthen your habits, and create lasting change.",
-    images: ['https://dailybetterjourney.com/logo-new.png'],
+    description:
+      'Find guidance, reflections, and practical steps that support steady self-improvement. Empower your mindset, strengthen your habits, and create lasting change.',
+    images: ['/logo-new.png'],
   },
   robots: {
     index: true,
@@ -37,76 +47,41 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
-  alternates: {
-    canonical: 'https://dailybetterjourney.com',
-  },
 }
 
 export default function Home() {
-  // Structured Data for SEO
-  const structuredData = {
+  const webPageJsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'WebSite',
-    name: 'Daily Better Journey',
-    url: 'https://dailybetterjourney.com',
-    description: 'A personal growth and self-improvement blog focused on daily habits, emotional intelligence, and mindful living.',
-    publisher: {
-      '@type': 'Person',
-      name: 'R. Khan',
+    '@type': 'WebPage',
+    '@id': `${site}/#webpage`,
+    url: site,
+    name: 'Daily Better Journey | Your Space For Real Growth',
+    isPartOf: { '@type': 'WebSite', name: 'Daily Better Journey', url: site },
+    about: {
+      '@type': 'Thing',
+      name: 'Personal growth and self-improvement',
     },
-    potentialAction: {
-      '@type': 'SearchAction',
-      target: 'https://dailybetterjourney.com/blog?q={search_term_string}',
-      'query-input': 'required name=search_term_string',
+    primaryImageOfPage: {
+      '@type': 'ImageObject',
+      url: absoluteUrl('/logo-new.png'),
     },
-  }
-
-  const organizationSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'Organization',
-    name: 'Daily Better Journey',
-    url: 'https://dailybetterjourney.com',
-    logo: 'https://dailybetterjourney.com/logo-new.png',
-    contactPoint: {
-      '@type': 'ContactPoint',
-      telephone: '+447411504773',
-      email: 'support@dailybetterjourney.com',
-      contactType: 'Customer Service',
-    },
-    sameAs: [
-      'https://instagram.com/dailybetterjourney',
-      'https://linkedin.com/company/dailybetterjourney',
-      'https://youtube.com/@dailybetterjourney',
-    ],
   }
 
   return (
     <>
-      {/* Structured Data for SEO */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
-      />
+      <JsonLd data={webPageJsonLd} />
 
       <div className="bg-white">
         <Header />
-        
+
         <Hero />
 
-        {/* Featured Articles */}
         <FeaturedArticles />
-        
-        {/* About the Mission */}
+
         <AboutMission />
 
-        {/* Daily Quote */}
         <DailyQuote />
 
-        {/* Newsletter */}
         <Newsletter />
 
         <Footer />

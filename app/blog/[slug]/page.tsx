@@ -1,50 +1,52 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
-import { fetchPostBySlug, fetchPosts } from '@/lib/api/serverApi'
+import { fetchPostBySlug, fetchPostSlugs, fetchPublishedSummaries } from '@/lib/api/serverApi'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import CommentSection from '@/components/CommentSection'
+import JsonLd from '@/components/JsonLd'
+import { absoluteUrl, getSiteUrl } from '@/lib/site'
 
 interface PageProps {
   params: Promise<{ slug: string }>
 }
 
-// Generate metadata for SEO
+export const revalidate = 120
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params
   const post = await fetchPostBySlug(slug)
-  
+
   if (!post) {
     return {
       title: 'Post Not Found | Daily Better Journey',
+      robots: { index: false, follow: false, googleBot: { index: false, follow: false } },
     }
   }
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://dailybetterjourney.com'
-  const postUrl = `${siteUrl}/blog/${slug}`
-  const description = post.meta_description || post.excerpt || post.content?.replace(/<[^>]*>/g, '').substring(0, 160) || 'Read this article on Daily Better Journey'
-  const ogImage = post.featured_image || `${siteUrl}/logo-new.png`
+  const site = getSiteUrl()
+  const description =
+    post.meta_description ||
+    post.excerpt ||
+    post.content?.replace(/<[^>]*>/g, '').substring(0, 160) ||
+    'Read this article on Daily Better Journey'
+  const ogImage = post.featured_image || `${site}/logo-new.png`
 
   return {
     title: `${post.title} | Daily Better Journey`,
     description,
-    keywords: post.meta_keywords || 'personal growth, self improvement, daily habits, emotional intelligence, mindfulness, self awareness',
-    authors: [{ name: 'Daily Better Journey' }],
+    keywords:
+      post.meta_keywords ||
+      'personal growth, self improvement, daily habits, emotional intelligence, mindfulness, self awareness',
+    authors: [{ name: 'R. Khan', url: site }],
     openGraph: {
       title: post.title,
       description,
       type: 'article',
       locale: 'en_US',
-      url: postUrl,
+      url: `/blog/${slug}`,
       siteName: 'Daily Better Journey',
-      images: [
-        {
-          url: ogImage,
-          width: 1200,
-          height: 630,
-          alt: post.title,
-        },
-      ],
+      images: [{ url: ogImage, width: 1200, height: 630, alt: post.title }],
       publishedTime: post.created_at,
       modifiedTime: post.updated_at || post.created_at,
     },
@@ -66,21 +68,20 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       },
     },
     alternates: {
-      canonical: postUrl,
+      canonical: `/blog/${slug}`,
     },
   }
 }
 
-// Generate static params for better performance (optional, can be removed if you have too many posts)
 export async function generateStaticParams() {
   try {
-    const posts = await fetchPosts()
-    return posts
-      .filter((p: any) => p.status === 'published')
+    const rows = await fetchPostSlugs()
+    return rows
+      .filter((p: any) => p.status === 'published' && p.slug)
       .map((post: any) => ({
         slug: post.slug,
       }))
-  } catch (error) {
+  } catch {
     return []
   }
 }
@@ -93,57 +94,71 @@ export default async function BlogDetailPage({ params }: PageProps) {
     notFound()
   }
 
-  // Fetch all posts for related posts and featured posts
-  const allPosts = await fetchPosts()
-  const publishedPosts = allPosts.filter((p: any) => p.status === 'published')
-  
+  const site = getSiteUrl()
+  const articleUrl = absoluteUrl(`/blog/${slug}`)
+  const publishedPosts = await fetchPublishedSummaries()
+
   const featured = publishedPosts
     .filter((p: any) => p.is_featured && p.slug !== post.slug)
     .slice(0, 5)
 
   const relatedPosts = post.category_id
     ? publishedPosts
-        .filter((p: any) => 
-          p.category_id === post.category_id && 
-          p.slug !== post.slug
-        )
+        .filter((p: any) => p.category_id === post.category_id && p.slug !== post.slug)
         .slice(0, 3)
     : []
 
-  // Structured Data for Article
-  const structuredData = {
+  const descPlain =
+    post.meta_description || post.excerpt || post.content?.replace(/<[^>]*>/g, '').substring(0, 160) || ''
+
+  const imageUrls = post.featured_image
+    ? [post.featured_image, absoluteUrl('/logo-new.png')]
+    : [absoluteUrl('/logo-new.png')]
+
+  const blogPosting = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
     headline: post.title,
-    description: post.meta_description || post.excerpt || post.content?.replace(/<[^>]*>/g, '').substring(0, 160) || '',
-    image: post.featured_image || `${process.env.NEXT_PUBLIC_SITE_URL || 'https://dailybetterjourney.com'}/logo-new.png`,
+    description: descPlain,
+    image: imageUrls,
     datePublished: post.created_at,
     dateModified: post.updated_at || post.created_at,
+    inLanguage: 'en',
+    isAccessibleForFree: true,
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `${articleUrl}#webpage`,
+    },
     author: {
-      '@type': 'Organization',
-      name: 'Daily Better Journey',
-      url: process.env.NEXT_PUBLIC_SITE_URL || 'https://dailybetterjourney.com',
+      '@type': 'Person',
+      name: 'R. Khan',
+      url: site,
     },
     publisher: {
       '@type': 'Organization',
       name: 'Daily Better Journey',
+      url: site,
       logo: {
         '@type': 'ImageObject',
-        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://dailybetterjourney.com'}/logo-new.png`,
+        url: absoluteUrl('/logo-new.png'),
       },
     },
-    mainEntityOfPage: {
-      '@type': 'WebPage',
-      '@id': `${process.env.NEXT_PUBLIC_SITE_URL || 'https://dailybetterjourney.com'}/blog/${slug}`,
-    },
+    url: articleUrl,
+  }
+
+  const breadcrumb = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: site },
+      { '@type': 'ListItem', position: 2, name: 'Blog', item: `${site}/blog` },
+      { '@type': 'ListItem', position: 3, name: post.title, item: articleUrl },
+    ],
   }
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-white to-charcoal-50">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-      />
+      <JsonLd data={[blogPosting, breadcrumb]} />
       <Header />
 
       <div className="max-w-7xl xl:max-w-[1360px] 2xl:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-10 xl:px-12 py-10 md:py-14">
@@ -201,14 +216,12 @@ export default async function BlogDetailPage({ params }: PageProps) {
           ) : null}
         </div>
 
-        {/* Comment Section */}
         {post && (
           <div className="mt-16 lg:mt-20 max-w-5xl xl:max-w-6xl mx-auto px-0 sm:px-1">
             <CommentSection postId={post.id} postSlug={post.slug} />
           </div>
         )}
 
-        {/* Related Posts from Same Category */}
         {relatedPosts.length > 0 && (
           <div className="mt-16 lg:mt-20 mb-10 md:mb-14">
             <div className="mb-8 md:mb-10">
@@ -234,13 +247,16 @@ export default async function BlogDetailPage({ params }: PageProps) {
                   ) : (
                     <div className="w-full h-48 bg-gradient-to-br from-golden-200 to-forest-200" />
                   )}
-                  
+
                   <div className="p-5">
                     <h3 className="text-lg font-bold text-charcoal-900 mb-2 group-hover:text-golden-600 transition-colors line-clamp-2">
                       {relatedPost.title}
                     </h3>
                     <p className="text-sm text-charcoal-600 mb-3 line-clamp-2">
-                      {relatedPost.excerpt || relatedPost.content?.replace(/<[^>]*>/g, '').substring(0, 100) + '...'}
+                      {relatedPost.excerpt ||
+                        (typeof relatedPost.content === 'string'
+                          ? relatedPost.content.replace(/<[^>]*>/g, '').substring(0, 100) + '...'
+                          : '')}
                     </p>
                     <div className="flex items-center justify-between text-xs text-charcoal-500">
                       <span>
@@ -256,12 +272,9 @@ export default async function BlogDetailPage({ params }: PageProps) {
             </div>
           </div>
         )}
-
       </div>
 
       <Footer />
     </main>
   )
 }
-
-

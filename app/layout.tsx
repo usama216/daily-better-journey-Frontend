@@ -1,9 +1,11 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import Script from 'next/script'
 import './globals.css'
 import Providers from '@/components/Providers'
 import AdSenseScript from '@/components/AdSenseScript'
+import RootJsonLd from '@/components/RootJsonLd'
+import { getSiteUrl } from '@/lib/site'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -11,12 +13,23 @@ const ADSENSE_CLIENT = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID || 'ca-pub-7003
 
 const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID || 'GTM-TNVXVF69'
 
+const googleSiteVerification = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
+
+export const viewport: Viewport = {
+  themeColor: '#15803d',
+  width: 'device-width',
+  initialScale: 1,
+}
+
 export const metadata: Metadata = {
+  metadataBase: new URL(getSiteUrl()),
   title: {
     default: 'Daily Better Journey - Become Better Every Single Day',
     template: '%s | Daily Better Journey',
   },
-  description: 'Join a journey of growth, habits, and self-awareness that leads to the best version of you. Weekly insights, stories, and growth tips.',
+  applicationName: 'Daily Better Journey',
+  description:
+    'Join a journey of growth, habits, and self-awareness that leads to the best version of you. Weekly insights, stories, and growth tips.',
   keywords: [
     'personal growth',
     'self improvement',
@@ -34,13 +47,22 @@ export const metadata: Metadata = {
   authors: [{ name: 'Daily Better Journey' }],
   creator: 'Daily Better Journey',
   publisher: 'Daily Better Journey',
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://dailybetterjourney.com'),
   alternates: {
     canonical: '/',
   },
+  referrer: 'origin-when-cross-origin',
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  ...(googleSiteVerification
+    ? { verification: { google: googleSiteVerification } }
+    : {}),
   openGraph: {
     title: 'Daily Better Journey - Become Better Every Single Day',
-    description: 'Join a journey of growth, habits, and self-awareness that leads to the best version of you.',
+    description:
+      'Join a journey of growth, habits, and self-awareness that leads to the best version of you.',
     type: 'website',
     locale: 'en_US',
     url: '/',
@@ -57,7 +79,8 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Daily Better Journey - Become Better Every Single Day',
-    description: 'Join a journey of growth, habits, and self-awareness that leads to the best version of you.',
+    description:
+      'Join a journey of growth, habits, and self-awareness that leads to the best version of you.',
     creator: '@dailybetterjourney',
     images: ['/logo-new.png'],
   },
@@ -81,9 +104,7 @@ export const metadata: Metadata = {
       { url: '/logo-new.png', sizes: '32x32', type: 'image/png' },
       { url: '/logo-new.png', sizes: '16x16', type: 'image/png' },
     ],
-    apple: [
-      { url: '/logo-new.png', sizes: '180x180', type: 'image/png' },
-    ],
+    apple: [{ url: '/logo-new.png', sizes: '180x180', type: 'image/png' }],
     shortcut: '/logo-new.png',
   },
 }
@@ -107,6 +128,7 @@ export default function RootLayout({
         </Script>
       </head>
       <body className={inter.className}>
+        <RootJsonLd />
         <noscript>
           <iframe
             src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
@@ -121,4 +143,3 @@ export default function RootLayout({
     </html>
   )
 }
-

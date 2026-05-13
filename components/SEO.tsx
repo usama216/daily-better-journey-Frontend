@@ -1,6 +1,7 @@
 'use client'
 
 import { NextSeo, ArticleJsonLd, BreadcrumbJsonLd } from 'next-seo'
+import { absoluteUrl, getSiteUrl } from '@/lib/site'
 
 interface SEOProps {
   title?: string
@@ -30,8 +31,9 @@ export default function SEO({
   article,
   breadcrumbs,
 }: SEOProps) {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://yourdomain.com'
-  
+  const siteUrl = getSiteUrl()
+  const ogImageUrl = ogImage.startsWith('http') ? ogImage : absoluteUrl(ogImage.startsWith('/') ? ogImage : `/${ogImage}`)
+
   return (
     <>
       <NextSeo
@@ -47,7 +49,7 @@ export default function SEO({
           siteName: 'Daily Better Journey',
           images: [
             {
-              url: ogImage,
+              url: ogImageUrl,
               width: 1200,
               height: 630,
               alt: title,
@@ -131,7 +133,7 @@ export default function SEO({
             '@type': 'Organization',
             name: 'Daily Better Journey',
             url: siteUrl,
-            logo: `${siteUrl}/logo-new.png`,
+            logo: absoluteUrl('/logo-new.png'),
             sameAs: [
               // Add your social media URLs here
               'https://twitter.com/dailybetterjourney',
