@@ -139,6 +139,9 @@ export default async function CategoryPage({ params }: PageProps) {
                       {post.title}
                     </h3>
                   </Link>
+                  {(post.byline_author_name || '').trim() ? (
+                    <p className="text-xs text-charcoal-500 mb-2">By {(post.byline_author_name || '').trim()}</p>
+                  ) : null}
                   <p className="text-sm text-charcoal-600 line-clamp-3 mb-4">
                     {(post.excerpt || '').replace(/<[^>]*>/g, '')}
                   </p>

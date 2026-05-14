@@ -105,11 +105,14 @@ const FeaturedArticles = () => {
               </div>
 
               {/* Content */}
-              <div className="p-6 md:p-8 flex flex-col flex-1">
+                <div className="p-6 md:p-8 flex flex-col flex-1">
                 {/* Article Title */}
                 <h3 className="text-xl md:text-2xl font-bold text-charcoal-900 mb-3 group-hover:text-golden-600 transition-colors line-clamp-2">
                   {post.title}
                 </h3>
+                {(post.byline_author_name || '').trim() ? (
+                  <p className="text-xs text-charcoal-500 mb-2">By {(post.byline_author_name || '').trim()}</p>
+                ) : null}
                 
                 {/* Description */}
                 <p className="text-charcoal-600 mb-6 leading-relaxed text-base flex-1">

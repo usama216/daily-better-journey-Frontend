@@ -12,6 +12,10 @@ export interface CreatePostRequest {
   tags?: string[]
   meta_description?: string
   meta_keywords?: string
+  /** Shown on the article page; each post can differ. */
+  byline_author_name?: string
+  byline_author_bio?: string
+  byline_author_image_url?: string
 }
 
 export interface UpdatePostRequest extends Partial<CreatePostRequest> {

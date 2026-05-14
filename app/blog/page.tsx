@@ -282,6 +282,9 @@ export default function BlogPage() {
                     </div>
                     <div className="p-6 flex flex-col flex-1">
                       <h3 className="text-lg font-bold text-charcoal-900 mb-2 group-hover:text-golden-600 transition-colors line-clamp-2">{post.title}</h3>
+                      {(post.byline_author_name || '').trim() ? (
+                        <p className="text-xs text-charcoal-500 mb-2">By {(post.byline_author_name || '').trim()}</p>
+                      ) : null}
                       <p className="text-charcoal-600 mb-4 line-clamp-3 flex-1">{post.excerpt ? getTextPreview(post.excerpt) : getTextPreview(post.content)}</p>
                       <span className="inline-flex items-center gap-2 text-golden-600 group-hover:text-golden-700 font-semibold group mt-auto">
                         Read More

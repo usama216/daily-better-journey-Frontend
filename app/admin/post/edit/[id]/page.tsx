@@ -46,7 +46,10 @@ export default function EditPostPage() {
     status: 'draft' as 'draft' | 'published',
     category_id: '',
     meta_description: '',
-    meta_keywords: ''
+    meta_keywords: '',
+    byline_author_name: '',
+    byline_author_bio: '',
+    byline_author_image_url: '',
   })
   const hasUserEditedSlug = useRef(false)
   const hasUserEditedExcerpt = useRef(false)
@@ -132,7 +135,10 @@ export default function EditPostPage() {
         category_id: post.category_id || '',
         status: post.status || 'draft',
         meta_description: post.meta_description || '',
-        meta_keywords: post.meta_keywords || ''
+        meta_keywords: post.meta_keywords || '',
+        byline_author_name: post.byline_author_name || '',
+        byline_author_bio: post.byline_author_bio || '',
+        byline_author_image_url: post.byline_author_image_url || '',
       })
       hasUserEditedSlug.current = false
       hasUserEditedExcerpt.current = !!post.excerpt
@@ -366,6 +372,79 @@ export default function EditPostPage() {
                 <p className="text-xs text-charcoal-500 mt-1">
                   Brief summary (used in previews). {!hasUserEditedExcerpt.current ? 'Auto-generating from content...' : 'Edit manually if needed.'}
                 </p>
+              </div>
+
+              <div className="bg-forest-50 rounded-lg p-4 border border-forest-200">
+                <h3 className="text-sm font-semibold text-charcoal-800 mb-1">Author on this article</h3>
+                <p className="text-xs text-charcoal-600 mb-4">
+                  Optional. Shown to readers on the article page and in listings. Each post can have a different author.
+                </p>
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-xs font-medium text-charcoal-600 mb-1">Display name</label>
+                    <input
+                      type="text"
+                      name="byline_author_name"
+                      value={formData.byline_author_name}
+                      onChange={handleInputChange}
+                      placeholder="e.g. Aisha Rahman"
+                      className="w-full px-3 py-2 border border-charcoal-300 rounded-lg focus:ring-2 focus:ring-forest-500 focus:border-forest-500 text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-charcoal-600 mb-1">Short bio (optional)</label>
+                    <textarea
+                      name="byline_author_bio"
+                      value={formData.byline_author_bio}
+                      onChange={handleInputChange}
+                      placeholder="One or two sentences for the article page..."
+                      rows={3}
+                      className="w-full px-3 py-2 border border-charcoal-300 rounded-lg focus:ring-2 focus:ring-forest-500 focus:border-forest-500 text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-charcoal-600 mb-1">Author photo (optional)</label>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={async (e) => {
+                        const file = e.target.files?.[0]
+                        if (!file) return
+                        try {
+                          const form = new FormData()
+                          form.append('file', file)
+                          const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://api.dailybetterjourney.com/api'}/upload`, {
+                            method: 'POST',
+                            headers: getAuthHeadersForFetch(),
+                            body: form,
+                          })
+                          const json = await res.json()
+                          if (!res.ok) {
+                            throw new Error(json?.message || json?.error || 'Upload failed')
+                          }
+                          if (json?.url) {
+                            setFormData(prev => ({ ...prev, byline_author_image_url: json.url }))
+                          } else {
+                            showError('Upload Failed', json?.message || 'Failed to upload image.')
+                          }
+                        } catch (err: unknown) {
+                          const msg = err instanceof Error ? err.message : 'Image upload failed.'
+                          showError('Upload Failed', msg)
+                        }
+                      }}
+                      className="w-full text-sm"
+                    />
+                    {formData.byline_author_image_url ? (
+                      <div className="mt-2">
+                        <img
+                          src={formData.byline_author_image_url}
+                          alt="Author"
+                          className="w-20 h-20 rounded-full object-cover border border-charcoal-200"
+                        />
+                      </div>
+                    ) : null}
+                  </div>
+                </div>
               </div>
 
               <div>

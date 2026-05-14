@@ -25,6 +25,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   const site = getSiteUrl()
+  const bylineName = (post.byline_author_name || '').trim()
   const description =
     post.meta_description ||
     post.excerpt ||
@@ -38,7 +39,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     keywords:
       post.meta_keywords ||
       'personal growth, self improvement, daily habits, emotional intelligence, mindfulness, self awareness',
-    authors: [{ name: 'R. Khan', url: site }],
+    authors: [{ name: bylineName || 'Daily Better Journey', url: site }],
     openGraph: {
       title: post.title,
       description,
@@ -111,9 +112,27 @@ export default async function BlogDetailPage({ params }: PageProps) {
   const descPlain =
     post.meta_description || post.excerpt || post.content?.replace(/<[^>]*>/g, '').substring(0, 160) || ''
 
+  const bylineName = (post.byline_author_name || '').trim()
+  const bylineBio = (post.byline_author_bio || '').trim()
+  const bylineImage = (post.byline_author_image_url || '').trim()
+  const hasByline = Boolean(bylineName || bylineBio || bylineImage)
+
   const imageUrls = post.featured_image
     ? [post.featured_image, absoluteUrl('/logo-new.png')]
     : [absoluteUrl('/logo-new.png')]
+
+  const schemaAuthor = bylineName
+    ? {
+        '@type': 'Person',
+        name: bylineName,
+        url: site,
+        ...(bylineImage ? { image: bylineImage } : {}),
+      }
+    : {
+        '@type': 'Organization',
+        name: 'Daily Better Journey',
+        url: site,
+      }
 
   const blogPosting = {
     '@context': 'https://schema.org',
@@ -129,11 +148,7 @@ export default async function BlogDetailPage({ params }: PageProps) {
       '@type': 'WebPage',
       '@id': `${articleUrl}#webpage`,
     },
-    author: {
-      '@type': 'Person',
-      name: 'R. Khan',
-      url: site,
-    },
+    author: schemaAuthor,
     publisher: {
       '@type': 'Organization',
       name: 'Daily Better Journey',
@@ -179,9 +194,28 @@ export default async function BlogDetailPage({ params }: PageProps) {
               <h1 className="text-3xl sm:text-4xl md:text-[2.5rem] xl:text-5xl font-extrabold text-charcoal-900 mb-3 leading-tight tracking-tight">
                 {post.title}
               </h1>
-              <div className="text-sm md:text-base text-charcoal-500 mb-8 md:mb-10">
+              <div className="text-sm md:text-base text-charcoal-500 mb-6 md:mb-8">
                 {post.created_at ? new Date(post.created_at).toLocaleDateString() : ''}
               </div>
+              {hasByline ? (
+                <div className="flex flex-col sm:flex-row gap-4 sm:items-start p-4 md:p-5 mb-8 md:mb-10 rounded-xl border border-charcoal-200 bg-charcoal-50/80">
+                  {bylineImage ? (
+                    <img
+                      src={bylineImage}
+                      alt={bylineName || 'Author'}
+                      className="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover border border-charcoal-200 flex-shrink-0"
+                    />
+                  ) : null}
+                  <div className="min-w-0">
+                    {bylineName ? (
+                      <p className="font-semibold text-charcoal-900 text-base md:text-lg">{bylineName}</p>
+                    ) : null}
+                    {bylineBio ? (
+                      <p className="text-sm md:text-base text-charcoal-600 mt-1 leading-relaxed">{bylineBio}</p>
+                    ) : null}
+                  </div>
+                </div>
+              ) : null}
               <div className="prose prose-lg max-w-none prose-headings:text-charcoal-900 prose-p:text-charcoal-800 prose-a:text-blue-600 prose-a:underline hover:prose-a:text-blue-800 blog-content [&_h2]:scroll-mt-24 [&_h3]:scroll-mt-24">
                 <div dangerouslySetInnerHTML={{ __html: post.content || '' }} />
               </div>
