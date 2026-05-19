@@ -4,7 +4,9 @@ import { fetchPostBySlug, fetchPostSlugs, fetchPublishedSummaries } from '@/lib/
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import CommentSection from '@/components/CommentSection'
+import BlogPostAuthorSection from '@/components/BlogPostAuthorSection'
 import JsonLd from '@/components/JsonLd'
+import { getPostAuthorFields, hasPostAuthor } from '@/components/PostAuthorByline'
 import { absoluteUrl, getSiteUrl } from '@/lib/site'
 
 interface PageProps {
@@ -112,10 +114,8 @@ export default async function BlogDetailPage({ params }: PageProps) {
   const descPlain =
     post.meta_description || post.excerpt || post.content?.replace(/<[^>]*>/g, '').substring(0, 160) || ''
 
-  const bylineName = (post.byline_author_name || '').trim()
-  const bylineBio = (post.byline_author_bio || '').trim()
-  const bylineImage = (post.byline_author_image_url || '').trim()
-  const hasByline = Boolean(bylineName || bylineBio || bylineImage)
+  const { name: bylineName, bio: bylineBio, imageUrl: bylineImage } = getPostAuthorFields(post)
+  const showAuthor = hasPostAuthor(post)
 
   const imageUrls = post.featured_image
     ? [post.featured_image, absoluteUrl('/logo-new.png')]
@@ -197,28 +197,27 @@ export default async function BlogDetailPage({ params }: PageProps) {
               <div className="text-sm md:text-base text-charcoal-500 mb-6 md:mb-8">
                 {post.created_at ? new Date(post.created_at).toLocaleDateString() : ''}
               </div>
-              {hasByline ? (
-                <div className="flex flex-col sm:flex-row gap-4 sm:items-start p-4 md:p-5 mb-8 md:mb-10 rounded-xl border border-charcoal-200 bg-charcoal-50/80">
-                  {bylineImage ? (
-                    <img
-                      src={bylineImage}
-                      alt={bylineName || 'Author'}
-                      className="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover border border-charcoal-200 flex-shrink-0"
-                    />
-                  ) : null}
-                  <div className="min-w-0">
-                    {bylineName ? (
-                      <p className="font-semibold text-charcoal-900 text-base md:text-lg">{bylineName}</p>
-                    ) : null}
-                    {bylineBio ? (
-                      <p className="text-sm md:text-base text-charcoal-600 mt-1 leading-relaxed">{bylineBio}</p>
-                    ) : null}
-                  </div>
-                </div>
-              ) : null}
+              <BlogPostAuthorSection
+                slug={slug}
+                initialName={bylineName}
+                initialBio={bylineBio}
+                initialImageUrl={bylineImage}
+                variant="compact"
+                className="mb-8"
+              />
               <div className="prose prose-lg max-w-none prose-headings:text-charcoal-900 prose-p:text-charcoal-800 prose-a:text-blue-600 prose-a:underline hover:prose-a:text-blue-800 blog-content [&_h2]:scroll-mt-24 [&_h3]:scroll-mt-24">
                 <div dangerouslySetInnerHTML={{ __html: post.content || '' }} />
               </div>
+              {showAuthor ? (
+                <BlogPostAuthorSection
+                  slug={slug}
+                  initialName={bylineName}
+                  initialBio={bylineBio}
+                  initialImageUrl={bylineImage}
+                  variant="full"
+                  className="mt-10 md:mt-12"
+                />
+              ) : null}
             </div>
           </article>
 
@@ -286,6 +285,11 @@ export default async function BlogDetailPage({ params }: PageProps) {
                     <h3 className="text-lg font-bold text-charcoal-900 mb-2 group-hover:text-golden-600 transition-colors line-clamp-2">
                       {relatedPost.title}
                     </h3>
+                    {(relatedPost.byline_author_name || '').trim() ? (
+                      <p className="text-xs text-charcoal-500 mb-2">
+                        By {(relatedPost.byline_author_name || '').trim()}
+                      </p>
+                    ) : null}
                     <p className="text-sm text-charcoal-600 mb-3 line-clamp-2">
                       {relatedPost.excerpt ||
                         (typeof relatedPost.content === 'string'
