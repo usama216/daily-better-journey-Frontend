@@ -753,7 +753,7 @@ export default function AdminDashboard() {
   const posts = postsData?.data || []
   const categories = (categoriesData?.data || categoriesData || [])
   const pagination = postsData?.pagination || { total: posts.length, page: 1, totalPages: 1, limit: postsPerPage }
-  const totalPosts = pagination.total
+  const postStats = postsData?.stats
 
   // Function to strip HTML tags and get plain text preview
   const getTextPreview = (html: string, maxLength: number = 150) => {
@@ -799,13 +799,11 @@ export default function AdminDashboard() {
     }
   }
 
-  // Calculate stats from all posts (we might need to fetch all for accurate stats)
-  // For now, we'll calculate from current page data
   const stats = {
-    totalPosts: totalPosts, // Use total from pagination
-    publishedPosts: posts.filter((p: any) => p.status === 'published').length,
-    draftPosts: posts.filter((p: any) => p.status === 'draft').length,
-    totalViews: posts.reduce((sum: number, p: any) => sum + (p.views || 0), 0)
+    totalPosts: postStats?.total ?? pagination.total,
+    publishedPosts: postStats?.published ?? 0,
+    draftPosts: postStats?.draft ?? 0,
+    totalViews: postStats?.totalViews ?? 0,
   }
   
   const handlePageChange = (newPage: number) => {
