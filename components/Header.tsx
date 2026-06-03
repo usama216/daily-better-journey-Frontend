@@ -5,8 +5,14 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useState } from 'react'
 
+const navItems = [
+  { label: 'Home', href: '/' },
+  { label: 'Blog', href: '/blog' },
+  { label: 'About us', href: '/journey' },
+  { label: 'Contact', href: '/contact' },
+]
+
 const Header = () => {
-  const navItems = ['Home', 'Blog', 'Journey', 'Contact']
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const toggleMenu = () => {
@@ -48,10 +54,8 @@ const Header = () => {
 
           {/* Desktop Navigation Links */}
           <div className="hidden md:flex items-center space-x-8">
-            {navItems.map((item, index) => {
-              const href = item === 'Home' ? '/' : `/${item.toLowerCase()}`
-              return (
-                <Link key={item} href={href}>
+            {navItems.map((item, index) => (
+                <Link key={item.href} href={item.href}>
                   <motion.span
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -59,11 +63,10 @@ const Header = () => {
                     whileHover={{ scale: 1.05 }}
                     className="text-charcoal-800 hover:text-golden-600 font-medium transition-colors cursor-pointer"
                   >
-                    {item}
+                    {item.label}
                   </motion.span>
                 </Link>
-              )
-            })}
+              ))}
           </div>
 
           {/* Mobile menu button */}
@@ -100,10 +103,8 @@ const Header = () => {
               className="md:hidden overflow-hidden"
             >
               <div className="py-4 space-y-4 border-t border-charcoal-200">
-                {navItems.map((item, index) => {
-                  const href = item === 'Home' ? '/' : `/${item.toLowerCase()}`
-                  return (
-                    <Link key={item} href={href} onClick={closeMenu}>
+                {navItems.map((item, index) => (
+                    <Link key={item.href} href={item.href} onClick={closeMenu}>
                       <motion.div
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
@@ -111,11 +112,10 @@ const Header = () => {
                         whileHover={{ x: 5 }}
                         className="text-charcoal-800 hover:text-golden-600 font-medium transition-colors cursor-pointer px-2 py-2"
                       >
-                        {item}
+                        {item.label}
                       </motion.div>
                     </Link>
-                  )
-                })}
+                  ))}
               </div>
             </motion.div>
           )}

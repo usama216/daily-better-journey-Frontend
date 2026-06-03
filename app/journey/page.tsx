@@ -204,7 +204,7 @@ export default function JourneyPage() {
             <div className="relative z-10">
               <blockquote className="text-2xl sm:text-3xl md:text-4xl font-light italic text-charcoal-800 leading-relaxed mb-8 text-center">
               The biggest shift in my life happened when I stopped chasing the perfect version of myself and started showing up for the real one.    </blockquote>
-              <p className="text-center text-charcoal-900 font-bold text-lg">— R. Khan, Founder</p>
+              <p className="text-center text-charcoal-900 font-bold text-lg">Rrabiya Khan, Founder</p>
               <p className="text-center text-charcoal-600 mt-2">Daily Better Journey</p>
             </div>
           </div>
