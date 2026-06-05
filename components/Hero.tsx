@@ -10,6 +10,8 @@ const NewsletterSubscriptionPopup = dynamic(
   { ssr: false }
 )
 
+const SLIDE_TRANSITION_MS = 650
+
 function SlideContent({
   slide,
   onJoinClick,
@@ -50,7 +52,7 @@ function SlideContent({
             <span className="relative z-10 flex items-center gap-3">
               Join the Journey
               <svg
-                className="w-6 h-6 group-hover:translate-x-2 transition-transform"
+                className="w-6 h-6 group-hover:translate-x-2 transition-transform duration-300"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -111,29 +113,33 @@ function SlideContent({
 
 const Hero = () => {
   const [currentSlide, setCurrentSlide] = useState(0)
+  const [slideDirection, setSlideDirection] = useState(1)
   const [showNewsletterPopup, setShowNewsletterPopup] = useState(false)
   const [popupMounted, setPopupMounted] = useState(false)
-  const [isFading, setIsFading] = useState(false)
 
-  const goToSlide = useCallback((index: number) => {
-    if (index === currentSlide) return
-    setIsFading(true)
-    window.setTimeout(() => {
+  const goToSlide = useCallback(
+    (index: number) => {
+      if (index === currentSlide) return
+      setSlideDirection(index > currentSlide ? 1 : -1)
       setCurrentSlide(index)
-      setIsFading(false)
-    }, 150)
-  }, [currentSlide])
+    },
+    [currentSlide]
+  )
+
+  useEffect(() => {
+    HERO_SLIDES.forEach((slide) => {
+      const img = new window.Image()
+      img.src = slide.image
+    })
+  }, [])
 
   useEffect(() => {
     let interval: number | undefined
 
     const startDelay = window.setTimeout(() => {
       interval = window.setInterval(() => {
-        setIsFading(true)
-        window.setTimeout(() => {
-          setCurrentSlide((prev) => (prev + 1) % HERO_SLIDES.length)
-          setIsFading(false)
-        }, 150)
+        setSlideDirection(1)
+        setCurrentSlide((prev) => (prev + 1) % HERO_SLIDES.length)
       }, 6000)
     }, 10000)
 
@@ -148,8 +154,6 @@ const Hero = () => {
     setShowNewsletterPopup(true)
   }
 
-  const slide = HERO_SLIDES[currentSlide]
-
   return (
     <section className="relative min-h-[90vh] flex items-center overflow-hidden bg-white">
       <div className="absolute inset-0 bg-gradient-to-br from-golden-50/30 via-white to-forest-50/30" />
@@ -161,16 +165,30 @@ const Hero = () => {
       />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 w-full">
-        <div
-          className={`transition-opacity duration-150 ${
-            isFading ? 'opacity-0' : 'opacity-100'
-          }`}
-        >
-          <SlideContent
-            slide={slide}
-            onJoinClick={openNewsletterPopup}
-            isFirstSlide={currentSlide === 0}
-          />
+        <div className="relative min-h-[520px] sm:min-h-[500px] lg:min-h-[460px]">
+          {HERO_SLIDES.map((slide, index) => {
+            const isActive = index === currentSlide
+            const offset = slideDirection > 0 ? 'translate-x-6' : '-translate-x-6'
+
+            return (
+              <div
+                key={slide.badge}
+                aria-hidden={!isActive}
+                className={`absolute inset-0 w-full hero-slide ${
+                  isActive
+                    ? 'hero-slide-active opacity-100 translate-x-0 scale-100 z-10'
+                    : `opacity-0 ${offset} scale-[0.985] z-0 pointer-events-none`
+                }`}
+                style={{ transitionDuration: `${SLIDE_TRANSITION_MS}ms` }}
+              >
+                <SlideContent
+                  slide={slide}
+                  onJoinClick={openNewsletterPopup}
+                  isFirstSlide={index === 0}
+                />
+              </div>
+            )
+          })}
         </div>
 
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-3 z-30">
@@ -179,8 +197,9 @@ const Hero = () => {
               key={index}
               type="button"
               aria-label={`Go to slide ${index + 1}`}
+              aria-current={currentSlide === index ? 'true' : undefined}
               onClick={() => goToSlide(index)}
-              className={`transition-all duration-300 rounded-full ${
+              className={`rounded-full transition-all duration-500 ease-out ${
                 currentSlide === index
                   ? 'w-8 h-3 bg-gradient-to-r from-golden-600 to-forest-600'
                   : 'w-3 h-3 bg-charcoal-300 hover:bg-charcoal-400'

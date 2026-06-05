@@ -58,6 +58,25 @@ body {
   animation-delay: 4s;
 }
 
+.hero-slide {
+  transition-property: opacity, transform;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: opacity, transform;
+}
+
+.hero-slide-active {
+  transition-property: opacity, transform;
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-slide,
+  .hero-slide-active {
+    transition-duration: 0.01ms !important;
+    transform: none !important;
+  }
+}
+
 /* Blog Content Links Styling */
 .prose a,
 .blog-content a {
