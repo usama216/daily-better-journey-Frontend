@@ -7,7 +7,7 @@ import AdSenseScript from '@/components/AdSenseScript'
 import RootJsonLd from '@/components/RootJsonLd'
 import { getSiteUrl } from '@/lib/site'
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ['latin'], display: 'swap' })
 
 const ADSENSE_CLIENT = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID || 'ca-pub-7003431121839753'
 
@@ -117,7 +117,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <Script id="google-tag-manager" strategy="beforeInteractive">
+        <Script id="google-tag-manager" strategy="afterInteractive">
           {`
             (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
             new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],

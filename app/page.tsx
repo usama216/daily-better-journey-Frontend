@@ -1,13 +1,16 @@
 import type { Metadata } from 'next'
+import dynamic from 'next/dynamic'
 import Header from '@/components/Header'
 import Hero from '@/components/Hero'
-import AboutMission from '@/components/AboutMission'
-import FeaturedArticles from '@/components/FeaturedArticles'
-import DailyQuote from '@/components/DailyQuote'
-import Newsletter from '@/components/Newsletter'
-import Footer from '@/components/Footer'
 import JsonLd from '@/components/JsonLd'
 import { absoluteUrl, getSiteUrl } from '@/lib/site'
+import { getFeaturedPosts } from '@/lib/posts'
+
+const FeaturedArticles = dynamic(() => import('@/components/FeaturedArticles'))
+const AboutMission = dynamic(() => import('@/components/AboutMission'))
+const DailyQuote = dynamic(() => import('@/components/DailyQuote'))
+const Newsletter = dynamic(() => import('@/components/Newsletter'))
+const Footer = dynamic(() => import('@/components/Footer'))
 
 const site = getSiteUrl()
 
@@ -49,7 +52,9 @@ export const metadata: Metadata = {
   },
 }
 
-export default function Home() {
+export default async function Home() {
+  const featuredPosts = await getFeaturedPosts()
+
   const webPageJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
@@ -76,7 +81,7 @@ export default function Home() {
 
         <Hero />
 
-        <FeaturedArticles />
+        <FeaturedArticles initialPosts={featuredPosts} />
 
         <AboutMission />
 
