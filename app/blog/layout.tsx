@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import JsonLd from '@/components/JsonLd'
+import Providers from '@/components/Providers'
 import { getSiteUrl } from '@/lib/site'
 
 const site = getSiteUrl()
@@ -64,7 +65,7 @@ export default function BlogLayout({
   return (
     <>
       <JsonLd data={blogJsonLd} />
-      {children}
+      <Providers>{children}</Providers>
     </>
   )
 }

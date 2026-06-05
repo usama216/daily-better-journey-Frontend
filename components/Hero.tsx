@@ -1,37 +1,26 @@
 'use client'
 
-import { motion, AnimatePresence } from 'framer-motion'
+import dynamic from 'next/dynamic'
 import Image from 'next/image'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { HERO_SLIDES, type HeroSlide } from '@/lib/heroSlides'
-import NewsletterSubscriptionPopup from './NewsletterSubscriptionPopup'
+
+const NewsletterSubscriptionPopup = dynamic(
+  () => import('./NewsletterSubscriptionPopup'),
+  { ssr: false }
+)
 
 function SlideContent({
   slide,
   onJoinClick,
-  animateTransitions,
   isFirstSlide,
 }: {
   slide: HeroSlide
   onJoinClick: () => void
-  animateTransitions: boolean
   isFirstSlide: boolean
 }) {
-  const Wrapper = animateTransitions ? motion.div : 'div'
-  const wrapperProps = animateTransitions
-    ? {
-        initial: { opacity: 0, x: 40 },
-        animate: { opacity: 1, x: 0 },
-        exit: { opacity: 0, x: -40 },
-        transition: { duration: 0.25 },
-      }
-    : {}
-
   return (
-    <Wrapper
-      {...wrapperProps}
-      className="grid lg:grid-cols-2 gap-12 items-center"
-    >
+    <div className="grid lg:grid-cols-2 gap-12 items-center">
       <div className="space-y-8">
         <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-golden-100 to-forest-100 border-2 border-golden-300 rounded-full shadow-sm">
           <span className="relative flex h-2 w-2">
@@ -116,29 +105,47 @@ function SlideContent({
           </div>
         </div>
       </div>
-    </Wrapper>
+    </div>
   )
 }
 
 const Hero = () => {
   const [currentSlide, setCurrentSlide] = useState(0)
   const [showNewsletterPopup, setShowNewsletterPopup] = useState(false)
-  const [enableSlideAnimations, setEnableSlideAnimations] = useState(false)
+  const [popupMounted, setPopupMounted] = useState(false)
+  const [isFading, setIsFading] = useState(false)
+
+  const goToSlide = useCallback((index: number) => {
+    if (index === currentSlide) return
+    setIsFading(true)
+    window.setTimeout(() => {
+      setCurrentSlide(index)
+      setIsFading(false)
+    }, 150)
+  }, [currentSlide])
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setEnableSlideAnimations(true)
-      setCurrentSlide((prev) => (prev + 1) % HERO_SLIDES.length)
-    }, 5000)
+    let interval: number | undefined
 
-    return () => clearInterval(interval)
+    const startDelay = window.setTimeout(() => {
+      interval = window.setInterval(() => {
+        setIsFading(true)
+        window.setTimeout(() => {
+          setCurrentSlide((prev) => (prev + 1) % HERO_SLIDES.length)
+          setIsFading(false)
+        }, 150)
+      }, 6000)
+    }, 10000)
+
+    return () => {
+      window.clearTimeout(startDelay)
+      if (interval) window.clearInterval(interval)
+    }
   }, [])
 
-  const goToSlide = (index: number) => {
-    if (index !== currentSlide) {
-      setEnableSlideAnimations(true)
-      setCurrentSlide(index)
-    }
+  const openNewsletterPopup = () => {
+    setPopupMounted(true)
+    setShowNewsletterPopup(true)
   }
 
   const slide = HERO_SLIDES[currentSlide]
@@ -154,24 +161,17 @@ const Hero = () => {
       />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 w-full">
-        {enableSlideAnimations ? (
-          <AnimatePresence mode="wait" initial={false}>
-            <SlideContent
-              key={currentSlide}
-              slide={slide}
-              onJoinClick={() => setShowNewsletterPopup(true)}
-              animateTransitions
-              isFirstSlide={currentSlide === 0}
-            />
-          </AnimatePresence>
-        ) : (
+        <div
+          className={`transition-opacity duration-150 ${
+            isFading ? 'opacity-0' : 'opacity-100'
+          }`}
+        >
           <SlideContent
             slide={slide}
-            onJoinClick={() => setShowNewsletterPopup(true)}
-            animateTransitions={false}
-            isFirstSlide
+            onJoinClick={openNewsletterPopup}
+            isFirstSlide={currentSlide === 0}
           />
-        )}
+        </div>
 
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-3 z-30">
           {HERO_SLIDES.map((_, index) => (
@@ -190,10 +190,12 @@ const Hero = () => {
         </div>
       </div>
 
-      <NewsletterSubscriptionPopup
-        isOpen={showNewsletterPopup}
-        onClose={() => setShowNewsletterPopup(false)}
-      />
+      {popupMounted ? (
+        <NewsletterSubscriptionPopup
+          isOpen={showNewsletterPopup}
+          onClose={() => setShowNewsletterPopup(false)}
+        />
+      ) : null}
     </section>
   )
 }

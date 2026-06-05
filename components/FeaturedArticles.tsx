@@ -1,38 +1,13 @@
-'use client'
-
-import { motion } from 'framer-motion'
 import Link from 'next/link'
 import Image from 'next/image'
-import { useGetPostsQuery } from '@/lib/api/blogApi'
 import type { BlogPost } from '@/lib/posts'
-
-function getTextPreview(html: string, maxLength = 140) {
-  if (!html) return ''
-  const text = html.replace(/<[^>]*>/g, '')
-  const decoded = text
-    .replace(/&nbsp;/g, ' ')
-    .replace(/&amp;/g, '&')
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&quot;/g, '"')
-  const trimmed = decoded.trim()
-  return trimmed.length > maxLength ? trimmed.substring(0, maxLength) + '...' : trimmed
-}
+import { getTextPreview } from '@/lib/postUtils'
 
 type FeaturedArticlesProps = {
-  initialPosts?: BlogPost[]
+  posts: BlogPost[]
 }
 
-const FeaturedArticles = ({ initialPosts = [] }: FeaturedArticlesProps) => {
-  const hasInitialPosts = initialPosts.length > 0
-  const { data: postsData } = useGetPostsQuery({}, { skip: hasInitialPosts })
-
-  const posts = hasInitialPosts
-    ? initialPosts
-    : (postsData?.data || postsData || [])
-        .filter((p: BlogPost) => p.status === 'published' && p.is_featured)
-        .slice(0, 3)
-
+export default function FeaturedArticles({ posts }: FeaturedArticlesProps) {
   return (
     <section className="relative z-10 bg-gradient-to-b from-white to-charcoal-50 lg:py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -54,21 +29,14 @@ const FeaturedArticles = ({ initialPosts = [] }: FeaturedArticlesProps) => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mb-12 md:mb-16">
-          {posts.map((post: BlogPost, index: number) => (
+          {posts.map((post, index) => (
             <Link
               key={post.slug || index}
               href={`/blog/${post.slug}`}
               className="block h-full no-underline text-inherit focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-golden-500"
             >
-              <motion.article
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.3, delay: index * 0.05 }}
-                whileHover={{ y: -5 }}
-                className="group cursor-pointer h-full"
-              >
-                <div className="relative bg-white rounded-2xl overflow-hidden shadow-lg border border-charcoal-200 hover:shadow-2xl transition-all duration-300 h-full flex flex-col">
+              <article className="group cursor-pointer h-full hover:-translate-y-1 transition-transform duration-300">
+                <div className="relative bg-white rounded-2xl overflow-hidden shadow-lg border border-charcoal-200 hover:shadow-2xl transition-shadow duration-300 h-full flex flex-col">
                   <div className="relative w-full h-56 overflow-hidden bg-gradient-to-br from-golden-200 to-forest-200 flex-shrink-0">
                     {post.featured_image ? (
                       <Image
@@ -126,7 +94,7 @@ const FeaturedArticles = ({ initialPosts = [] }: FeaturedArticlesProps) => {
                     </span>
                   </div>
                 </div>
-              </motion.article>
+              </article>
             </Link>
           ))}
         </div>
@@ -157,5 +125,3 @@ const FeaturedArticles = ({ initialPosts = [] }: FeaturedArticlesProps) => {
     </section>
   )
 }
-
-export default FeaturedArticles

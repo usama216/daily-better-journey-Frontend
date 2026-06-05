@@ -73,6 +73,10 @@ const nextConfig = {
 
   swcMinify: true,
   poweredByHeader: false,
+
+  experimental: {
+    optimizePackageImports: ['framer-motion', 'react-icons'],
+  },
 }
 
 module.exports = nextConfig

@@ -2,15 +2,15 @@ import type { Metadata } from 'next'
 import dynamic from 'next/dynamic'
 import Header from '@/components/Header'
 import Hero from '@/components/Hero'
+import FeaturedArticles from '@/components/FeaturedArticles'
+import AboutMission from '@/components/AboutMission'
+import DailyQuote from '@/components/DailyQuote'
+import Footer from '@/components/Footer'
 import JsonLd from '@/components/JsonLd'
 import { absoluteUrl, getSiteUrl } from '@/lib/site'
 import { getFeaturedPosts } from '@/lib/posts'
 
-const FeaturedArticles = dynamic(() => import('@/components/FeaturedArticles'))
-const AboutMission = dynamic(() => import('@/components/AboutMission'))
-const DailyQuote = dynamic(() => import('@/components/DailyQuote'))
 const Newsletter = dynamic(() => import('@/components/Newsletter'))
-const Footer = dynamic(() => import('@/components/Footer'))
 
 const site = getSiteUrl()
 
@@ -78,17 +78,11 @@ export default async function Home() {
 
       <div className="bg-white">
         <Header />
-
         <Hero />
-
-        <FeaturedArticles initialPosts={featuredPosts} />
-
+        <FeaturedArticles posts={featuredPosts} />
         <AboutMission />
-
         <DailyQuote />
-
         <Newsletter />
-
         <Footer />
       </div>
     </>

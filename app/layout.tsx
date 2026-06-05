@@ -2,12 +2,16 @@ import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import Script from 'next/script'
 import './globals.css'
-import Providers from '@/components/Providers'
 import AdSenseScript from '@/components/AdSenseScript'
 import RootJsonLd from '@/components/RootJsonLd'
 import { getSiteUrl } from '@/lib/site'
 
-const inter = Inter({ subsets: ['latin'], display: 'swap' })
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  preload: true,
+  adjustFontFallback: true,
+})
 
 const ADSENSE_CLIENT = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID || 'ca-pub-7003431121839753'
 
@@ -117,7 +121,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <Script id="google-tag-manager" strategy="afterInteractive">
+        <Script id="google-tag-manager" strategy="lazyOnload">
           {`
             (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
             new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -138,7 +142,7 @@ export default function RootLayout({
           />
         </noscript>
         <AdSenseScript />
-        <Providers>{children}</Providers>
+        {children}
       </body>
     </html>
   )

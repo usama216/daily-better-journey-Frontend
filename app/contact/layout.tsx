@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Providers from '@/components/Providers'
 
 export const metadata: Metadata = {
   title: 'Contact Us - Daily Better Journey | Get in Touch',
@@ -27,5 +28,5 @@ export const metadata: Metadata = {
 }
 
 export default function ContactLayout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>
+  return <Providers>{children}</Providers>
 }
