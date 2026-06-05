@@ -26,18 +26,23 @@ export default function AdSenseScript() {
       document.head.appendChild(script)
     }
 
-    if ('requestIdleCallback' in window) {
-      const idleId = window.requestIdleCallback(loadAdSense, { timeout: 4000 })
-      return () => {
-        cancelled = true
-        window.cancelIdleCallback(idleId)
-      }
+    let idleId: number | undefined
+    let timer: ReturnType<typeof setTimeout> | undefined
+
+    if (typeof requestIdleCallback === 'function') {
+      idleId = requestIdleCallback(loadAdSense, { timeout: 4000 })
+    } else {
+      timer = setTimeout(loadAdSense, 3000)
     }
 
-    const timer = window.setTimeout(loadAdSense, 3000)
     return () => {
       cancelled = true
-      window.clearTimeout(timer)
+      if (idleId !== undefined && typeof cancelIdleCallback === 'function') {
+        cancelIdleCallback(idleId)
+      }
+      if (timer !== undefined) {
+        clearTimeout(timer)
+      }
     }
   }, [])
 
